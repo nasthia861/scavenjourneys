@@ -16,7 +16,7 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 
 
 const config = {
-    entry: path.resolve(__dirname, "client/index.jsx"),
+    entry: path.resolve(__dirname, "client/index.tsx"),
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
@@ -27,7 +27,7 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'index.html',
+            template: 'client/index.html',
         }),
 
         new MiniCssExtractPlugin(),
