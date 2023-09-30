@@ -1,6 +1,5 @@
 import express from 'express';
 // import dotenv from 'dotenv-webpack';
-// require("dotenv").config();
 
 import path from 'path';
 const app = express();
