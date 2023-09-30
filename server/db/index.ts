@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 // const { DataSource } = require('typeorm');
 import { DataSource } from 'typeorm';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import{ createDatabase } from 'typeorm-extension'
 
 
 import { User } from './User'
@@ -12,16 +14,18 @@ import { JourneyTag } from './JourneyTag'
 import { Likes } from './Likes'
 import { Achievement } from './Achievement'
 import { UserAchievement } from './UserAchievement'
+// import { create } from 'axios';
 
 
 const AppDataSource = new DataSource({
   type: 'mysql',
   host: 'localhost',
-  port: 4000,
+  port: 3306,
   username: 'root',
   password: '',
   database:'scavenjourneys',
   synchronize: true,
+  logging: true,
   entities: [
     User,
     Journey,
@@ -35,7 +39,8 @@ const AppDataSource = new DataSource({
   ]
 });
 
-AppDataSource.initialize()
-.then(() => {'AppDataSource has been successfully initialized'})
-.catch((err: unknown) => console.error('AppDataSource has not been initialized', err))
+createDatabase({ifNotExist: true})
+  .then(() => {AppDataSource.initialize()})
+  .then(() => {'AppDataSource has been successfully initialized'})
+  .catch((err: unknown) => console.error('AppDataSource has not been initialized', err))
 
