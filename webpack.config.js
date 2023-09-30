@@ -1,14 +1,15 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
 
-require("dotenv").config();
+//require("dotenv").config();
+const { NODE_ENV } = process.env; 
 
-const isProduction = process.env.NODE_ENV == 'production';
+const isProduction = NODE_ENV == 'production';
 
 
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -16,9 +17,11 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 
 
 const config = {
-    entry: path.resolve(__dirname, "client/index.tsx"),
+    
+    mode: NODE_ENV,
+    entry: path.resolve(__dirname, "client/index.tsx"), 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist'), 
         filename: 'bundle.js'
     },
     devServer: {
@@ -33,7 +36,7 @@ const config = {
         new MiniCssExtractPlugin(),
 
         new Dotenv({
-            template: path.join(__dirname, ".env"),
+            template: path.join(__dirname, ".env"), // eslint-disable-line
           }),
 
         // Add your plugins here
