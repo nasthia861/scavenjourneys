@@ -12,5 +12,4 @@
     "outDir": "dist",
     "jsx": "react"
   },
-  "files": ["src/index.ts"]
 }
