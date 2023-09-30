@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 
 //temp in-line styling until bootstrap global 
 const navBarStyle: React.CSSProperties = {
-  backgroundColor: '#333',
+  backgroundColor: 'blue',
   overflow: 'hidden'
 };
 //temp in-line styling until bootstrap global 
 const linkStyle: React.CSSProperties = {
   float: 'left',
   display: 'block',
-  color: 'white',
+  color: 'yellow',
   textAlign: 'center',
   padding: '14px 16px',
   textDecoration: 'none'
