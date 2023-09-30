@@ -1,8 +1,7 @@
 import express from 'express';
-//import dotenv from 'dotenv-webpack';
-require("dotenv").config();
+// import dotenv from 'dotenv-webpack';
 
-const path = require('path');
+import path from 'path';
 const app = express();
 
 const port = process.env.port || 8080;
