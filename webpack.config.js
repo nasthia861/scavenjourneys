@@ -1,12 +1,11 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
 
-require("dotenv").config();
 
 const isProduction = process.env.NODE_ENV == 'production';
 
