@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import NavBar from './NavBar';
 
 const Home = () => {
   return (
     <div>
-      <h1> Welcome ScavenJourney </h1>
+     <h1> Welcome ScavenJourney </h1>
+     <NavBar />
     </div>
   )
 }

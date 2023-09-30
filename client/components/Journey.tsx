@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { Journey } from '../types/Journey';
 import { User } from '../types/User';
 
 

@@ -5,6 +5,7 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
+    "seed": "ts-node server/db/index.ts",
     "start": "ts-node server/index.ts"
   },
   "devDependencies": {
@@ -66,6 +67,7 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "typeorm-extension": "^3.0.2"
   }
 }
