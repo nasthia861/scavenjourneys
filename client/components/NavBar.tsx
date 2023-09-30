@@ -8,7 +8,7 @@ const navBarStyle: React.CSSProperties = {
   backgroundColor: 'blue',
   overflow: 'hidden'
 };
-//temp in-line styling until bootstrap global 
+//temp in-line styling until bootstrap global
 const linkStyle: React.CSSProperties = {
   float: 'left',
   display: 'block',
