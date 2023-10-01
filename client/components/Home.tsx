@@ -1,10 +1,9 @@
 import React from 'react';
-import NavBar from './NavBar';
 
 const Home = () => {
   return (
     <div>
-     <h1> Welcome ScavenJourney </h1>
+     <h1> ScavenJourney Home Page</h1>
      {/* <NavBar menuItems={[]} /> */}
     </div>
   )

@@ -13,13 +13,14 @@ import Menu from '@mui/material/Menu';
 import { Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-
+//iterface to allocate types to MenuItems (path and label)
 interface MenuItem {
   path: string;
   label: string;
 }
-
+//interface to set type menuItem: array of pages to link to (Profile, Leaderboard, etc.)
 interface NavBarProps {
+  //menu items hold the value of MenuItem interface within an array to map over 
   menuItems: MenuItem[];
 }
 
