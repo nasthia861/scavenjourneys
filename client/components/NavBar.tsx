@@ -14,8 +14,17 @@ import { Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 
+interface MenuItem {
+  path: string;
+  label: string;
+}
 
-const NavBar = () => {
+interface NavBarProps {
+  menuItems: MenuItem[];
+}
+
+
+const NavBar = ( {menuItems}: NavBarProps ) => {
 
   //authenticate user
   const [auth, setAuth] = React.useState<boolean | null>(true);
@@ -55,16 +64,19 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar>
           <IconButton
+           onClick={handleMenu} 
+           style={{ cursor: 'pointer' }} 
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <MenuIcon
+           />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Photos
+            Welcome To ScavenJourney !
           </Typography>
           {auth && (
             <div>
@@ -73,7 +85,6 @@ const NavBar = () => {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
                 color="inherit"
               >
                 <AccountCircle />
@@ -93,15 +104,17 @@ const NavBar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem component={Link} to="/profile"  onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Journey</MenuItem>
+            {menuItems.map((item) => (
+                  <MenuItem key={item.path} component={Link} to={item.path} onClick={handleClose}>
+                    {item.label}
+                  </MenuItem>
+                ))}
               </Menu>
             </div>
           )}
         </Toolbar>
       </AppBar>
     </Box>
- 
     
   );
 }

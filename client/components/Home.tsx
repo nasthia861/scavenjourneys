@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div>
      <h1> Welcome ScavenJourney </h1>
-     <NavBar />
+     {/* <NavBar menuItems={[]} /> */}
     </div>
   )
 }
