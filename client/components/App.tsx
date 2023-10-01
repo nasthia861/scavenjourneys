@@ -5,9 +5,27 @@ import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
-import SignUp from './SignUp';
+import SignUp from './SignUp'; 
+import { themeOptions } from './Theme';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles';
 
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#9a4119',
+    },
+    secondary: {
+      main: '#b5870a',
+    },
+    background: {
+      default: '#bbada7',
+    },
+  },
+  // Add more customizations if needed
+});
 const App = () => {
 
   const menuItems = [
@@ -19,8 +37,13 @@ const App = () => {
   ];
 
   return (
+    <ThemeProvider theme={theme}> 
+    <CssBaseline />
+
     <BrowserRouter>
+    
      <NavBar menuItems={menuItems} />
+     
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
@@ -29,6 +52,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
