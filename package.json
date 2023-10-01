@@ -49,6 +49,12 @@
   "description": "My webpack project",
   "name": "my-webpack-project",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.11",
+    "@mui/material": "^5.14.11",
+    "@mui/styled-engine-sc": "^5.14.11",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.5.1",
     "cloudinary": "^1.41.0",
@@ -67,6 +73,7 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
+    "styled-components": "^5.3.11",
     "typeorm": "^0.3.17",
     "typeorm-extension": "^3.0.2"
   }
