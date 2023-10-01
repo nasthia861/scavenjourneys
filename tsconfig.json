@@ -10,6 +10,8 @@
     "target": "es6",
     "allowJs": true,
     "outDir": "dist",
-    "jsx": "react"
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
 }

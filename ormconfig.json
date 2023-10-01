@@ -1,11 +1,9 @@
-
-
-{ 
-   "name": "scavenjourneysConnection", 
-   "type": "mysql", 
-   "host": "localhost", 
-   "port": 3306, 
-   "username": "root", 
-   "password": "", 
-   "database": "scavenjourneys" 
+{
+   "name": "scavenjourneysConnection",
+   "type": "mysql",
+   "host": "localhost",
+   "port": 3306,
+   "username": "root",
+   "password": "",
+   "database": "scavenjourneys"
 }
