@@ -10,7 +10,8 @@
       "airbnb-typescript/base",
       "prettier",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/typescript"
+      "plugin:import/typescript",
+      "plugin:@mui/material/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": { "project": ["./tsconfig.json"] },

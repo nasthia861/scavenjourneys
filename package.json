@@ -6,7 +6,7 @@
     "watch": "webpack --watch",
     "serve": "webpack serve",
     "seed": "ts-node server/db/index.ts",
-    "start": "ts-node server/index.ts"
+    "start": "ts-node server/index.ts --watch"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
@@ -20,6 +20,7 @@
     "@types/passport-google-oauth": "^1.0.43",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",
+    "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
     "@webpack-cli/generators": "^3.0.7",
@@ -50,6 +51,12 @@
   "description": "My webpack project",
   "name": "my-webpack-project",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.11",
+    "@mui/material": "^5.14.11",
+    "@mui/styled-engine-sc": "^5.14.11",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.4",
     "@types/cors": "^2.8.14",
@@ -82,6 +89,7 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
+    "styled-components": "^5.3.11",
     "ts-dotenv": "^0.9.1",
     "typeorm": "^0.3.17",
     "typeorm-extension": "^3.0.2"

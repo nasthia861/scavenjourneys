@@ -1,42 +1,42 @@
 import dotenv from 'dotenv';
-dotenv.config();
 // eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth2';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
+import AppDataSource from '../db/index';
 import { User } from '../db/User';
-import  AppDataSource  from '../db/index';
-import { Profile } from 'passport-google-oauth';
+
+dotenv.config();
 
 passport.use(new GoogleStrategy ({
 
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.HOST}/auth/google/redirect`,
-      scope: ['email', 'profile'],
-      passReqToCallback: true,
+      callbackURL: `${process.env.HOST}/auth/google/redirect`
+
     },
+
     async (
-      accessToken: string, 
-      refreshToken: string, 
-      profile: Profile, 
-      done: VerifyCallback) => {
+      accessToken: any,
+      refreshToken: any,
+      profile: any,
+      cb: any) => {
 
       const authUser = {
         username: profile.displayName,
         email: profile.emails[0].value,
-        picture: profile.photos,
+        picture: profile.photos[0].toString(),
         googleId: profile.id
       };
+      
       let user = await AppDataSource
-      .createQueryBuilder()
-      .select('user')
-      .from(User,'username' )
-      .where('user.id = :id', { id: authUser.googleId})
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.username = :username', { username: authUser.username})
       .getOne();
 
       if (!user ) {
-         user = await AppDataSource
+         await AppDataSource
         .createQueryBuilder()
         .insert()
         .into(User)
@@ -51,18 +51,34 @@ passport.use(new GoogleStrategy ({
       }
 
       if (user) {
-        done(null, user);
+        return cb(null, user);
       }
     }
   )
 );
 
-passport.serializeUser(async (user, done) => {
-  done(null, user);
+//stores user object in a session
+passport.serializeUser((user: any, done: any) => {
+  return done(null, user.id);
 });
 
-passport.deserializeUser(async(user, done) => {
-        done(null, user);
+passport.deserializeUser(async (id: any, done: any) => {
+  let user = await AppDataSource
+  .getRepository(User)
+  .createQueryBuilder('user')
+  .where('user.id = :id', { id: id})
+  .getOne();
+  try {
+
+    if (user) {
+      done(null, user);
+    } else {
+      return done(new Error('No user found'), null);
+    }
+  } catch (err) {
+    console.error(err);
+    return done(err, null);
+  }
 })
 
-module.exports = passport;
+export default passport;
