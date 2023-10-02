@@ -1,30 +1,27 @@
 import * as React from 'react';
-import FormGroup from '@mui/material/FormGroup';
-import { FormControlLabel } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { Routes } from 'react-router-dom';
+import { AccountCircle } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import {  AppBar, Box, Toolbar, Typography, Menu, MenuItem, IconButton } from '@mui/material';
 
-//iterface to allocate types to MenuItems (path and label)
+//we can use forms to anchor signed-in users to NavBar features (Profile Pic, username, etc..)
+import { FormControlLabel, FormGroup } from '@mui/material';
+
+//withheld from external types folder to exemplify interface/ assignments being passed to functional component
+//we have to assign types/interface to ensure proper typescript syntax 
+//interface to allocate types to MenuItems (path and label: string)
 interface MenuItem {
   path: string;
   label: string;
 }
-//interface to set type menuItem: array of pages to link to (Profile, Leaderboard, etc.)
+//interface to set interface for NavBarProps: array of pages to link to (Profile:{path: '/', label: 'profile'} etc.)
 interface NavBarProps {
   //menu items hold the value of MenuItem interface within an array to map over 
+  //path and label props being passed to MenuItem array elements
   menuItems: MenuItem[];
 }
 
-
+//NavBar accepts NavBar props with with menu items array, each value assigned a path and label
 const NavBar = ( {menuItems}: NavBarProps ) => {
 
   //authenticate user
@@ -42,7 +39,7 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
     setAnchorEl(event.currentTarget);
   };
 
-  //handler to close menu
+  //handler to close menu after selecting link to other page
   const handleClose = () => {
     setAnchorEl(null);
   };
