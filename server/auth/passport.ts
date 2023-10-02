@@ -3,7 +3,7 @@ import passport from 'passport';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import AppDataSource from '../db/index';
-import { User } from '../db/User';
+import { User } from '../db/entities/User';
 
 passport.use(new GoogleStrategy ({
 

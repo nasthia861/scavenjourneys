@@ -12,15 +12,16 @@ export class Step {
 
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
+  
+  @ManyToOne(() => User, (user: User) => user.id)
+  user: number;
+
+  @ManyToOne(() => Journey, (journey: Journey) => journey.id)
+  journey: number;
+
 
   @CreateDateColumn()
   created_at: Date;
-
-  @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey: Journey;
-
-  @ManyToOne(() => User, (user: User) => user.id)
-  user: User;
 }
 
 module.exports = {
