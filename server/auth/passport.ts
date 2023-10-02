@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -6,34 +5,40 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import AppDataSource from '../db/index';
 import { User } from '../db/User';
 
-dotenv.config();
-
 passport.use(new GoogleStrategy ({
 
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.HOST}/auth/google/redirect`
+      callbackURL: `${process.env.HOST}/auth/google/redirect`,
+      passReqToCallback: true
 
     },
 
     async (
+      request: any,
       accessToken: any,
       refreshToken: any,
       profile: any,
-      cb: any) => {
+      done: any) => {
 
       const authUser = {
+        googleId: profile.id,
         username: profile.displayName,
-        email: profile.emails[0].value,
-        picture: profile.photos[0].toString(),
-        googleId: profile.id
+        picture: profile.picture,
       };
-      
+
+      try {
+
       let user = await AppDataSource
-      .getRepository(User)
-      .createQueryBuilder('user')
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
       .where('user.username = :username', { username: authUser.username})
       .getOne();
+
+      if (user) {
+        return done(null, user);
+      }
 
       if (!user ) {
          await AppDataSource
@@ -42,7 +47,7 @@ passport.use(new GoogleStrategy ({
         .into(User)
         .values([
           {
-            id: authUser.googleId,
+            google_id: authUser.googleId,
             username: authUser.username,
             img_url: authUser.picture,
           }
@@ -50,9 +55,11 @@ passport.use(new GoogleStrategy ({
         .execute();
       }
 
-      if (user) {
-        return cb(null, user);
-      }
+    } catch(err) {
+
+      return done(err);
+
+    }
     }
   )
 );
@@ -76,7 +83,6 @@ passport.deserializeUser(async (id: any, done: any) => {
       return done(new Error('No user found'), null);
     }
   } catch (err) {
-    console.error(err);
     return done(err, null);
   }
 })

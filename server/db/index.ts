@@ -23,7 +23,7 @@ const AppDataSource = new DataSource({
   password: '',
   database:'scavenjourneys',
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [
     User,
     Journey,

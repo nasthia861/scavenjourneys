@@ -1,21 +1,18 @@
 import { Router } from "express";
 import passport from "passport";
-import dotenv from 'dotenv';
-import session from "express-session";
-dotenv.config();
 
-const router = Router();
+const auth = Router();
 
 const successLoginUrl = process.env.HOST;
 const failedLoginUrl = process.env.HOST + '/signup';
 
 //routes to google oauth
-router.get('/google', passport.authenticate('google', 
+auth.get('/google', passport.authenticate('google', 
 { 
-  scope: ['profile']
+  scope: ['email', 'profile']
 }));
 
-router.get('/google/redirect', passport.authenticate('google', 
+auth.get('/google/redirect', passport.authenticate('google', 
 {
   failureMessage: true,
   failureRedirect: failedLoginUrl,
@@ -29,4 +26,4 @@ router.get('/google/redirect', passport.authenticate('google',
   }
 });
 
-export default router;
+export default auth;
