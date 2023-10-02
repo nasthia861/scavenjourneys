@@ -1,7 +1,8 @@
 import express from 'express';
 import { User } from "../db/User";
+import AppDataSource from '../db';
 
-const router = express.Router();
+const userRouter = express.Router();
 
 
-export default router;
+export default userRouter;

@@ -1,7 +1,8 @@
 import express from 'express';
 import { Step } from "../db/Step";
+import AppDataSource from '../db';
 
-const router = express.Router();
+const stepRouter = express.Router();
 
 
-export default router;
+export default stepRouter;

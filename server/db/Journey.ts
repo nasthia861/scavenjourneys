@@ -22,9 +22,12 @@ export class Journey {
   @Column()
   img_url: string;
 
-  @ManyToMany(() => JourneyTag)
+  @ManyToMany(() => JourneyTag
+  // , (tag) => tag.journeys, {
+  //   cascade: true,}
+  )
   @JoinTable()
-  journeyTag: JourneyTag[]
+  journeyTags: JourneyTag[]
 
   @CreateDateColumn()
   created_at: Date;
