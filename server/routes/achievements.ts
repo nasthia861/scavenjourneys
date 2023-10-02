@@ -1,6 +1,7 @@
 import express from 'express';
 import { Achievement } from '../db/Achievement';
+import AppDataSource from '../db';
 
-const router = express.Router();
+const achievementRouter = express.Router();
 
-export default router;
+export default achievementRouter;

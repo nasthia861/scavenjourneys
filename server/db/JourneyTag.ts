@@ -1,5 +1,5 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Journey } from './Journey'
+import { Journey } from "./Journey";
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToMany} from 'typeorm';
 
 @Entity()
 export class JourneyTag {
@@ -9,11 +9,10 @@ export class JourneyTag {
   @Column()
   name: string;
 
-  @Column()
-  tag_id: number;
-
-  @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey_id: Journey;
+  // @Column()
+  // tag_id: number;
+  // @ManyToMany(() => Journey, (journey) => journey.tags)
+  // journeys: Journey[]
 
   @CreateDateColumn()
   created_at: Date;
