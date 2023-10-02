@@ -1,19 +1,20 @@
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import{ createDatabase, SeederOptions } from 'typeorm-extension'
+import{ createDatabase, runSeeders, SeederOptions, dropDatabase } from 'typeorm-extension'
 
 
-import { User } from './User'
-import { Journey } from './Journey'
-import { Step } from './Step'
-import { JourneyProgress } from './JourneyProgress'
-import { StepProgress } from './StepProgress'
-import { JourneyTag } from './JourneyTag'
-import { Likes } from './Likes'
-import { Achievement } from './Achievement'
-import { UserAchievement } from './UserAchievement'
-// import { create } from 'axios';
+import { User } from './entities/User'
+import { Journey } from './entities/Journey'
+import { Step } from './entities/Step'
+import { JourneyProgress } from './entities/JourneyProgress'
+import { StepProgress } from './entities/StepProgress'
+import { JourneyTag } from './entities/JourneyTag'
+import { Likes } from './entities/Likes'
+import { Achievement } from './entities/Achievement'
+import { UserAchievement } from './entities/UserAchievement'
+import UserSeeder from './seeding/seeds/user.seeder'
+import UserFactory from './seeding/factories/user.factory';
 
   const options: DataSourceOptions = {
   type: 'mysql',
@@ -34,13 +35,18 @@ import { UserAchievement } from './UserAchievement'
     Likes,
     Achievement,
     UserAchievement
-  ]};
+  ]
+};
   
   const AppDataSource = new DataSource(options);
-  createDatabase({options})
+  dropDatabase({options})
+    .then(() => createDatabase({options}))
     .then(() => {AppDataSource.initialize()})
+    .then(() => runSeeders(AppDataSource, {
+      seeds: [UserSeeder],
+      factories: [UserFactory]
+    }))
     .then(() => {'AppDataSource has been successfully initialized'})
-    .catch((err: unknown) => console.error('AppDataSource has not been initialized', err))
       
 // createDatabase({ifNotExist: true})
 //   .then(() => {AppDataSource.initialize()})
