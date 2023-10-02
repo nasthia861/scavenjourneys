@@ -1,5 +1,6 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './User'
+import { JourneyTag } from './JourneyTag';
 
 @Entity()
 export class Journey {
@@ -20,6 +21,10 @@ export class Journey {
 
   @Column()
   img_url: string;
+
+  @ManyToMany(() => JourneyTag)
+  @JoinTable()
+  journeyTag: JourneyTag[]
 
   @CreateDateColumn()
   created_at: Date;

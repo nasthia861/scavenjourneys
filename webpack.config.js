@@ -1,9 +1,13 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 
-
-const isProduction = NODE_ENV == 'production';
+const isProduction = process.env.NODE_ENV == 'production';
 
 
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -11,11 +15,9 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 
 
 const config = {
-    
-    mode: NODE_ENV,
-    entry: path.resolve(__dirname, "client/index.tsx"), 
+    entry: path.resolve(__dirname, "client/index.tsx"),
     output: {
-        path: path.resolve(__dirname, 'dist'), 
+        path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
     },
     devServer: {
@@ -30,7 +32,7 @@ const config = {
         new MiniCssExtractPlugin(),
 
         new Dotenv({
-            template: path.join(__dirname, ".env"), // eslint-disable-line
+            template: path.join(__dirname, ".env"),
           }),
 
         // Add your plugins here
