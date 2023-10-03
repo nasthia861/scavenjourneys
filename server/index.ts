@@ -1,16 +1,13 @@
 
 import dotenv from 'dotenv';
 import express from 'express';
-// import dotenv from 'dotenv-webpack';
-
 import path from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import session from "express-session";
-import auth from './routes/auth';
 import journeyRouter from './routes/journey';
 import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
+import auth from './routes/auth';
+import session from "express-session";
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 
