@@ -35,7 +35,7 @@ import { UserAchievement } from './UserAchievement'
     Achievement,
     UserAchievement
   ]};
-  
+
   const AppDataSource = new DataSource(options);
   createDatabase({options})
     .then(() => {AppDataSource.initialize()})
