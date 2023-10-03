@@ -9,11 +9,6 @@ export class Tag {
   @Column()
   name: string;
 
-  // @Column()
-  // tag_id: number;
-  // @ManyToMany(() => Journey, (journey) => journey.tags)
-  // journeys: Journey[]
-
   @CreateDateColumn()
   created_at: Date;
 }

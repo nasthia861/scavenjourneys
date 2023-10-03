@@ -39,9 +39,5 @@ import { UserAchievement } from './entities/UserAchievement'
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
       
-// createDatabase({ifNotExist: true})
-//   .then(() => {AppDataSource.initialize()})
-//   .then(() => {'AppDataSource has been successfully initialized'})
-//   .catch((err: unknown) => console.error('AppDataSource has not been initialized', err))
 
 export default AppDataSource;
