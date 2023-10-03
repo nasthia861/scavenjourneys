@@ -1,10 +1,12 @@
 import express from 'express';
 import { Journey } from "../db/entities/Journey";
+import { Tag } from "../db/entities/Tag";
 import AppDataSource from '../db';
 import { ArrayContains } from "typeorm";
 
 const journeyRouter = express.Router();
-const journeyRepository = AppDataSource.getRepository(Journey)
+const journeyRepository = AppDataSource.getRepository(Journey);
+const tagRepository = AppDataSource.getRepository(Tag);
 
 //get all journeys
 journeyRouter.get('/', async(req, res) => {
@@ -16,18 +18,21 @@ journeyRouter.get('/', async(req, res) => {
   })
 })
 
-// get journeys by journeytag
-journeyRouter.get('/journeyTag/:name', async(req, res) => {
+// get journeys by tag
+journeyRouter.get('/tag/:name', async(req, res) => {
   const { name } = req.params;
   journeyRepository.find({
     relations: {
-      journeyTags: true,
+      Tag: true,
     },
     where: {
-      journeyTags: ArrayContains([{name}])
+      tag: {
+        name: name
+      }
     }
   })
     .then((journeys) => {
+      console.log(journeys);
       if(journeys) {
         res.status(200).send(journeys)
       } else {

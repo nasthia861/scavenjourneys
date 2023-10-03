@@ -22,7 +22,7 @@ import { UserAchievement } from './entities/UserAchievement'
   password: '',
   database:'journeys',
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [
     User,
     Journey,
