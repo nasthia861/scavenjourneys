@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import{ createDatabase } from 'typeorm-extension'
+
 
 
 import { User } from './entities/User'
@@ -33,9 +33,8 @@ import { UserAchievement } from './entities/UserAchievement'
     Likes,
     Achievement,
     UserAchievement
-  ]
-};
-  
+  ]};
+
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
