@@ -3,7 +3,7 @@ import passport from "passport";
 
 const authRoutes = Router();
 
-const successLoginUrl = process.env.HOST;
+const successLoginUrl = process.env.HOST + '/home';
 const failedLoginUrl = process.env.HOST + '/signup';
 
 //routes to google oauth

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
 import Journey from './Journey';
@@ -16,7 +17,8 @@ const App = () => {
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
-    { path: '/', label: 'Home' },
+    { path: '/', label: 'Welcome' },  
+    { path: '/home', label: 'Home' },
     { path: '/profile', label: 'Profile' },
     { path: '/journey', label: 'Journey' },
     { path: '/leaderboard', label: 'Leaderboard' },
@@ -31,7 +33,8 @@ const App = () => {
     <BrowserRouter>
      <NavBar menuItems={menuItems} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/journey" element={<Journey />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
