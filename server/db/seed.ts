@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import{ createDatabase } from 'typeorm-extension'
+import{ createDatabase, runSeeders, dropDatabase } from 'typeorm-extension'
 
 
 import { User } from './entities/User'
@@ -13,6 +13,8 @@ import { JourneyTag } from './entities/JourneyTag'
 import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
+import UserSeeder from './seeding/seeds/user.seeder'
+import UserFactory from './seeding/factories/user.factory';
 
   const options: DataSourceOptions = {
   type: 'mysql',
@@ -37,12 +39,9 @@ import { UserAchievement } from './entities/UserAchievement'
 };
   
   const AppDataSource = new DataSource(options);
-  AppDataSource.initialize()
-    .then(() => {'AppDataSource has been successfully initialized'})
-      
-// createDatabase({ifNotExist: true})
-//   .then(() => {AppDataSource.initialize()})
-//   .then(() => {'AppDataSource has been successfully initialized'})
-//   .catch((err: unknown) => console.error('AppDataSource has not been initialized', err))
-
-export default AppDataSource;
+  dropDatabase({options})
+    .then(() => createDatabase({options}))
+    .then(() => runSeeders(AppDataSource, {
+      seeds: [UserSeeder],
+      factories: [UserFactory]
+    }))
