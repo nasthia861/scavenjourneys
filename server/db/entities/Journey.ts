@@ -16,11 +16,12 @@ export class Journey {
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
 
+  @Column()
+  img_url: string;
+  
   @ManyToOne(() => User, (user: User) => user.id)
   user_id: User;
 
-  @Column()
-  img_url: string;
 
   @ManyToMany(() => JourneyTag
   // , (tag) => tag.journeys, {
