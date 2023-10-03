@@ -1,9 +1,14 @@
 import React from 'react';
 import { Avatar, Container, Stack, TextField, Typography, Button, List, ListItem, ListItemText, Divider} from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
-import { Box, style } from '@mui/system';
+import { Box } from '@mui/system';
+import axios from 'axios';
 
 const Profile = () => {
+
+  const updateUsername = () => {
+    axios.patch('')
+  }
 
   return (
     <Container>
