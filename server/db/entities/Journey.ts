@@ -25,13 +25,6 @@ export class Journey {
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   tag: number;
 
-  // @ManyToMany(() => Tag
-  // , (tag) => tag.journeys, {
-  //   cascade: true,}
-  // )
-  // @JoinTable()
-  // tags: Tag[]
-
   @CreateDateColumn()
   created_at: Date;
 
