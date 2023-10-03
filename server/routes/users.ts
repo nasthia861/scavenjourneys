@@ -61,15 +61,15 @@ userRouter.post('/', async (req, res) => {
 });
 
 //Put to adjust user photo (tested: 404)
-userRouter.put('/:id', async (req, res) => {
+userRouter.put('/:id/img', async (req, res) => {
   const { id } = req.params;
   const { img_url } = req.body;
 
   try {
     const user = await userRepo.findOneBy( {id: parseInt(id)  } );
-    if (!user) {
-      res.status(404).send('User not found' )
-    }
+    // if (!user) {
+    //   res.status(404).send('User not found' )
+    // }
     user.img_url = img_url;
     await userRepo.save(user);
     res.status(200).send(user);
