@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "noImplicitAny": true,
+    "allowImportingTsExtensions" :true,
+    "emitDeclarationOnly": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "target": "es6",
+    "allowJs": true,
+    "outDir": "dist",
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
