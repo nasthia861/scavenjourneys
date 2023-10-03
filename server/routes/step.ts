@@ -2,81 +2,84 @@ import express from 'express';
 import { Step } from "../db/Step";
 import { StepProgress } from '../db/StepProgress';
 import AppDataSource from '../db';
-const router = express.Router();
 
-const stepRepo = AppDataSource.getRepository(Step);
-const stepProgressRepo = AppDataSource.getRepository(StepProgress);
-const Steps = express.Router();
+const stepRouter = express.Router();
+const stepRepository = AppDataSource.getRepository(Step)
 
-//GET step by :id
-Steps.get('/:id', async (req, res) => {
-  const { id } = req.params;
+// get all steps (probs not very useful)
+stepRouter.get('/', async (req, res) => {
   try {
-    const step = await stepRepo.findOneBy({id: parseInt(id)});
-    if (step) {
-      res.status(200).send(step);
+    const steps = await stepRepository.find();
+    res.status(200).json(steps);
+  } catch (error) {
+    console.error('Could not get all steps', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// get steps by journey
+// stepRouter.get('/journey/:journeyId', async (req, res) => {
+//   const { journeyId } = req.params;
+//   try {
+//     const steps = await stepRepository.find({
+//       relations: {
+//         journey_id: true,
+//       },
+//       where: {
+//         journey_id: Number(journeyId)
+//       },
+//     });
+//     res.status(200).json(steps);
+//   } catch (error) {
+//     console.error('Could not get steps by journey', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
+// create a step
+stepRouter.post('/', async (req, res) => {
+  const newStepData = req.body; // Assuming the request body contains step data
+  try {
+    const newStep = stepRepository.create(newStepData);
+    await stepRepository.save(newStep);
+    res.status(201).json(newStep);
+  } catch (error) {
+    console.error('Could not create step', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// update a step by id
+stepRouter.put('/:id', async (req, res) => {
+  const stepId = req.params.id;
+  const updatedStepData = req.body; // Assuming the request body contains updated step data
+  try {
+    const result = await stepRepository.update(stepId, updatedStepData);
+    if (result.affected > 0) {
+      res.status(200).json({ message: 'Step updated successfully' });
     } else {
-      res.status(404).send('Step Error');
+      res.status(404).json({ message: 'Step not found' });
     }
-  } catch(err) {
-    console.error(err);
+  } catch (error) {
+    console.error('Could not update step', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-//GET all steps
-Steps.get('/', async (req, res) => {
+// delete a step by id
+stepRouter.delete('/:id', async (req, res) => {
+  const stepId = req.params.id;
   try {
-    const steps = await stepRepo.find();
-    res.status(200).send(steps);
-
-  } catch(err) {
-    console.error(err);
-    res.send(404).send('Error')
-  }
-});
-
-//POST new step
-Steps.post('/', async (req, res) => {
-  const { name, location, journey_id, user_id } = req.body;
-  try {
-    const newStep = stepRepo.create({ name, location, journey_id, user_id });
-    await stepRepo.save(newStep);
-    res.status(201).send(newStep);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-// PATCH Step progression by :id
-Steps.patch('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { in_progress, step_id } = req.body;
-
-  try {
-    const step = await stepRepo.findOneBy({ id: parseInt(id)});
-    if (step) {
-    
-      // Find the StepProgress entry for the given step_id
-      let stepProgress = await stepProgressRepo.findOne({where: { step_id: step_id }});
-      //if step progress exist
-      if (stepProgress) {
-        // update the progression and save
-        stepProgress.in_progress = in_progress;
-        await stepProgressRepo.save(stepProgress);
-        res.status(200).send(stepProgress);
-      } else {
-        // stepProgress entry not found
-        res.status(404).send('StepProgress not found');
-      }
+    const result = await stepRepository.delete(stepId);
+    if (result.affected > 0) {
+      res.status(200).json({ message: 'Step deleted successfully' });
     } else {
-      // Step not found
-      res.status(404).send('Step not found');
+      res.status(404).json({ message: 'Step not found' });
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error('Could not delete step', error);
     res.status(500).send('Internal Server Error');
   }
 });
-export default router;
+
+export default stepRouter;
