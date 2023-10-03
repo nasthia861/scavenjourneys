@@ -7,15 +7,8 @@ export default class JourneySeeder implements Seeder {
         dataSource: DataSource,
         factoryManager: SeederFactoryManager
     ): Promise<any> {
-        const JourneyFactory = await factoryManager.get(Journey);
+        const journeyFactory = factoryManager.get(Journey);
 
-        await factoryManager(User)()
-        .map(async (user) => {
-          user.journey = users[Math.floor(Math.random() * users.length)];
-          return post;
-        })
-        .createMany(100);
-
-        await JourneyFactory.saveMany(5);
+        await journeyFactory.saveMany(3)
     }
 }

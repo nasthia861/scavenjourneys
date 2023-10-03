@@ -2,7 +2,7 @@ import { Journey } from "./Journey";
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToMany} from 'typeorm';
 
 @Entity()
-export class JourneyTag {
+export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,5 +19,5 @@ export class JourneyTag {
 }
 
 module.exports = {
-  JourneyTag
+  Tag
 }

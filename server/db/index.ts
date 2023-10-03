@@ -9,7 +9,7 @@ import { Journey } from './entities/Journey'
 import { Step } from './entities/Step'
 import { JourneyProgress } from './entities/JourneyProgress'
 import { StepProgress } from './entities/StepProgress'
-import { JourneyTag } from './entities/JourneyTag'
+import { Tag } from './entities/Tag'
 import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
@@ -29,7 +29,7 @@ import { UserAchievement } from './entities/UserAchievement'
     Step,
     JourneyProgress,
     StepProgress,
-    JourneyTag,
+    Tag,
     Likes,
     Achievement,
     UserAchievement
