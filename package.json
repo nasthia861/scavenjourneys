@@ -5,7 +5,7 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
-    "seed": "ts-node server/db/index.ts",
+    "seed": "ts-node server/db/seed.ts",
     "start": "ts-node server/index.ts"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { Journey } from "../db/Journey";
+import { Journey } from "../db/entities/Journey";
 import AppDataSource from '../db';
 import { ArrayContains } from "typeorm";
 

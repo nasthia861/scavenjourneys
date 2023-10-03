@@ -1,6 +1,6 @@
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './User'
-import { JourneyTag } from './JourneyTag';
+import { Tag } from './Tag';
 
 @Entity()
 export class Journey {
@@ -16,18 +16,21 @@ export class Journey {
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
 
-  @ManyToOne(() => User, (user: User) => user.id)
-  user_id: User;
-
   @Column()
   img_url: string;
 
-  @ManyToMany(() => JourneyTag
+  @ManyToOne(() => User, (user: User) => user.id)
+  user: number;
+  
+  @ManyToOne(() => Tag, (tag: Tag) => tag.id)
+  tag: number;
+
+  // @ManyToMany(() => Tag
   // , (tag) => tag.journeys, {
   //   cascade: true,}
-  )
-  @JoinTable()
-  journeyTags: JourneyTag[]
+  // )
+  // @JoinTable()
+  // tags: Tag[]
 
   @CreateDateColumn()
   created_at: Date;

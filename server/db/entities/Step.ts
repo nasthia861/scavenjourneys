@@ -12,12 +12,13 @@ export class Step {
 
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
+  
+  @ManyToOne(() => User, (user: User) => user.id)
+  user: number;
 
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey_id: Journey;
+  journey: number;
 
-  @ManyToOne(() => User, (user: User) => user.id)
-  user_id: User;
 
   @CreateDateColumn()
   created_at: Date;

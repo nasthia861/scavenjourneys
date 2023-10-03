@@ -1,6 +1,6 @@
 import express from 'express';
-import { Step } from "../db/Step";
-import { StepProgress } from '../db/StepProgress';
+import { Step } from "../db/entities/Step";
+import { StepProgress } from '../db/entities/StepProgress';
 import AppDataSource from '../db';
 
 const stepRouter = express.Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import { User } from "../db/User";
+import { User } from "../db/entities/User";
 import AppDataSource from '../db';
 
 //create repo instance for User entity from AppDataSource
