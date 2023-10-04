@@ -17,29 +17,29 @@ journeyRouter.get('/', async(req, res) => {
 })
 
 // get journeys by journeytag
-journeyRouter.get('/journeyTag/:name', async(req, res) => {
-  const { name } = req.params;
-  journeyRepository.find({
-    relations: {
-      journeyTags: true,
-    },
-    where: {
-      journeyTags: ArrayContains([{name}])
-    }
-  })
-    .then((journeys) => {
-      if(journeys) {
-        res.status(200).send(journeys)
-      } else {
-        console.error('could not find tag name');
-        res.status(404)
-      }
-    })
-    .catch((error) => {
-      console.error('could not get journeys by tag', error);
-      res.status(500);
-  })
-})
+// journeyRouter.get('/journeyTag/:name', async(req, res) => {
+//   const { name } = req.params;
+//   journeyRepository.find({
+//     relations: {
+//       journeyTags: true,
+//     },
+//     where: {
+//       journeyTags: ArrayContains([{name}])
+//     }
+//   })
+//     .then((journeys) => {
+//       if(journeys) {
+//         res.status(200).send(journeys)
+//       } else {
+//         console.error('could not find tag name');
+//         res.status(404)
+//       }
+//     })
+//     .catch((error) => {
+//       console.error('could not get journeys by tag', error);
+//       res.status(500);
+//   })
+// })
 
 // create a new journey
 journeyRouter.post('/', async (req, res) => {
