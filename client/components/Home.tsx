@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import Search from './Search'
 
 const Home = () => {
+
+
+
+
+
   return (
     <div>
-     <h1> ScavenJourney Home Page</h1>
-     {/* <NavBar menuItems={[]} /> */}
+     <Search />
     </div>
   )
 }
