@@ -7,14 +7,15 @@ export class UserAchievement {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Achievement, (achievement: Achievement) => achievement.id)
-  achievement_id: Achievement;
-
-  @ManyToOne(() => User, (user: User) => user.id)
-  user_id: User;
-
   @CreateDateColumn()
   created_at: Date;
+
+  @ManyToOne(() => Achievement, (achievement: Achievement) => achievement.id)
+  achievement: Achievement;
+
+  @ManyToOne(() => User, (user: User) => user.id)
+  user: User;
+
 }
 
 module.exports = {
