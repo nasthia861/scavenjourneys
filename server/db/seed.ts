@@ -59,3 +59,4 @@ import tagFactory from './seeding/factories/tag.factory';
       seeds: [StepSeeder],
       factories: [stepFactory]
     }))
+    .then(() => console.log('Seed has seeded'))
