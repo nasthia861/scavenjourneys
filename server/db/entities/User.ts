@@ -11,6 +11,9 @@ export class User {
   @Column()
   img_url: string;
 
+  @Column()
+  google_id: string;
+
   @CreateDateColumn()
   created_at: Date;
 }
