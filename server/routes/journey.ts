@@ -19,7 +19,6 @@ journeyRouter.get('/', async(req, res) => {
 })
 
 //get journeys by tag
-//get journey by name
 journeyRouter.get('/tag/:name', async(req, res) => {
   const { name } = req.params;
   AppDataSource.manager.find(Journey, {
