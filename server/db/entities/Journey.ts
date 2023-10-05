@@ -33,13 +33,6 @@ export class Journey {
   @JoinColumn()
   tag: Tag;
 
-  // @ManyToMany(() => Tag
-  // , (tag) => tag.journeys, {
-  //   cascade: true,}
-  // )
-  // @JoinTable()
-  // tags: Tag[]
-
   @CreateDateColumn()
   created_at: Date;
 

@@ -20,6 +20,7 @@ export class User {
 
   @OneToMany(() => Journey, (journey: Journey) => journey.id)
   journey: Journey;
+
 }
 
 
