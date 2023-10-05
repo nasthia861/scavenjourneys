@@ -82,4 +82,18 @@ stepRouter.delete('/:id', async (req, res) => {
   }
 });
 
+// get Steps by userId
+stepRouter.get('/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const steps = await stepRepository.findOneBy({  user: +userId }  )
+    res.status(200).send(steps)
+
+  } catch(err) {
+    console.error("Error getting user Steps", err);
+    res.status(404).send(err)
+  }
+})
+
 export default stepRouter;
