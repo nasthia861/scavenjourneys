@@ -83,15 +83,29 @@ stepRouter.delete('/:id', async (req, res) => {
 });
 
 // get Steps by userId
-stepRouter.get('/:userId', async (req, res) => {
+stepRouter.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const steps = await stepRepository.findOneBy({  user: +userId }  )
+    const steps = await stepRepository.findBy({  user: +userId }  )
     res.status(200).send(steps)
 
   } catch(err) {
     console.error("Error getting user Steps", err);
+    res.status(404).send(err)
+  }
+});
+
+// get Steps by journeyId
+stepRouter.get('/journey/:journeyId', async (req, res) => {
+  const { journeyId } = req.params;
+
+  try {
+    const steps = await stepRepository.findBy({  journey: +journeyId }  )
+    res.status(200).send(steps)
+
+  } catch(err) {
+    console.error("Error getting journey", err);
     res.status(404).send(err)
   }
 })
