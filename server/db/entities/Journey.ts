@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable, JoinColumn } from 'typeorm';
 import { User } from './User'
 import { Tag } from './Tag';
 
@@ -19,11 +19,19 @@ export class Journey {
   @Column()
   img_url: string;
 
+  @Column({ nullable: true })
+  userId: number
+
   @ManyToOne(() => User, (user: User) => user.id)
-  user: number;
+  @JoinColumn()
+  user: User;
+
+  @Column({ nullable: true })
+  tagId: number
   
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
-  tag: number;
+  @JoinColumn()
+  tag: Tag;
 
   // @ManyToMany(() => Tag
   // , (tag) => tag.journeys, {

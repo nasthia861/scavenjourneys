@@ -41,6 +41,10 @@ app.use(passport.authenticate('session'));
 
 //routes
 app.use('/auth', authRoutes);
+app.use('/user', userRouter);
+app.use('/journey', journeyRouter);
+app.use('/step', stepRouter);
+app.use('/achievement', achievementRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {
