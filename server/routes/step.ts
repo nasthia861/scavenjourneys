@@ -84,63 +84,78 @@ stepRouter.delete('/:id', async (req, res) => {
 });
 
 // get Steps by userId
-stepRouter.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
+// stepRouter.get('/user/:userId', async (req, res) => {
+//   const { userId } = req.params;
 
-  try {
-    const steps = await AppDataSource.getRepository(Step)
-    .createQueryBuilder('step')
-    .leftJoinAndSelect('user.id', 'user')
-    .where('user.id = :userId', { userId: +userId })
-    .getMany();
-     //debugger;
-    console.log(steps)
-    res.status(200).send(steps)
-
-  } catch(err) {
-    console.error("Error getting user Steps", err);
-    res.status(404).send(err)
-  }
-});
-
-
-// stepRouter.get('/user/:id', async (req, res) => {
-//   const { id } = req.params;
-  
 //   try {
-//     const steps = await AppDataSource.manager.find(Step, {
-//       relations: { userId: true},
-//       where: {
-//         userId: +id,
+//     const steps = await stepRepository.find({ 
+//       relations: ['user'],
+//      where: {
+//       user: {
+//         id: +userId
 //       }
-//     });
-
-//     if (steps) {
-//       res.status(200).json(steps);
-//     } else {
-//       console.error( id);
-//       res.status(404).send('Steps not found');
 //     }
-//   } catch (error) {
-
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-// // get Steps by journeyId
-// stepRouter.get('/journey/:journeyId', async (req, res) => {
-//   const { journeyId } = req.params;
-
-//   try {
-//     const steps = await stepRepository.find({where: {  journey: parseInt(journeyId) } } )
+//      })
+//      //debugger;
 //     console.log(steps)
 //     res.status(200).send(steps)
 
 //   } catch(err) {
-//     console.error("Error getting journey", err);
+//     console.error("Error getting user Steps", err);
 //     res.status(404).send(err)
 //   }
 // });
+
+// GET all steps assigned to a user
+stepRouter.get('/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  
+  try {
+    const steps = await AppDataSource.manager.find(Step, {
+      relations: ['user'],
+      where: {
+        user :  {
+          id: +userId,
+        }
+      }
+    });
+
+    if (steps) {
+      res.status(200).json(steps);
+    } else {
+      res.status(404).send('Steps not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// // get Steps by journeyId
+stepRouter.get('/journey/:journeyId', async (req, res) => {
+  const { journeyId } = req.params;
+  
+  try {
+    const steps = await AppDataSource.manager.find(Step, {
+      relations: ['journey'],
+      where: {
+        journey :  {
+          id: +journeyId,
+        }
+      }
+    });
+
+    if (steps) {
+      res.status(200).json(steps);
+    } else {
+      res.status(404).send('Steps not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 export default stepRouter;
