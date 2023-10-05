@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha} from '@mui/material/styles';
 
@@ -33,10 +34,24 @@ const SearchBase = styled('div')(({ theme }) => ({
 }));
 
 const Search = () => {
+  const [searchInput, setSearchInput] = useState('')
+  const [journeys, setJourneys] = useState([]);
 
+  const getJourney = () => {
+    axios.get(`/journey/name/${searchInput}`)
+      .then((journey: {}) => {
+        setJourneys([journey])
+      })
+  }
 
+  const handleChange = (e: React.ChangeEvent) => {
+    e.preventDefault();
+    setSearchInput(e.target.textContent);
+  };
 
+  useEffect(() => {
 
+  }, [journeys])
 
   return (
     <div>
@@ -44,6 +59,13 @@ const Search = () => {
             <StyledInputBase
               placeholder="Journey Search"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                getJourney();
+                }
+              }}
+              value={searchInput}
               />
       </SearchBase>
     </div>
