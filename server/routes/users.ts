@@ -85,11 +85,11 @@ userRouter.put('/:id/img', async (req, res) => {
       const user = await userRepo.findOneBy( { id: parseInt(id) });
       user.username = username;
       await userRepo.save(user);
-      res.sendStatus(200).send(user);
+      res.status(200).send(user);
 
     } catch (err) {
       console.error('Could not update username', err)
-      res.sendStatus(500);
+      res.status(500);
     }
   })
 
