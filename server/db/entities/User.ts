@@ -1,5 +1,5 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Journey } from './Journey';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -13,6 +13,9 @@ export class User {
 
   @Column()
   google_id: string;
+
+  @OneToMany(() => Journey, (journey: Journey) => journey.id)
+  journey: Journey;
 
   @CreateDateColumn()
   created_at: Date;
