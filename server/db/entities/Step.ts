@@ -14,10 +14,10 @@ export class Step {
   location: { latitude: number; longitude: number };
   
   @ManyToOne(() => User, (user: User) => user.id)
-  user: number;
+  user: User;
 
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey: number;
+  journey: Journey;
 
 
   @CreateDateColumn()

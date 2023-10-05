@@ -1,4 +1,5 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Journey } from './Journey';
 
 @Entity()
 export class User {
@@ -16,7 +17,11 @@ export class User {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @OneToMany(() => Journey, (journey: Journey) => journey.id)
+  journey: Journey;
 }
+
 
 module.exports = {
   User

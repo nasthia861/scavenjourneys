@@ -1,0 +1,5 @@
+{
+  "watch": ["src"],
+  "ext": ".tsx,.ts,.json",
+  "exec": "ts-node server/index.ts"
+}
