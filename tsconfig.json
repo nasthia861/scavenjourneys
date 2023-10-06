@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@this/types/*": ["types/*"]
+    },
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,

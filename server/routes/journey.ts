@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';;
 import { Journey } from "../db/entities/Journey";
 import { Tag } from "../db/entities/Tag";
 import AppDataSource from '../db';
@@ -17,6 +17,20 @@ journeyRouter.get('/', async(req, res) => {
       res.status(500);
   })
 })
+
+//get most recent 20 journeys
+journeyRouter.get('/recent', async (req, res) => {
+  try {
+    const recentJourneys = await journeyRepository.find({
+      take: 20, // Limit to the most recent 20 journeys
+      order: { created_at: 'DESC' }, // Sort by creation date in descending order
+    });
+    res.status(200).json(recentJourneys);
+  } catch (error) {
+    console.error('Error fetching recent journeys:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 //get journeys by tag
 journeyRouter.get('/tag/:id', async(req, res) => {
@@ -60,16 +74,23 @@ journeyRouter.get('/name/:name', async(req, res) => {
 })
 
 
-// create a new journey
-journeyRouter.post('/', async (req, res) => {
-  const newJourneyData = req.body; // Assuming the request body contains journey data
-  const newJourney = journeyRepository.create(newJourneyData);
-  await journeyRepository.save(newJourney)
-    .then((createdJourney: {}) => res.status(201).json(createdJourney))
-    .catch((error: null) => {
-      console.error('could not create journey', error);
-      res.status(500);
+// Create a new journey
+journeyRouter.post('/', async (req: Request, res: Response) => {
+  try {
+    const { name, description, img_url } = req.body;
+
+    const journey = journeyRepository.create({
+      name,
+      description,
+      img_url,
     });
+
+    const createdJourney = await journeyRepository.save(journey);
+    res.status(201).json(createdJourney);
+  } catch (error) {
+    console.error('Error creating journey:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // GET journeys by userId

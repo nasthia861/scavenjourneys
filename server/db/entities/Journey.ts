@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable, JoinColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './User'
 import { Tag } from './Tag';
 
@@ -28,7 +28,7 @@ export class Journey {
 
   @Column({ nullable: true })
   tagId: number
-  
+
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   @JoinColumn()
   tag: Tag;

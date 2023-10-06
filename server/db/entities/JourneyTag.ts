@@ -1,5 +1,5 @@
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Journey } from './Journey'
+import { Journey } from './entities/Journey'
 
 @Entity()
 export class JourneyTag {

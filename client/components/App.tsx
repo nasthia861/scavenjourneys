@@ -7,6 +7,7 @@ import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
 import SignUp from './SignUp'; 
+import CreateJourney from './CreateJourney';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
 import { themeOptions } from './Theme'; //theme import
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="/journey" element={<Journey />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/create-journey" element={<CreateJourney />} />
       </Routes>
     </BrowserRouter>
     </ThemeProvider>
