@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { JourneyType } from '@this/types/Journey';
@@ -10,11 +10,14 @@ import {
   Button,
 } from "@mui/material";
 
-const Search = () => {
+type IHeaderProps = {
+  setJourneys: (journeys: JourneyType[]) => void;
+};
+
+const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   const [searchInput, setSearchInput] = useState("");
-  const [journeys, setJourneys] = useState([]);
+  // const [journeys, setJourneys] = useState([]);
   const [tags, setTags] = useState([]);
-  const navigate = useNavigate();
 
   const getTags = () => {
     axios.get("/tag").then((tags: { data: [] }) => {
@@ -24,19 +27,21 @@ const Search = () => {
 
   const getJourneyByName = () => {
     axios.get(`journey/name/${searchInput}`)
-    .then((journey: { data: [] }) => {
-      setJourneys(journey.data);
+    .then((journeys: { data: [] }) => {
+      console.log(journeys.data)
+      setJourneys(journeys.data);
       setSearchInput('')
-      navigate('/home', {state: journey.data})
+      // navigate('/home', {state: journey.data})
     })
 
   };
 
-  const getJourneyByTag = (tagName: string) => {
-    axios.get(`journey/tag/${tagName}`)
+  const getJourneyByTag = async (tagName: string) => {
+    await axios.get(`journey/tag/${tagName}`)
       .then((journeys: { data: [] }) => {
+        console.log(journeys.data)
         setJourneys(journeys.data);
-        navigate('/home', {state: journeys.data})
+        // navigate('/home', {state: journeys.data})
       })
   };
 
@@ -67,29 +72,6 @@ const Search = () => {
         return <Button key={tag.id} onClick={() => getJourneyByTag(tag.name)}>{tag.name}</Button>
       })}
       </div>
-      <section>
-        <ImageList sx={{ width: 500, height: 450 }}>
-          {journeys.map(
-            (journey: JourneyType) => (
-              <ImageListItem
-                key={journey.id}
-                onClick={() => navigate('/journey',{state:{journey}})}>
-                <img
-                  srcSet={journey.img_url}
-                  src={journey.img_url}
-                  alt={journey.description}
-                  loading="lazy"
-                  />
-                <ImageListItemBar
-                  title={journey.name}
-                  subtitle={<span>by: {journey.user.username}</span>}
-                  // position="below"
-                  />
-              </ImageListItem>
-            )
-          )}
-        </ImageList>
-      </section>
     </div>
   );
 };

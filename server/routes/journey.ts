@@ -98,6 +98,31 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
   }
 });
 
+// GET journeys by userId
+journeyRouter.get('/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const journeys = await AppDataSource.manager.find(Journey, {
+      relations: ['user'],
+      where: {
+        user :  {
+          id: +userId,
+        }
+      }
+    });
+    if (journeys) {
+      res.status(200).json(journeys);
+    } else {
+      res.status(404).send('No Journeys found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // update a journey by id
 journeyRouter.put('/:id', async (req, res) => {
   const journeyId = req.params.id;

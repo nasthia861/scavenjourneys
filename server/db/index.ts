@@ -38,6 +38,6 @@ import { UserAchievement } from './entities/UserAchievement'
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
-      
+
 
 export default AppDataSource;

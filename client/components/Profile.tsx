@@ -10,6 +10,8 @@ const Profile = () => {
     axios.patch('')
   }
 
+  axios.get('/step/')
+
   return (
     <Container>
       <Stack spacing={1}>
