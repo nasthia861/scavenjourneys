@@ -2,6 +2,7 @@ import express from 'express';
 import { Step } from "../db/entities/Step";
 import { StepProgress } from '../db/entities/StepProgress';
 import AppDataSource from '../db';
+import { User } from '../db/entities/User';
 
 const stepRouter = express.Router();
 const stepRepository = AppDataSource.getRepository(Step)
@@ -78,6 +79,81 @@ stepRouter.delete('/:id', async (req, res) => {
     }
   } catch (error) {
     console.error('Could not delete step', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// get Steps by userId
+// stepRouter.get('/user/:userId', async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const steps = await stepRepository.find({ 
+//       relations: ['user'],
+//      where: {
+//       user: {
+//         id: +userId
+//       }
+//     }
+//      })
+//      //debugger;
+//     console.log(steps)
+//     res.status(200).send(steps)
+
+//   } catch(err) {
+//     console.error("Error getting user Steps", err);
+//     res.status(404).send(err)
+//   }
+// });
+
+// GET all steps assigned to a user
+stepRouter.get('/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  
+  try {
+    const steps = await AppDataSource.manager.find(Step, {
+      relations: ['user'],
+      where: {
+        user :  {
+          id: +userId,
+        }
+      }
+    });
+
+    if (steps) {
+      res.status(200).json(steps);
+    } else {
+      res.status(404).send('Steps not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// // get Steps by journeyId
+stepRouter.get('/journey/:journeyId', async (req, res) => {
+  const { journeyId } = req.params;
+  
+  try {
+    const steps = await AppDataSource.manager.find(Step, {
+      relations: ['journey'],
+      where: {
+        journey :  {
+          id: +journeyId,
+        }
+      }
+    });
+
+    if (steps) {
+      res.status(200).json(steps);
+    } else {
+      res.status(404).send('Steps not found');
+    }
+  } catch (error) {
+
+    console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });

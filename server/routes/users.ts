@@ -49,9 +49,9 @@ userRouter.get('/', async (req, res) => {
 
 //POST new user (tested: √ )
 userRouter.post('/', async (req, res) => {
-  const { username, img_url } = req.body;
+  const { username, img_url, google_id } = req.body;
   try {
-    const newUser = userRepo.create({ username, img_url });
+    const newUser = userRepo.create({ username, img_url, google_id });
     await userRepo.save(newUser);
     res.status(201).send(newUser);
   } catch(err) {
