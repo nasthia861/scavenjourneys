@@ -20,9 +20,9 @@ authRoutes.get('/google/redirect', passport.authenticate('google',
 }),
 (req, res) => {
   if (req.user) {
-
     res.redirect(successLoginUrl);
-
+  } else {
+    res.redirect(failedLoginUrl);
   }
 });
 

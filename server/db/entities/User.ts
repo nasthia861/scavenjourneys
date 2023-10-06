@@ -15,14 +15,15 @@ export class User {
   @Column()
   google_id: string;
 
-  @OneToMany(() => Journey, (journey: Journey) => journey.id)
-  journey: Journey;
-
   @OneToMany(() => Step, (step: Step) => step.id)
   step: Step;
 
   @CreateDateColumn()
   created_at: Date;
+
+  @OneToMany(() => Journey, (journey: Journey) => journey.id)
+  journey: Journey;
+
 }
 
 module.exports = {

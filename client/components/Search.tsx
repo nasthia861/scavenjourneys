@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { JourneyType } from '@this/types/Journey';
+import { TagType } from '@this/types/Tag'
 import {
   ImageList,
   ImageListItem,
@@ -24,13 +26,17 @@ const Search = () => {
     axios.get(`journey/name/${searchInput}`)
     .then((journey: { data: [] }) => {
       setJourneys(journey.data);
-    });
+      setSearchInput('')
+      navigate('/home', {state: journey.data})
+    })
+
   };
 
   const getJourneyByTag = (tagName: string) => {
     axios.get(`journey/tag/${tagName}`)
       .then((journeys: { data: [] }) => {
         setJourneys(journeys.data);
+        navigate('/home', {state: journeys.data})
       })
   };
 
@@ -57,23 +63,14 @@ const Search = () => {
       />
       <div>
       {tags.map(
-        (tag: {
-          id: number,
-          name: string
-        }) => {
+        (tag: TagType) => {
         return <Button key={tag.id} onClick={() => getJourneyByTag(tag.name)}>{tag.name}</Button>
       })}
       </div>
       <section>
         <ImageList sx={{ width: 500, height: 450 }}>
           {journeys.map(
-            (journey: {
-              id: number;
-              name: string;
-              img_url: string;
-              description: string;
-              user: { username: string };
-            }) => (
+            (journey: JourneyType) => (
               <ImageListItem
                 key={journey.id}
                 onClick={() => navigate('/journey',{state:{journey}})}>
