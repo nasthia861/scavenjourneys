@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Container, Grid, Card, TextField, CardContent, CardMedia, Typography } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 
 import Search from './Search'
 import JourneyItem from './JourneyItem';
+import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
 const StyledCreateJourneyButton = styled(Button)(() => ({
@@ -17,19 +19,22 @@ const StyledCreateJourneyButton = styled(Button)(() => ({
   },
 }));
 
+// type IHeaderProps = {
+//   journeys: JourneyType[];
+//   setJourneys: (journeys: JourneyType[]) => void;
+// };
+
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const location: {state: {journey: JourneyType}} = useLocation();
 
  //set user state to User or null
  const [user, setUser] = useState<User | null>(null);
 
- const [journeys, setJourneys] = useState([]);
- const [journeyId, setJourneyId] = useState('')
+ const [journeys, setJourneys] = useState<JourneyType[]>([]);
  const [newJourneyName, setNewJourneyName] = useState('');
  const [selectedJourney, setSelectedJourney] = useState(null);
  const [steps, setSteps] = useState([]);
-
-
-  // const [journeys, setJourneys] = useState<Journey[]>([]);
 
   useEffect(() => {
     // Fetch the most recently made 20 journeys
@@ -42,19 +47,19 @@ const Home: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    // get steps for the selected journey
-    if (selectedJourney) {
-      axios.get(`/step/journey/${selectedJourney.id}`)
-        .then((stepAndJourney) => {
-          //console.log(stepAndJourney)
-          setSteps(stepAndJourney.data);
-        })
-        .catch((error) => {
-          console.error('Error getting steps for journey:', error);
-        });
-    }
-  }, [selectedJourney]);
+  // useEffect(() => {
+  //   // get steps for the selected journey
+  //   if (selectedJourney) {
+  //     axios.get(`/step/journey/${selectedJourney.id}`)
+  //       .then((stepAndJourney) => {
+  //         //console.log(stepAndJourney)
+  //         setSteps(stepAndJourney.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error getting steps for journey:', error);
+  //       });
+  //   }
+  // }, [selectedJourney]);
 
   //assign Journey to User
   // const assignJourney = () => {
@@ -73,26 +78,18 @@ const Home: React.FC = () => {
 
 return (
   <Container>
-    <Search />
+    <Search setJourneys={setJourneys}/>
 
      {/* Styled "Create a New Journey" button */}
      <Link to="/create-journey">
         <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
       </Link>
-
-
-      {/* Render the list of recently made journeys */}
-      <div className="journey-list">
-        {journeys.map((journey) => (
-          <JourneyItem key={journey.id} journey={journey} />
-        ))}
-      </div>
-    <h1> Journey Begins Here! *change me*</h1>
+    <h1> Pick your Journey</h1>
     <Grid container spacing={2}>
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card >
+          <Card onClick={() => navigate('/journey',{state:{journey}})}>
             <CardMedia
               component="img"
               alt={journey.name}
@@ -105,20 +102,12 @@ return (
                 <br/>
                 {journey.description}
               </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setSelectedJourney(journey)}
-                style={{ marginTop: 10 }}
-              >
-                More Details
-              </Button>
             </CardContent>
           </Card>
         </Grid>
       ))}
     </Grid>
-      {/* Display selected journey details steps */}
+      {/* Display selected journey details steps
       {selectedJourney && (
         <div>
           <h2>Selected Journey: {selectedJourney.name}</h2>
@@ -132,7 +121,7 @@ return (
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
 
 

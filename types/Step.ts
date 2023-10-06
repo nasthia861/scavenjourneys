@@ -1,9 +1,12 @@
 
-export type Steps = {
+export type StepType = {
   id: number;
   name: string;
-  location: Location;
+  location: {
+    latitude: string,
+    longitude: string
+  };
   journey_id: number;
   user_id: number;
-  created_at: string; 
+  created_at: string;
 }

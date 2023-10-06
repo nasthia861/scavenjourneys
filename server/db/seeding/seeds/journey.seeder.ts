@@ -9,6 +9,6 @@ export default class JourneySeeder implements Seeder {
     ): Promise<any> {
         const journeyFactory = factoryManager.get(Journey);
 
-        await journeyFactory.saveMany(3)
+        await journeyFactory.saveMany(20)
     }
 }

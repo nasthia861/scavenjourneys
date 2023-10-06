@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';;
 import { Journey } from "../db/entities/Journey";
-import { Tag } from "../db/entities/Tag";
 import AppDataSource from '../db';
-import { ArrayContains } from "typeorm";
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
@@ -33,22 +31,26 @@ journeyRouter.get('/recent', async (req, res) => {
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:id', async(req, res) => {
-  const { id } = req.params;
-  AppDataSource.manager.findBy(Journey, {
-    tagId: +id,
+journeyRouter.get('/tag/:name', async(req, res) => {
+  const { name } = req.params;
+  AppDataSource.manager.find(Journey, {
+    relations: ['user', 'tag'],
+    where: {
+      tag: {
+        name: name
+      }
+    }
   })
     .then((journeys: []) => {
-      console.log(journeys);
       if(journeys) {
         res.status(200).send(journeys)
       } else {
-        console.error('could not find tag name');
+        console.error('could not find journey by name');
         res.status(404)
       }
     })
     .catch((error: null) => {
-      console.error('could not get journeys by tag', error);
+      console.error('could not get journeys by name', error);
       res.status(500);
   })
 })
@@ -56,8 +58,11 @@ journeyRouter.get('/tag/:id', async(req, res) => {
 //get journey by name
 journeyRouter.get('/name/:name', async(req, res) => {
   const { name } = req.params;
-  AppDataSource.manager.findOneBy(Journey, {
-    name: name,
+  AppDataSource.manager.find(Journey, {
+    relations: ['user', 'tag'],
+    where: {
+      name: name,
+    }
   })
     .then((journey: {}) => {
       if(journey) {

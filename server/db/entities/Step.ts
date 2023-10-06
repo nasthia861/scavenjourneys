@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './User'
 import { Journey } from './Journey'
 
@@ -12,13 +12,20 @@ export class Step {
 
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
-  
+
+  @Column({ nullable: true })
+  userId: number
+
   @ManyToOne(() => User, (user: User) => user.id)
+  @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey: Journey;
+  @Column({ nullable: true })
+  journeyId: number
 
+  @ManyToOne(() => Journey, (journey: Journey) => journey.id)
+  @JoinColumn()
+  journey: Journey;
 
   @CreateDateColumn()
   created_at: Date;
