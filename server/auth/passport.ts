@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy ({
       refreshToken: any,
       profile: any,
       done: any) => {
-
+        
       const authUser = {
         googleId: profile.id,
         username: profile.displayName,

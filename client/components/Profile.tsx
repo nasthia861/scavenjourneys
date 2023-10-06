@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Avatar,
   Container,
@@ -16,17 +17,16 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import { User } from '../types/User'
 
-//need to create state for userID
-const userId = "1"
 
 const Profile = () => {
 
+  let { userId } = useParams();
   const [user, setUser] = useState({})
   const [username, setUsername] = useState("ddmcdona1906")
 
   // Fetch user by id
   const getUser = (userId: string) => {
-    axios.get('/user' + userId)
+    axios.get('/user/' + userId)
     .then((res) => {
       setUser(res.data);
   })
@@ -37,7 +37,7 @@ const Profile = () => {
 
 //update user information
 const updateUsername = () => {
-  axios.patch("/user" + userId, {username: username} )
+  axios.patch("/user/" + userId, {username: username} )
   .then((res) => {
       setUser(res.data);
     })

@@ -1,25 +1,30 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
-import SignUp from './SignUp'; 
+import SignUp from './SignUp';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
 import { themeOptions } from './Theme'; //theme import
 
 
+// const profileId = () => {
+//   let { userId } = useParams();
+//   return userId;
+// }
 
-const App = () => {
+
+const App = (userId: string) => {
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
-    { path: '/', label: 'Welcome' },  
+    { path: '/', label: 'Welcome' },
     { path: '/home', label: 'Home' },
-    { path: '/profile', label: 'Profile' },
+    { path:`/profile`, label: 'Profile' },
     { path: '/journey', label: 'Journey' },
     { path: '/leaderboard', label: 'Leaderboard' },
     { path: '/signup', label: 'SignUp'}
@@ -28,7 +33,7 @@ const App = () => {
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
     //https://mui.com/system/styles/basics/
   return (
-    <ThemeProvider theme={themeOptions}> 
+    <ThemeProvider theme={themeOptions}>
     <CssBaseline />
     <BrowserRouter>
      <NavBar menuItems={menuItems} />
