@@ -12,25 +12,13 @@ const Journey = () => {
   //const [user, setUser] = useState<User | null>(null);
 
   const location: {state: {journey: {name: string, user: {username: string}, img_url: string}}} = useLocation();
-  const [journeys, setJourneys] = useState([]);
-
-  useEffect(() => {
-    console.log(location.state.journey);
-    setJourneys([location.state.journey]);
-  }, [])
-
-
+  const [journey, setJourneys] = useState(location.state.journey);
 
   return(
     <Container>
-      { journeys.map((journey) => {
-        return (
-          <div>
           <div>{journey.name}</div>
           <div>{journey.user.username}</div>
           <img src={journey.img_url}></img>
-          </div>
-      )})}
     </Container>
   );
 }
