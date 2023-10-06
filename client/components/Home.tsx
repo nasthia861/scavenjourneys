@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 
 import Search from './Search'
 import JourneyItem from './JourneyItem';
-import Journey from './Journey';
+import { Journey } from '@this/types/Journey';
 
 const StyledCreateJourneyButton = styled(Button)(() => ({
   backgroundColor: '#9a4119', // Change the background color
@@ -18,7 +18,7 @@ const StyledCreateJourneyButton = styled(Button)(() => ({
 }));
 
 const Home: React.FC = () => {
-  const [journeys, setJourneys] = useState<typeof Journey[]>([]);
+  const [journeys, setJourneys] = useState<Journey[]>([]);
 
   useEffect(() => {
     // Fetch the most recently made 20 journeys
@@ -43,7 +43,7 @@ const Home: React.FC = () => {
       {/* Render the list of recently made journeys */}
       <div className="journey-list">
         {journeys.map((journey) => (
-          <JourneyItem journey={journey} />
+          <JourneyItem key={journey.id} journey={journey} />
         ))}
       </div>
     </div>

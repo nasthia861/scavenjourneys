@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import Journey from './Journey';
+import { Journey } from '@this/types/Journey';
 
 const StyledPaper = styled(Paper)(() => ({
   padding: '16px',
@@ -20,16 +20,16 @@ const StyledTypography = styled(Typography)(() => ({
 }));
 
 interface JourneyItemProps {
-  journey: typeof Journey;
+  journey: Journey;
 }
 
 const JourneyItem: React.FC<JourneyItemProps> = ({ journey }) => {
   return (
     <StyledPaper>
       <StyledTypography variant="h6">{journey.name}</StyledTypography>
-      {/* <img src={journey.img_url} alt={journey.name} style={{ maxWidth: '100%' }} /> */}
-      {/* <Typography>{journey.description}</Typography>
-      <Typography>Created on: {journey.created_at}</Typography> */}
+      <img src={journey.img_url} alt={journey.name} style={{ maxWidth: '100%' }} />
+      <Typography>{journey.description}</Typography>
+      <Typography>Created on: {journey.created_at}</Typography>
     </StyledPaper>
   );
 };

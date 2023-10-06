@@ -28,7 +28,7 @@ export class Journey {
 
   @Column({ nullable: true })
   tagId: number
-  
+
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   @JoinColumn()
   tag: Tag;
