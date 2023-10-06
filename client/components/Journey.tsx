@@ -16,9 +16,9 @@ const Journey = () => {
 
   return(
     <Container>
-          <div>{journey.name}</div>
-          <div>{journey.user.username}</div>
-          <img src={journey.img_url}></img>
+          <div>title: {journey.name}</div>
+          <div>created by: {journey.user.username}</div>
+          <img src={journey.img_url} alt='image of chosen journey'></img>
     </Container>
   );
 }
