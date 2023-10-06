@@ -9,4 +9,3 @@ export interface Journey {
   created_at: string; 
   last_modified_at: string;
 }
-

@@ -8,10 +8,10 @@ export class Likes {
   id: number;
 
   @ManyToOne(() => User, (user: User) => user.id)
-  user_id: User;
+  user: User;
 
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
-  journey_id: Journey;
+  journey: Journey;
 }
 
 module.exports = {

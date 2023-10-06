@@ -30,7 +30,7 @@ import tagFactory from './seeding/factories/tag.factory';
   password: '',
   database:'journeys',
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [
     User,
     Journey,
@@ -59,3 +59,4 @@ import tagFactory from './seeding/factories/tag.factory';
       seeds: [StepSeeder],
       factories: [stepFactory]
     }))
+    .then(() => console.log('Seed has seeded'))
