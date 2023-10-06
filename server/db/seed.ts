@@ -43,7 +43,7 @@ import tagFactory from './seeding/factories/tag.factory';
     UserAchievement
   ]
 };
-  
+
   const AppDataSource = new DataSource(options);
   dropDatabase({options})
     .then(() => createDatabase({options}))

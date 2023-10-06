@@ -12,7 +12,6 @@
     "allowJs": true,
     "outDir": "dist",
     "jsx": "react",
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
 }
