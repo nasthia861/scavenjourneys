@@ -16,7 +16,7 @@ import { UserAchievement } from './entities/UserAchievement'
 
   const options: DataSourceOptions = {
   type: 'mysql',
-  host: '127.0.0.1',
+  host: 'localhost',
   port: 3306,
   username: 'root',
   password: '',
@@ -38,6 +38,6 @@ import { UserAchievement } from './entities/UserAchievement'
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
-      
+
 
 export default AppDataSource;
