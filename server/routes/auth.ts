@@ -1,18 +1,20 @@
 import { Router } from "express";
 import passport from "passport";
+import dotenv from 'dotenv'
 
+dotenv.config();
 const authRoutes = Router();
 
 const successLoginUrl = process.env.HOST + '/home';
-const failedLoginUrl = process.env.HOST + '/signup';
+const failedLoginUrl = process.env.HOST + '/welcome';
 
 //routes to google oauth
-authRoutes.get('/google', passport.authenticate('google', 
-{ 
+authRoutes.get('/google', passport.authenticate('google',
+{
   scope: ['email', 'profile']
 }));
 
-authRoutes.get('/google/redirect', passport.authenticate('google', 
+authRoutes.get('/google/redirect', passport.authenticate('google',
 {
   failureMessage: true,
   failureRedirect: failedLoginUrl,
