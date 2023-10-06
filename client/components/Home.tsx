@@ -47,19 +47,19 @@ const Home: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    // get steps for the selected journey
-    if (selectedJourney) {
-      axios.get(`/step/journey/${selectedJourney.id}`)
-        .then((stepAndJourney) => {
-          //console.log(stepAndJourney)
-          setSteps(stepAndJourney.data);
-        })
-        .catch((error) => {
-          console.error('Error getting steps for journey:', error);
-        });
-    }
-  }, [selectedJourney]);
+  // useEffect(() => {
+  //   // get steps for the selected journey
+  //   if (selectedJourney) {
+  //     axios.get(`/step/journey/${selectedJourney.id}`)
+  //       .then((stepAndJourney) => {
+  //         //console.log(stepAndJourney)
+  //         setSteps(stepAndJourney.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error getting steps for journey:', error);
+  //       });
+  //   }
+  // }, [selectedJourney]);
 
   //assign Journey to User
   // const assignJourney = () => {
@@ -102,14 +102,6 @@ return (
                 <br/>
                 {journey.description}
               </Typography>
-              {/* <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setSelectedJourney(journey)}
-                style={{ marginTop: 10 }}
-              >
-                More Details
-              </Button> */}
             </CardContent>
           </Card>
         </Grid>

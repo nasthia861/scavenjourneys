@@ -1,12 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
-import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 import {
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   Button,
 } from "@mui/material";
 
@@ -16,7 +12,6 @@ type IHeaderProps = {
 
 const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   const [searchInput, setSearchInput] = useState("");
-  // const [journeys, setJourneys] = useState([]);
   const [tags, setTags] = useState([]);
 
   const getTags = () => {
@@ -28,10 +23,8 @@ const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   const getJourneyByName = () => {
     axios.get(`journey/name/${searchInput}`)
     .then((journeys: { data: [] }) => {
-      console.log(journeys.data)
       setJourneys(journeys.data);
       setSearchInput('')
-      // navigate('/home', {state: journey.data})
     })
 
   };
@@ -39,9 +32,8 @@ const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   const getJourneyByTag = async (tagName: string) => {
     await axios.get(`journey/tag/${tagName}`)
       .then((journeys: { data: [] }) => {
-        console.log(journeys.data)
         setJourneys(journeys.data);
-        // navigate('/home', {state: journeys.data})
+
       })
   };
 

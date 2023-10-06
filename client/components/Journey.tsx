@@ -22,26 +22,12 @@ const Journey = () => {
     // get steps for the selected journey
       axios.get(`/step/journey/${journey.id}`)
         .then((stepAndJourney: {data: []}) => {
-          //console.log(stepAndJourney)
           setSteps(stepAndJourney.data);
         })
         .catch((error) => {
           console.error('Error getting steps for journey:', error);
         });
   },[]);
-
-  // //Not in complete working state Logan, placeholder
-  // const createJourney = () => {
-  //   axios.post('/journey', { name: newJourneyName })
-  //     .then((response) => {
-  //       console.log('Journey created successfully:', response.data);
-
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error creating journey:', error);
-  //     });
-  // };
-
 
   return (
     <Container>
