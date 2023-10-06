@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import {
   ImageList,
@@ -11,10 +12,10 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
   const [journeys, setJourneys] = useState([]);
   const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
 
   const getTags = () => {
     axios.get("/tag").then((tags: { data: [] }) => {
-      console.log(tags.data)
       setTags(tags.data);
     });
   };
@@ -27,7 +28,6 @@ const Search = () => {
   };
 
   const getJourneyByTag = (tagName: string) => {
-    console.log(tagName);
     axios.get(`journey/tag/${tagName}`)
       .then((journeys: { data: [] }) => {
         setJourneys(journeys.data);
@@ -74,18 +74,20 @@ const Search = () => {
               description: string;
               user: { username: string };
             }) => (
-              <ImageListItem key={journey.id}>
+              <ImageListItem
+                key={journey.id}
+                onClick={() => navigate('/journey',{state:{journey}})}>
                 <img
                   srcSet={journey.img_url}
                   src={journey.img_url}
                   alt={journey.description}
                   loading="lazy"
-                />
+                  />
                 <ImageListItemBar
                   title={journey.name}
                   subtitle={<span>by: {journey.user.username}</span>}
                   // position="below"
-                />
+                  />
               </ImageListItem>
             )
           )}

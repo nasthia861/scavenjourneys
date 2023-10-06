@@ -1,8 +1,6 @@
 import express from 'express';
 import { Journey } from "../db/entities/Journey";
-import { Tag } from "../db/entities/Tag";
 import AppDataSource from '../db';
-import { ArrayContains } from "typeorm";
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
@@ -47,7 +45,7 @@ journeyRouter.get('/tag/:name', async(req, res) => {
 journeyRouter.get('/name/:name', async(req, res) => {
   const { name } = req.params;
   AppDataSource.manager.find(Journey, {
-    relations: ['user'],
+    relations: ['user', 'tag'],
     where: {
       name: name,
     }
