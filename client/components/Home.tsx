@@ -28,9 +28,12 @@ const Home: React.FC = () => {
     }, () => console.log('Could not get location'))
 
 
-    // Fetch the most recently made 20 journeys
+    // Fetch the journeys closest to you
     axios.get(`/journey/recent/${userLat}/${userLong}`)
       .then((response) => {
+        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+        })
         setJourneys(response.data);
       })
       .catch((error) => {
@@ -56,7 +59,7 @@ const Home: React.FC = () => {
 return (
   <Container>
     <br/>
-    <Search setJourneys={setJourneys}/>
+    <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong}/>
     <br/>
     <Link to="/create-journey">
       <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
