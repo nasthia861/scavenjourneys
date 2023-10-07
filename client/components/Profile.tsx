@@ -55,7 +55,7 @@ const updateUsername = () => {
     <Container>
       <Stack spacing={1}>
         <Typography variant="h5" gutterBottom>
-          {username} Profile
+          {username}
         </Typography>
         <Avatar
         sx={{ bgcolor: deepPurple[500], width: 56, height: 56 }}

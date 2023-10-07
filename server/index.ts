@@ -11,6 +11,7 @@ import journeyRouter from './routes/journey';
 import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
+// import homeRouter from './routes/home';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -41,6 +42,7 @@ app.use(passport.authenticate('session'));
 
 //routes
 app.use('/auth', authRoutes);
+// app.use('/home', homeRouter);
 app.use('/user', userRouter);
 app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);

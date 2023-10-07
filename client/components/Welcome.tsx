@@ -1,12 +1,18 @@
 import React from 'react';
 import GoogleButton from 'react-google-button'
+import { Typography } from '@mui/material';
 
 const Welcome = () => {
   return (
     <div>
-     <h1> ScavenJourney Welcome Page</h1>
+      <Typography
+      variant='h5'
+      gutterBottom
+      >
+        Welcome to ScavenJourney
+      </Typography>
      <a href='/auth/google'>
-      <GoogleButton
+        <GoogleButton
           label='Google Sign In'
           onClick={() => { console.log('Google button clicked') }}
       />

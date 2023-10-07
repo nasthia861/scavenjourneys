@@ -79,7 +79,7 @@ userRouter.put('/:id', async (req, res) => {
 
 })
 
-//PATCH to update user username
+//PATCH to update user username (tested: √ )
 userRouter.patch('/:id', async (req, res) => {
   const { id } = req.params
 

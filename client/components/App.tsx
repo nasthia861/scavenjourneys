@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
@@ -10,15 +10,21 @@ import SignUp from './SignUp';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
 import { themeOptions } from './Theme'; //theme import
+// import { ReactSession } from 'react-client-session';
 
 
-// const profileId = () => {
-//   let { userId } = useParams();
-//   return userId;
-// }
 
 
-const App = (userId: string) => {
+const App = () => {
+
+  // const [userId, setUserId] = useState('');
+
+  // ReactSession.setStoreType('sessionStorage');
+  // ReactSession.set('id', userId)
+  // useEffect(() => {
+  //   setUserId(ReactSession.get('id'));
+  // })
+  
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
