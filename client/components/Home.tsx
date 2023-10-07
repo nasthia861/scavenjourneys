@@ -15,19 +15,28 @@ const Home: React.FC = () => {
 
  //set user state to User or null
  const [user, setUser] = useState<User | null>(null);
+ const [userLat, setUserLat] = useState<number | null>(null)
+ const [userLong, setUserLong] = useState<number | null>(null)
 
  const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
   useEffect(() => {
+    //grab user location
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLat(position.coords.latitude)
+      setUserLong(position.coords.longitude)
+    }, () => console.log('Could not get location'))
+
+
     // Fetch the most recently made 20 journeys
-    axios.get('/journey/recent')
+    axios.get(`/journey/recent/${userLat}/${userLong}`)
       .then((response) => {
         setJourneys(response.data);
       })
       .catch((error) => {
         console.error('Error fetching recent journeys:', error);
       });
-  }, []);
+  }, [userLat, userLong]);
 
   //assign Journey to User
   // const assignJourney = () => {
