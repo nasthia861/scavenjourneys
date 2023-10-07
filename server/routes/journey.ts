@@ -1,9 +1,13 @@
 import express, { Request, Response } from 'express';;
 import { Journey } from "../db/entities/Journey";
 import AppDataSource from '../db';
+import { Between } from 'typeorm';
+import { JourneyProgress } from '../db/entities/JourneyProgress';
+
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
+const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
 //const tagRepository = AppDataSource.getRepository(Tag);
 
 //get all journeys
@@ -17,12 +21,19 @@ journeyRouter.get('/', async(req, res) => {
 })
 
 //get most recent 20 journeys
-journeyRouter.get('/recent', async (req, res) => {
+journeyRouter.get('/recent/:latitude/:longitude', async (req, res) => {
+  const { latitude, longitude } = req.params
+  const latNum = Number(latitude);
+  const longNum = Number(longitude);
   try {
     const recentJourneys = await journeyRepository.find({
       relations: ['user'],
-      take: 20, // Limit to the most recent 20 journeys
-      order: { created_at: 'DESC' }, // Sort by creation date in descending order
+      where: {
+        latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
+        longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3))//10 mile radius
+      },
+      //take: 20, // Limit to the most recent 20 journeys
+      //order: { created_at: 'DESC'} , // Sort by creation date in descending order
     });
     res.status(200).json(recentJourneys);
   } catch (error) {
@@ -32,11 +43,15 @@ journeyRouter.get('/recent', async (req, res) => {
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:name', async(req, res) => {
-  const { name } = req.params;
+journeyRouter.get('/tag/:latitude/:longitude/:name', async(req, res) => {
+  const { latitude, longitude, name } = req.params
+  const latNum = Number(latitude);
+  const longNum = Number(longitude);
   AppDataSource.manager.find(Journey, {
     relations: ['user', 'tag'],
     where: {
+      latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
+      longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3)),//10 mile radius
       tag: {
         name: name
       }
@@ -158,5 +173,93 @@ journeyRouter.delete('/:id', async (req, res) => {
       res.status(500);
     });
 });
+
+// POST journey_progress assigned to user/journey (test: pending )
+journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
+  const { difficulty, in_progress, started_at, last_progress_at, user, journey }  = req.body;
+
+  try {
+    const addProgress = journeyProgressRepo.create({
+      difficulty,
+      in_progress,
+      started_at,
+       last_progress_at,
+       user,
+        journey,
+    });
+    await journeyProgressRepo.save(addProgress);
+    res.status(201).send(addProgress);
+
+  } catch(err) {
+    console.error(err);
+    res.status(500).send('Internal error');
+  }
+
+});
+
+//GET all journey progress
+journeyRouter.get('/journey_progress', async (req, res) => {
+  try {
+    const progress = await journeyProgressRepo.find()
+    res.status(200).send(progress);
+
+  } catch(err) {
+    console.error("error", err);
+    res.status(500).send(err)
+  }
+})
+
+// GET JourneyProgress by journeyId
+journeyRouter.get('/progress/:journeyId', async (req, res) => {
+  const { journeyId } = req.params;
+
+  try {
+    const journey = await AppDataSource.manager.find(JourneyProgress, {
+      relations: ['journey'],
+      where: {
+        journey :  {
+          id: +journeyId,
+        }
+      }
+    });
+    if (journey) {
+      res.status(200).json(journey);
+    } else {
+      res.status(404).send('journey not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// GET JourneyProgress by UserId
+journeyRouter.get('/progress/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userProgress = await AppDataSource.manager.find(JourneyProgress, {
+      relations: ['user'],
+      where: {
+        user :  {
+          id: +userId,
+        }
+      }
+    });
+
+    if (userProgress) {
+      res.status(200).json(userProgress);
+    } else {
+      res.status(404).send('journey not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 export default journeyRouter;

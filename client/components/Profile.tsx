@@ -7,18 +7,68 @@ import {
   Typography,
   Button,
   List,
-  ListItem,
   ListItemText,
   Divider,
-} from "@mui/material";
+  ListItemButton} from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
-import { User } from '../types/User'
 import { myContext } from "./Context";
+
+import { JourneyType } from '@this/types/Journey';
+import { StepType } from "@this/types/Step"
 
 
 const Profile = () => {
+
+  const [journey, setJourney] = useState<JourneyType[]>([]);
+  const [journeys, setJourneys] = useState([]);
+  const [steps, setSteps] = useState<StepType[]>([]);
+  const [stepProgress, setStepProgress] = useState([]);
+
+
+
+  useEffect(() => {
+
+
+      // Get journeys by userId
+    axios.get('/journey/user/5')
+      .then((userJourneys) => {
+        setJourneys(userJourneys.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching journeys:', error);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   // get steps for the selected journey
+  //     axios.get(`/step/journey/${journey.id}`)
+  //       .then((stepAndJourney: {data: []}) => {
+  //         setSteps(stepAndJourney.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error getting steps for journey:', error);
+  //       })
+
+  // }, []);
+
+  useEffect(() => {
+    // Fetching step progress for each step
+    steps.forEach((step) => {
+      axios.get(`/step/step_progress/${step.id}`)
+        .then((progressResponse) => {
+          setStepProgress((prevProgress) => ({
+            ...prevProgress,
+            [step.id]: progressResponse.data,
+          }));
+        })
+        .catch((error) => {
+          console.error(`Error getting step progress for step ${step.id}:`, error);
+        });
+    });
+  }, [steps]);
+
 
   const userObj = useContext(myContext);
   const [user, setUser] = useState<any>({});
@@ -71,29 +121,17 @@ const Profile = () => {
           // onChange={(e) => setUser(e.target.value)}
         />
       </Box>
-      <List component="nav" aria-label="mailbox folders">
-  <ListItem button>
-    <ListItemText primary="Journey 1 Achievements" />
-  </ListItem>
-  <Divider />
-  <ListItem button divider>
-    <ListItemText primary="Journey 2 Achievements" />
-  </ListItem>
-  <ListItem button>
-    <ListItemText primary="Journey 3 Achievements" />
-  </ListItem>
-  <Divider light />
-  <ListItem button>
-    <ListItemText primary="Journey 4 Achievements" />
-  </ListItem>
-</List>
-      <Button
-      variant="contained"
-      size="medium"
-      onClick={() => {
-        updateUsername();
-      }}
-      >
+      <List component="nav" aria-label="journeys">
+          {journeys.map((journey) => (
+            <React.Fragment key={journey.id}>
+              <ListItemButton >
+                <ListItemText primary={journey.name} />
+              </ListItemButton>
+              <Divider />
+            </React.Fragment>
+          ))}
+        </List>
+      <Button variant="contained" size="medium">
           Update Username
         </Button>
     </Stack>
