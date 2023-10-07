@@ -1,6 +1,7 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from './User'
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable, JoinColumn, OneToMany } from 'typeorm';
+import { User } from './User';
 import { Tag } from './Tag';
+import { Step } from './Step';
 
 @Entity()
 export class Journey {
@@ -32,6 +33,9 @@ export class Journey {
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   @JoinColumn()
   tag: Tag;
+
+  @OneToMany(() => Step, (step: Step) => step.id)
+  step: Step;
 
   @CreateDateColumn()
   created_at: Date;

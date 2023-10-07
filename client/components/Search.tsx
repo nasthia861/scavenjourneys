@@ -1,75 +1,98 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import InputBase from '@mui/material/InputBase';
-import { styled, alpha} from '@mui/material/styles';
+import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
+import axios from "axios";
+import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
+import { Item } from '../styling/journeyStyle'
+import SearchIcon from '@mui/icons-material/Search';
+import { Tab, Box, Tabs, Container, Grid, Stack } from '@mui/material';
+import { JourneyType } from '@this/types/Journey';
+import { TagType } from '@this/types/Tag'
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(0)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
+type IHeaderProps = {
+  setJourneys: (journeys: JourneyType[]) => void;
+};
 
-const SearchBase = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(10),
-    width: 'auto',
-  },
-}));
+const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tabValue, setTabValue] = useState(0)
 
-const Search = () => {
-  const [searchInput, setSearchInput] = useState('')
-  const [journeys, setJourneys] = useState([]);
+  const getTags = () => {
+    axios.get("/tag").then((tags: { data: [] }) => {
+      setTags(tags.data);
+    });
+  };
 
-  const getJourney = () => {
-    axios.get(`/journey/name/${searchInput}`)
-      .then((journey: {}) => {
-        setJourneys([journey])
+  const getJourneyByName = () => {
+    axios.get(`journey/name/${searchInput}`)
+    .then((journeys: { data: [] }) => {
+      setJourneys(journeys.data);
+      setSearchInput('')
+    })
+
+  };
+
+  const getJourneyByTag = async (tagName: string) => {
+    await axios.get(`journey/tag/${tagName}`)
+      .then((journeys: { data: [] }) => {
+        setJourneys(journeys.data);
+
       })
-  }
+  };
 
-  const handleChange = (e: React.ChangeEvent) => {
-    e.preventDefault();
-    setSearchInput(e.target.textContent);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.currentTarget.value);
+  };
+
+  const handleScrollChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
   };
 
   useEffect(() => {
-
-  }, [journeys])
+    getTags();
+  }, []);
 
   return (
-    <div>
-      <SearchBase>
-            <StyledInputBase
-              placeholder="Journey Search"
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={handleChange}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                getJourney();
-                }
-              }}
-              value={searchInput}
-              />
-      </SearchBase>
-    </div>
-  )
-}
+    <Stack>
+
+      <Item>
+        <SearchStyle>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            inputProps={{ 'aria-label': 'search' }}
+            type="text"
+            placeholder="Search Journey"
+            onChange={handleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                getJourneyByName();
+              }
+            }}
+            value={searchInput}
+            />
+        </SearchStyle>
+      </Item>
+
+      <Item>
+        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+          <Tabs
+            value={tabValue}
+            onChange={handleScrollChange}
+            variant="scrollable"
+            scrollButtons={false}
+            aria-label="scrollable prevent tabs example"
+            >
+            {tags.map(
+              (tag: TagType) => {
+                return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />
+              })}
+          </Tabs>
+        </Box>
+      </Item>
+
+    </Stack>
+  );
+};
 
 export default Search;
