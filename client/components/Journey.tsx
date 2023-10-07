@@ -33,32 +33,36 @@ const Journey = () => {
   return (
     <Container>
 
-      <h1> Journey Begins Here!</h1>
-        <Card >
-          <CardMedia
-            component="img"
-            alt={journey.name}
-            height="140"
-            image={journey.img_url}
-          />
-          <CardContent>
-            <Typography variant="h6" component="div">
-              {journey.name}
-              <br/>
-              {journey.description}
-            </Typography>
-          </CardContent>
-        </Card>
-
-      {/* Display selected journey details steps */}
       <Stack spacing={2}>
-          <h3>Steps:</h3>
-          {steps.map((step) => (
-            <Item key={step.id}>
-              <p>Details: {step.name}</p>
-              <p>Location: {step.location.latitude}, {step.location.longitude}</p>
-            </Item>
-          ))}
+        <h1> Journey Begins Here!</h1>
+        <Item>
+
+          <Card >
+            <CardMedia
+              component="img"
+              alt={journey.name}
+              height="140"
+              image={journey.img_url}
+            />
+            <CardContent>
+              <Typography variant="h6" component="div">
+                <b>{journey.name}</b>
+                <br/>
+                <i>by: {journey.user.username}</i>
+                <br/>
+                {journey.description}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Item>
+      {/* Display selected journey details steps */}
+        <h3>Steps:</h3>
+        {steps.map((step) => (
+          <Item key={step.id}>
+            <p>Details: {step.name}</p>
+            <p>Location: {step.location.latitude}, {step.location.longitude}</p>
+          </Item>
+        ))}
       </Stack>
     </Container>
   );
