@@ -10,6 +10,6 @@ export default class StepSeeder implements Seeder {
   ): Promise<any> {
       const stepFactory = factoryManager.get(Step);
 
-      await stepFactory.saveMany(10)
+      await stepFactory.saveMany(100)
   }
 }

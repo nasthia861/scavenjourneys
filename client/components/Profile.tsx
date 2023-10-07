@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Avatar,
   Container,
@@ -16,29 +15,25 @@ import { deepPurple } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { User } from '../types/User'
+import { myContext } from "./Context";
 
 
 const Profile = () => {
 
-  let { userId } = useParams();
-  const [user, setUser] = useState({})
-  const [username, setUsername] = useState("ddmcdona1906")
+  const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>({});
 
-  // Fetch user by id
-  const getUser = (userId: string) => {
-    axios.get('/user/' + userId)
-    .then((res) => {
-      setUser(res.data);
-  })
-  .catch((err)=> {
-    console.error('Could not Axios get user', err)
+  useEffect(() => {
+    setUser(userObj);
   });
-}
 
-//update user information
-const updateUsername = () => {
-  axios.patch("/user/" + userId, {username: username} )
-  .then((res) => {
+  axios.get('/step/')
+
+
+  // update user information
+  const updateUsername = () => {
+    axios.patch("/user/" + user.id, {username: user.username} )
+    .then((res) => {
       setUser(res.data);
     })
     .catch((err) => {
@@ -46,61 +41,64 @@ const updateUsername = () => {
     });
   };
 
-  useEffect(() => {
-    getUser(userId);
-  })
+
 
   return (
-
     <Container>
       <Stack spacing={1}>
-        <Typography variant="h5" gutterBottom>
-          {username}
-        </Typography>
-        <Avatar
-        sx={{ bgcolor: deepPurple[500], width: 56, height: 56 }}
-        // src={user.img_url}
-        />
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
+      <Typography variant="h5" gutterBottom>
+        {user.username}
+      </Typography>
+
+
+      {/* For other variants, adjust the size with `width` and `height` */}
+      <Avatar
+      sx={{ bgcolor: deepPurple[500],
+      width: 56, height: 56 }}
+      src={user.img_url}
+      ></Avatar>
+      <Box
+       component='form'
+       sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+       >
+      <TextField
           id="outlined-basic"
           label="Username"
-          onChange={(e) => setUsername(e.target.value)}
-          />
-        </Box>
-        <List component="nav" aria-label="mailbox folders">
-          <ListItem button>
-            <ListItemText primary="Journey 1" />
-          </ListItem>
-          <Divider />
-          <ListItem button divider>
-            <ListItemText primary="Journey 2" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="Journey 3" />
-          </ListItem>
-          <Divider light />
-          <ListItem button>
-            <ListItemText primary="Journey 4" />
-          </ListItem>
-        </List>
-        <Button
-        variant="contained"
-        size="medium"
-        onClick={() => { updateUsername() }}
-        >
+          // onChange={(e) => setUser(e.target.value)}
+        />
+      </Box>
+      <List component="nav" aria-label="mailbox folders">
+  <ListItem button>
+    <ListItemText primary="Journey 1 Achievements" />
+  </ListItem>
+  <Divider />
+  <ListItem button divider>
+    <ListItemText primary="Journey 2 Achievements" />
+  </ListItem>
+  <ListItem button>
+    <ListItemText primary="Journey 3 Achievements" />
+  </ListItem>
+  <Divider light />
+  <ListItem button>
+    <ListItemText primary="Journey 4 Achievements" />
+  </ListItem>
+</List>
+      <Button
+      variant="contained"
+      size="medium"
+      onClick={() => {
+        updateUsername();
+      }}
+      >
           Update Username
         </Button>
-      </Stack>
+    </Stack>
     </Container>
-  );
-};
+  )
+}
 
 export default Profile;

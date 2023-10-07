@@ -21,6 +21,10 @@ import journeyFactory from './seeding/factories/journey.factory';
 import userFactory from './seeding/factories/user.factory';
 import stepFactory from './seeding/factories/step.factory';
 import tagFactory from './seeding/factories/tag.factory';
+// import achievementFactory from './seeding/factories/achievement.factory';
+// import AchievementSeeder from './seeding/seeds/achievement.seeder';
+// import userAchievementFactory from './seeding/factories/userAchievement.factory';
+// import userAchievementSeeder from './seeding/seeds/userAchievement.seeder';
 
   const options: DataSourceOptions = {
   type: 'mysql',
@@ -43,7 +47,7 @@ import tagFactory from './seeding/factories/tag.factory';
     UserAchievement
   ]
 };
-  
+
   const AppDataSource = new DataSource(options);
   dropDatabase({options})
     .then(() => createDatabase({options}))
@@ -59,4 +63,8 @@ import tagFactory from './seeding/factories/tag.factory';
       seeds: [StepSeeder],
       factories: [stepFactory]
     }))
+    // .then(() => runSeeders(AppDataSource, {
+    //   seeds: [AchievementSeeder, userAchievementSeeder],
+    //   factories: [achievementFactory, userAchievementFactory]
+    // }))
     .then(() => console.log('Seed has seeded'))

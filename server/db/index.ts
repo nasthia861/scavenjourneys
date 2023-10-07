@@ -11,8 +11,8 @@ import { JourneyProgress } from './entities/JourneyProgress'
 import { StepProgress } from './entities/StepProgress'
 import { Tag } from './entities/Tag'
 import { Likes } from './entities/Likes'
-import { Achievement } from './entities/Achievement'
-import { UserAchievement } from './entities/UserAchievement'
+// import { Achievement } from './entities/Achievement'
+// import { UserAchievement } from './entities/UserAchievement'
 
   const options: DataSourceOptions = {
   type: 'mysql',
@@ -31,13 +31,13 @@ import { UserAchievement } from './entities/UserAchievement'
     StepProgress,
     Tag,
     Likes,
-    Achievement,
-    UserAchievement
+    // Achievement,
+    // UserAchievement
   ]};
 
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
-      
+
 
 export default AppDataSource;

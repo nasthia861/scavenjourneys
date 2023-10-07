@@ -1,5 +1,5 @@
 
-export interface Step {
+export type Steps = {
   id: number;
   name: string;
   location: Location;

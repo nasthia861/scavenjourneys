@@ -3,6 +3,10 @@ import GoogleButton from 'react-google-button'
 import { Typography } from '@mui/material';
 
 const Welcome = () => {
+
+  const googleLogin = () => {
+    window.open('http://localhost:8080/auth/google', '_self');
+  }
   return (
     <div>
       <Typography
@@ -11,13 +15,10 @@ const Welcome = () => {
       >
         Welcome to ScavenJourney
       </Typography>
-     <a href='/auth/google'>
         <GoogleButton
           label='Google Sign In'
-          onClick={() => { console.log('Google button clicked') }}
+          onClick={googleLogin}
       />
-
-     </a>
      {/* <NavBar menuItems={[]} /> */}
     </div>
   )
