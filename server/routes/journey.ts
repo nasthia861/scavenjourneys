@@ -20,6 +20,7 @@ journeyRouter.get('/', async(req, res) => {
 journeyRouter.get('/recent', async (req, res) => {
   try {
     const recentJourneys = await journeyRepository.find({
+      relations: ['user'],
       take: 20, // Limit to the most recent 20 journeys
       order: { created_at: 'DESC' }, // Sort by creation date in descending order
     });
