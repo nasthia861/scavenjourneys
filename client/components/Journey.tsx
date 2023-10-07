@@ -68,4 +68,4 @@ const Journey = () => {
   );
 };
 
-export default Journey;
+export default userJourney;
