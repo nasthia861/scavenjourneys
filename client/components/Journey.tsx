@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Container, Grid, Card, TextField, CardContent, CardMedia, Typography } from '@mui/material';
+import { Container, Grid, Card, CardContent, CardMedia, Typography , Stack} from '@mui/material';
+import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
@@ -33,39 +34,32 @@ const Journey = () => {
     <Container>
 
       <h1> Journey Begins Here!</h1>
-      <Grid container spacing={2}>
-          <Grid  xs={12} sm={6} md={4}>
-            <Card >
-              <CardMedia
-                component="img"
-                alt={journey.name}
-                height="140"
-                image={journey.img_url}
-              />
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  {journey.name}
-                  <br/>
-                  {journey.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-      </Grid>
+        <Card >
+          <CardMedia
+            component="img"
+            alt={journey.name}
+            height="140"
+            image={journey.img_url}
+          />
+          <CardContent>
+            <Typography variant="h6" component="div">
+              {journey.name}
+              <br/>
+              {journey.description}
+            </Typography>
+          </CardContent>
+        </Card>
 
       {/* Display selected journey details steps */}
-      {
-        <div>
-
+      <Stack spacing={2}>
           <h3>Steps:</h3>
           {steps.map((step) => (
-            <div key={step.id}>
+            <Item key={step.id}>
               <p>Details: {step.name}</p>
               <p>Location: {step.location.latitude}, {step.location.longitude}</p>
-            </div>
+            </Item>
           ))}
-        </div>
-      }
+      </Stack>
     </Container>
   );
 };

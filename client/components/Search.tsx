@@ -1,10 +1,11 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import axios from "axios";
+import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
+import { Item } from '../styling/journeyStyle'
+import SearchIcon from '@mui/icons-material/Search';
+import { Tab, Box, Tabs, Container, Grid, Stack } from '@mui/material';
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
-import {
-  Button,
-} from "@mui/material";
 
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
@@ -13,6 +14,7 @@ type IHeaderProps = {
 const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
+  const [tabValue, setTabValue] = useState(0)
 
   const getTags = () => {
     axios.get("/tag").then((tags: { data: [] }) => {
@@ -41,30 +43,55 @@ const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
     setSearchInput(e.currentTarget.value);
   };
 
+  const handleScrollChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
   useEffect(() => {
     getTags();
   }, []);
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search Journey"
-        onChange={handleChange}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            getJourneyByName();
-          }
-        }}
-        value={searchInput}
-      />
-      <div>
-      {tags.map(
-        (tag: TagType) => {
-        return <Button key={tag.id} onClick={() => getJourneyByTag(tag.name)}>{tag.name}</Button>
-      })}
-      </div>
-    </div>
+    <Stack>
+
+      <Item>
+        <SearchStyle>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            inputProps={{ 'aria-label': 'search' }}
+            type="text"
+            placeholder="Search Journey"
+            onChange={handleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                getJourneyByName();
+              }
+            }}
+            value={searchInput}
+            />
+        </SearchStyle>
+      </Item>
+
+      <Item>
+        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+          <Tabs
+            value={tabValue}
+            onChange={handleScrollChange}
+            variant="scrollable"
+            scrollButtons={false}
+            aria-label="scrollable prevent tabs example"
+            >
+            {tags.map(
+              (tag: TagType) => {
+                return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />
+              })}
+          </Tabs>
+        </Box>
+      </Item>
+
+    </Stack>
   );
 };
 

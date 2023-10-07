@@ -1,40 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Container, Grid, Card, TextField, CardContent, CardMedia, Typography } from '@mui/material';
-
-import { styled } from '@mui/material/styles';
+import { Link, useNavigate } from 'react-router-dom';
+import { Container, Grid, Card, CardContent, CardMedia, Typography, Stack } from '@mui/material';
+import { StyledCreateJourneyButton } from '../styling/homeStyle';
 
 import Search from './Search'
-import JourneyItem from './JourneyItem';
 import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
-const StyledCreateJourneyButton = styled(Button)(() => ({
-  backgroundColor: '#9a4119', // Change the background color
-  color: 'white',
-  '&:hover': {
-    backgroundColor: '#b5870a', // Change the hover background color
-  },
-}));
-
-// type IHeaderProps = {
-//   journeys: JourneyType[];
-//   setJourneys: (journeys: JourneyType[]) => void;
-// };
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const location: {state: {journey: JourneyType}} = useLocation();
 
  //set user state to User or null
  const [user, setUser] = useState<User | null>(null);
 
  const [journeys, setJourneys] = useState<JourneyType[]>([]);
- const [newJourneyName, setNewJourneyName] = useState('');
- const [selectedJourney, setSelectedJourney] = useState(null);
- const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     // Fetch the most recently made 20 journeys
@@ -46,20 +28,6 @@ const Home: React.FC = () => {
         console.error('Error fetching recent journeys:', error);
       });
   }, []);
-
-  // useEffect(() => {
-  //   // get steps for the selected journey
-  //   if (selectedJourney) {
-  //     axios.get(`/step/journey/${selectedJourney.id}`)
-  //       .then((stepAndJourney) => {
-  //         //console.log(stepAndJourney)
-  //         setSteps(stepAndJourney.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error getting steps for journey:', error);
-  //       });
-  //   }
-  // }, [selectedJourney]);
 
   //assign Journey to User
   // const assignJourney = () => {
@@ -78,12 +46,13 @@ const Home: React.FC = () => {
 
 return (
   <Container>
+    <br/>
     <Search setJourneys={setJourneys}/>
+    <br/>
+    <Link to="/create-journey">
+      <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
+    </Link>
 
-     {/* Styled "Create a New Journey" button */}
-     <Link to="/create-journey">
-        <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
-      </Link>
     <h1> Pick your Journey</h1>
     <Grid container spacing={2}>
       {/* Display list of journeys */}
@@ -107,24 +76,6 @@ return (
         </Grid>
       ))}
     </Grid>
-      {/* Display selected journey details steps
-      {selectedJourney && (
-        <div>
-          <h2>Selected Journey: {selectedJourney.name}</h2>
-          <p>Description: {selectedJourney.description}</p>
-
-          <h3>Steps:</h3>
-          {steps.map((step) => (
-            <div key={step.id}>
-              <p>Details: {step.name}</p>
-              <p>Location: {step.location.latitude}, {step.location.longitude}</p>
-            </div>
-          ))}
-        </div>
-      )} */}
-
-
-
   </Container>
 );
 ;
