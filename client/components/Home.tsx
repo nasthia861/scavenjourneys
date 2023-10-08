@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Typography, Stack } from '@mui/material';
+import { Container, Grid, Card, CardContent, CardMedia, Typography, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { StyledCreateJourneyButton } from '../styling/homeStyle';
 
 import Search from './Search'
@@ -17,8 +17,8 @@ const Home: React.FC = () => {
  const [user, setUser] = useState<User | null>(null);
  const [userLat, setUserLat] = useState<number | null>(null)
  const [userLong, setUserLong] = useState<number | null>(null)
-
- const [journeys, setJourneys] = useState<JourneyType[]>([]);
+ const [alignment, setAlignment] = useState(3);
+  const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
  const getLocation = () => {
   navigator.geolocation.getCurrentPosition((position) => {
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
 
  const getJourney = () => {
     // Fetch the journeys closest to you
-    axios.get(`/journey/recent/${userLat}/${userLong}`)
+    axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
       .then((response) => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
@@ -42,6 +42,13 @@ const Home: React.FC = () => {
     });
 
  }
+
+ const handleToggleChange = (
+  event: React.MouseEvent<HTMLElement>,
+  newAlignment: number,
+) => {
+  setAlignment(newAlignment);
+};
 
   useEffect(() => {
     //grab user location
@@ -66,7 +73,7 @@ const Home: React.FC = () => {
       getJourney()
     }
 
-  }, [userLat, userLong]);
+  }, [userLat, userLong, alignment]);
 
   //assign Journey to User
   // const assignJourney = () => {
@@ -88,6 +95,19 @@ return (
     <br/>
     <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong}/>
     <br/>
+    <ToggleButtonGroup
+      color="primary"
+      value={alignment}
+      exclusive
+      onChange={handleToggleChange}
+      aria-label="Platform"
+      >
+      <ToggleButton value={1}>5 miles</ToggleButton>
+      <ToggleButton value={2}>10 miles</ToggleButton>
+      <ToggleButton value={3}>15 miles</ToggleButton>
+      <ToggleButton value={4}>20 miles</ToggleButton>
+    </ToggleButtonGroup>
+    <br />
     <Link to="/create-journey">
       <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
     </Link>
