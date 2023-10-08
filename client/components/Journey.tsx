@@ -16,6 +16,8 @@ const Journey = () => {
   const location: {state: {journey: JourneyType}} = useLocation();
   const [journey, setJourneys] = useState(location.state.journey);
   const [steps, setSteps] = useState<StepType[]>([]);
+  const [stepProgress, setStepProgress] = useState([]);
+
 
 
 
@@ -27,8 +29,27 @@ const Journey = () => {
         })
         .catch((error) => {
           console.error('Error getting steps for journey:', error);
+        })
+
+  }, []);
+
+
+  useEffect(() => {
+    // Fetching step progress for each step
+    steps.forEach((step) => {
+      axios.get(`/step/step_progress/${step.id}`)
+        .then((progressResponse) => {
+          setStepProgress((prevProgress) => ({
+            ...prevProgress,
+            [step.id]: progressResponse.data,
+          }));
+        })
+        .catch((error) => {
+          console.error(`Error getting step progress for step ${step.id}:`, error);
         });
-  },[]);
+    });
+  }, [steps]);
+
 
   return (
     <Container>
@@ -57,12 +78,29 @@ const Journey = () => {
         </Item>
       {/* Display selected journey details steps */}
         <h3>Steps:</h3>
-        {steps.map((step) => (
-          <Item key={step.id}>
-            <p>Details: {step.name}</p>
-            <p>Location: {step.location.latitude}, {step.location.longitude}</p>
-          </Item>
-        ))}
+        {
+        steps.map((step) => {
+          const progress = stepProgress[step.id] || { in_progress: false };          console.log(progress)
+          return (
+            <Item key={step.id}>
+              <Card>
+
+                  <CardContent>
+                    <Typography variant="h6" component="div">
+                      <b>Details: {step.name}</b>
+                      <p>Location: {step.location.latitude}, {step.location.longitude}</p>
+                      <br />
+                      <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
+                      <br />
+                      {/* Display other step details as needed */}
+                    </Typography>
+                  </CardContent>
+
+              </Card>
+            </Item>
+          );
+          })
+        }
       </Stack>
     </Container>
   );
