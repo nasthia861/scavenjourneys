@@ -1,8 +1,6 @@
 
 import dotenv from 'dotenv';
 import express from 'express';
-// import dotenv from 'dotenv-webpack';
-
 import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import session from "express-session";
@@ -12,6 +10,7 @@ import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
 import tagRouter from './routes/tag';
+// import homeRouter from './routes/home';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -43,6 +42,7 @@ app.use(passport.authenticate('session'));
 
 //routes
 app.use('/auth', authRoutes);
+// app.use('/home', homeRouter);
 app.use('/user', userRouter);
 app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);

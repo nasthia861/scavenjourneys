@@ -10,7 +10,7 @@ const userRouter = express.Router();
 userRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await userRepo.findOneBy( {id: parseInt(id)  } );
+    const user = await userRepo.findOneBy( { id: +id } );
     if (user) {
       res.send(user)
     }
@@ -61,12 +61,12 @@ userRouter.post('/', async (req, res) => {
 });
 
 //Put to adjust user photo (tested: 404)
-userRouter.put('/:id/img', async (req, res) => {
+userRouter.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { img_url } = req.body;
 
   try {
-    const user = await userRepo.findOneBy( {id: parseInt(id)  } );
+    const user = await userRepo.findOneBy( {id: +id  } );
 
     user.img_url = img_url;
     await userRepo.save(user);
@@ -76,24 +76,27 @@ userRouter.put('/:id/img', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 
-  //Patch to update user username 
-  userRouter.patch('/:id', async (req, res) => {
-    const { id } = req.params
-    const { username } = req.body;
-    try {
 
-      const user = await userRepo.findOneBy( { id: parseInt(id) });
-      user.username = username;
-      await userRepo.save(user);
-      res.sendStatus(200).send(user);
+})
 
-    } catch (err) {
-      console.error('Could not update username', err)
-      res.sendStatus(500);
+//PATCH to update user username (tested: √ )
+userRouter.patch('/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await userRepo.findOne( { where: { id: +id } });
+    if (user) {
+      userRepo.merge(user, req.body);
+      let result = await userRepo.save(user);
+      return res.status(200).send(result);
+
     }
-  })
 
-});
+  } catch (err) {
+    console.error('Could not PUT username', err)
+    return res.sendStatus(500);
+  }
+})
 
 
 export default userRouter;

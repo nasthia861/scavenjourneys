@@ -11,6 +11,7 @@ import { User } from '@this/types/User';
 
 
 const Home: React.FC = () => {
+
   const navigate = useNavigate();
 
  //set user state to User or null

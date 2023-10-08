@@ -1,8 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Container, Stack, TextField, Typography, Button, List, ListItem, ListItemText, Divider, ListItemButton} from '@mui/material';
-import { deepPurple } from '@mui/material/colors';
-import { Box } from '@mui/system';
-import axios from 'axios';
+import React, { useEffect, useState, useContext } from "react";
+import {
+  Avatar,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  List,
+  ListItemText,
+  Divider,
+  ListItemButton} from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
+import { Box } from "@mui/system";
+import axios from "axios";
+import { myContext } from "./Context";
+
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
 
@@ -58,22 +70,43 @@ const Profile = () => {
   }, [steps]);
 
 
-  const updateUsername = () => {
-    axios.patch('')
-  }
+  const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    setUser(userObj);
+  });
 
   axios.get('/step/')
+
+
+  // update user information
+  const updateUsername = () => {
+    axios.patch("/user/" + user.id, {username: user.username} )
+    .then((res) => {
+      setUser(res.data);
+    })
+    .catch((err) => {
+      console.error('Could not Axios patch', err)
+    });
+  };
+
+
 
   return (
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        Profile
+        {user.username}
       </Typography>
 
 
       {/* For other variants, adjust the size with `width` and `height` */}
-      <Avatar sx={{ bgcolor: deepPurple[500],  width: 56, height: 56 }}>H</Avatar>
+      <Avatar
+      sx={{ bgcolor: deepPurple[500],
+      width: 56, height: 56 }}
+      src={user.img_url}
+      ></Avatar>
       <Box
        component='form'
        sx={{
@@ -85,6 +118,7 @@ const Profile = () => {
       <TextField
           id="outlined-basic"
           label="Username"
+          // onChange={(e) => setUser(e.target.value)}
         />
       </Box>
       <List component="nav" aria-label="journeys">
