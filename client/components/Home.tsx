@@ -20,25 +20,52 @@ const Home: React.FC = () => {
 
  const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
-  useEffect(() => {
-    //grab user location
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLat(position.coords.latitude)
-      setUserLong(position.coords.longitude)
-    }, () => console.log('Could not get location'))
+ const getLocation = () => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    setUserLat(position.coords.latitude)
+    setUserLong(position.coords.longitude)
+  }, () => console.log('Could not get location'))
+ }
 
-
+ const getJourney = () => {
     // Fetch the journeys closest to you
     axios.get(`/journey/recent/${userLat}/${userLong}`)
       .then((response) => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
-        })
-        setJourneys(response.data);
       })
-      .catch((error) => {
-        console.error('Error fetching recent journeys:', error);
-      });
+      console.log(response.data);
+      setJourneys(response.data);
+    })
+    .catch((error) => {
+      console.error('Error fetching recent journeys:', error);
+    });
+
+ }
+
+  useEffect(() => {
+    //grab user location
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   setUserLat(position.coords.latitude)
+    //   setUserLong(position.coords.longitude)
+    // }, () => console.log('Could not get location'))
+
+    // Fetch the journeys closest to you
+    // axios.get(`/journey/recent/${userLat}/${userLong}`)
+    //   .then((response) => {
+    //     response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+    //       return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+    //     })
+    //     setJourneys(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching recent journeys:', error);
+    //   });
+    getLocation()
+    if(userLat && userLong) {
+      getJourney()
+    }
+
   }, [userLat, userLong]);
 
   //assign Journey to User

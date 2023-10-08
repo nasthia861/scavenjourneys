@@ -9,9 +9,11 @@ import { TagType } from '@this/types/Tag'
 
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
+  userLat: number;
+  userLong: number;
 };
 
-const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
+const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
@@ -32,12 +34,19 @@ const Search: React.FC<IHeaderProps> = ({setJourneys}) => {
   };
 
   const getJourneyByTag = async (tagName: string) => {
-    await axios.get(`journey/tag/${tagName}`)
-      .then((journeys: { data: [] }) => {
-        setJourneys(journeys.data);
-
+    axios.get(`/journey/tag/${userLat}/${userLong}/${tagName}`)
+      .then((response) => {
+        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
+      setJourneys(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching recent journeys:', error);
+      });
   };
+
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.currentTarget.value);

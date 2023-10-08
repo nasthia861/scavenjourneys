@@ -26,11 +26,11 @@ journeyRouter.get('/recent/:latitude/:longitude', async (req, res) => {
     const recentJourneys = await journeyRepository.find({
       relations: ['user'],
       where: {
-        latitude: Between(latNum - (0.0725 * 2), latNum + (0.0725 * 2)),//10 mile radius
-        longitude: Between(longNum - (0.0725 * 2), longNum + (0.0725 * 2))//10 mile radius
+        latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
+        longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3))//10 mile radius
       },
-      take: 20, // Limit to the most recent 20 journeys
-      //order: { 'DESC'} , // Sort by creation date in descending order
+      //take: 20, // Limit to the most recent 20 journeys
+      //order: { created_at: 'DESC'} , // Sort by creation date in descending order
     });
     res.status(200).json(recentJourneys);
   } catch (error) {
@@ -40,11 +40,15 @@ journeyRouter.get('/recent/:latitude/:longitude', async (req, res) => {
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:name', async(req, res) => {
-  const { name } = req.params;
+journeyRouter.get('/tag/:latitude/:longitude/:name', async(req, res) => {
+  const { latitude, longitude, name } = req.params
+  const latNum = Number(latitude);
+  const longNum = Number(longitude);
   AppDataSource.manager.find(Journey, {
     relations: ['user', 'tag'],
     where: {
+      latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
+      longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3)),//10 mile radius
       tag: {
         name: name
       }
