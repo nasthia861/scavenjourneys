@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
-    "build:dev": "nodemon --exec webpack --mode=development --watch",
+    "build:dev": "webpack --mode=development --watch",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
