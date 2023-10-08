@@ -11,9 +11,10 @@ type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   userLat: number;
   userLong: number;
+  alignment: number
 };
 
-const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
+const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
@@ -36,7 +37,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
   };
 
   const getJourneyByTag = async (tagName: string) => {
-    axios.get(`/journey/tag/${userLat}/${userLong}/${tagName}`)
+    axios.get(`/journey/tag/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)

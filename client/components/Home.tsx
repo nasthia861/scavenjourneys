@@ -93,8 +93,9 @@ const Home: React.FC = () => {
 return (
   <Container>
     <br/>
-    <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong}/>
+    <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
     <br/>
+    <h2>set distance:</h2>
     <ToggleButtonGroup
       color="primary"
       value={alignment}

@@ -44,15 +44,16 @@ journeyRouter.get('/recent/:latitude/:longitude/:alignment', async (req, res) =>
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:latitude/:longitude/:name', async(req, res) => {
-  const { latitude, longitude, name } = req.params
+journeyRouter.get('/tag/:latitude/:longitude/:alignment/:name', async(req, res) => {
+  const { latitude, longitude, alignment, name } = req.params
   const latNum = Number(latitude);
   const longNum = Number(longitude);
+  const distance = Number(alignment);
   AppDataSource.manager.find(Journey, {
     relations: ['user', 'tag'],
     where: {
-      latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
-      longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3)),//10 mile radius
+      latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
+      longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
       tag: {
         name: name
       }
