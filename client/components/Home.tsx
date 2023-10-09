@@ -45,23 +45,23 @@ const Home: React.FC = () => {
  }
 
   useEffect(() => {
-    //grab user location
-    // navigator.geolocation.getCurrentPosition((position) => {
-    //   setUserLat(position.coords.latitude)
-    //   setUserLong(position.coords.longitude)
-    // }, () => console.log('Could not get location'))
+   // grab user location
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLat(position.coords.latitude)
+      setUserLong(position.coords.longitude)
+    }, () => console.log('Could not get location'))
 
-    // Fetch the journeys closest to you
-    // axios.get(`/journey/recent/${userLat}/${userLong}`)
-    //   .then((response) => {
-    //     response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-    //       return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
-    //     })
-    //     setJourneys(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching recent journeys:', error);
-    //   });
+   // Fetch the journeys closest to you
+    axios.get(`/journey/recent/${userLat}/${userLong}`)
+      .then((response) => {
+        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+        })
+        setJourneys(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching recent journeys:', error);
+      });
     getLocation()
     if(userLat && userLong) {
       getJourney()
