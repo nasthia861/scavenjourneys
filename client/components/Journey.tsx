@@ -92,7 +92,6 @@ const Journey = () => {
                       <br />
                       <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
                       <br />
-                      {/* Display other step details as needed */}
                     </Typography>
                   </CardContent>
 
