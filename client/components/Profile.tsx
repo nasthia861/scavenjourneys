@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   List,
+  ListItem,
   ListItemText,
   Divider,
   ListItemButton, Accordion,
@@ -81,17 +82,14 @@ const Profile = () => {
     getUserData();
   }, []);
 
-  // useEffect(() => {
-  //   // get steps for the selected journey
-  //     axios.get(`/step/journey/${journey.id}`)
-  //       .then((stepAndJourney: {data: []}) => {
-  //         setSteps(stepAndJourney.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error getting steps for journey:', error);
-  //       })
+  const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>({});
 
-  // }, []);
+  useEffect(() => {
+    setUser(userObj);
+  });
+
+  axios.get('/step/')
 
   useEffect(() => {
     // Fetching step progress for each step
