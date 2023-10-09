@@ -7,16 +7,19 @@ import {
   Typography,
   Button,
   List,
+  ListItem,
   ListItemText,
   Divider,
   ListItemButton} from "@mui/material";
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import { deepOrange } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { myContext } from "./Context";
 
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
+//import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 
 const Profile = () => {
@@ -30,7 +33,7 @@ const Profile = () => {
 
   useEffect(() => {
     setUser(userObj)
-  });
+  }, []);
 
   useEffect(() => {
     axios.get('/user/' + user.id)
@@ -45,37 +48,65 @@ const Profile = () => {
   })
 
   const [journey, setJourney] = useState<JourneyType[]>([]);
-  const [journeys, setJourneys] = useState([]);
+ // const journey: {journey: JourneyType} ;
+  //const [journey, setJourney] = useState<JourneyType[]>([]);
+  const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
+  const [step, setStep] = useState<StepType[]>([]);
   const [stepProgress, setStepProgress] = useState([]);
+  const [journeyProgress, setJourneyProgress] = useState([])
+  const [selectedJourney, setSelectedJourney] = useState(null);
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+
+
+
+
+  const handleJourneyClick = async (journeyId: number) => {
+    try {
+      // GET steps for the selected journey
+      const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
+      setSteps(stepAndJourney.data);
+
+      // GET step progress for each step
+      const progressData = await Promise.all(
+        stepAndJourney.data.map(async (step: { id: any; }) => {
+          const progressObj = await axios.get(`/step/step_progress/${step.id}`);
+          return {
+            [step.id]: progressObj.data,
+          };
+        })
+      );
+
+      setStepProgress(Object.assign({}, ...progressData));
+
+      // Update the selected journey
+      const selectedJourney = journeys.find((journey) => journey.id === journeyId);
+      setSelectedJourney(selectedJourney);
+    } catch (error) {
+      console.error('Error fetching journey details:', error);
+    }
+  };
 
 
 
 
   useEffect(() => {
-
-
-      // Get journeys by userId
-    axios.get('/journey/user/5')
-      .then((userJourneys) => {
+    // GET user's journeys and journey progress
+    const getUserData = async () => {
+      try {
+        const userJourneys = await axios.get('/journey/user/5');
         setJourneys(userJourneys.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching journeys:', error);
-      });
+
+        const journeyProgressResponse = await axios.get('/journey/progress/user/5');
+        setJourneyProgress(journeyProgressResponse.data);
+        console.log(journeyProgressResponse)
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    getUserData();
   }, []);
-
-  // useEffect(() => {
-  //   // get steps for the selected journey
-  //     axios.get(`/step/journey/${journey.id}`)
-  //       .then((stepAndJourney: {data: []}) => {
-  //         setSteps(stepAndJourney.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error getting steps for journey:', error);
-  //       })
-
-  // }, []);
 
   useEffect(() => {
     // Fetching step progress for each step
@@ -108,7 +139,11 @@ const Profile = () => {
   };
 
 
-
+  const handleChange = (panel: string) =>
+  (event: React.SyntheticEvent, isExpanded: boolean) =>
+  {
+    setExpanded(isExpanded ? panel : false);
+  };
   return (
     <Container>
       <Stack spacing={1}>
@@ -138,16 +173,62 @@ const Profile = () => {
         />
       </Box>
       <List component="nav" aria-label="journeys">
-          {journeys.map((journey) => (
-            <React.Fragment key={journey.id}>
-              <ListItemButton >
-                <ListItemText primary={journey.name} />
-              </ListItemButton>
+        {journeys.map((journey) => (
+          <React.Fragment key={journey.id}>
+            <ListItemButton onClick={() => handleJourneyClick(journey.id)}>
+              <ListItemText primary={journey.name} />
+            </ListItemButton>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </List>
+        <Typography variant="h6" gutterBottom>
+          Journey Progress
+        </Typography>
+        <List component="nav" aria-label="journey-progress">
+          {journeyProgress.map((progress) => (
+            <ListItem key={progress.id}>
+              <ListItemText primary={`In Progress: ${progress.in_progress}`} />
+              <ListItemText primary={`Difficulty: ${progress.difficulty}`} />
+              <br/>
+              <ListItemText primary={`Started: ${progress.started_at.slice(0, 10)}`} />
+              <ListItemText primary={`Journeyed on: ${progress.last_progress_at.slice(0, 10)}`} />
+
+            </ListItem>
+          ))}
+        </List>
+
+        {/* Steps and Step Progress */}
+        <Typography variant="h6" gutterBottom>
+          Steps
+        </Typography>
+        <List component="nav" aria-label="steps">
+          {steps.map((step) => (
+            <React.Fragment key={step.id}>
+              <ListItem>
+                <ListItemText primary={`Step: ${step.name}`} />
+              </ListItem>
+              {/* Display step progress */}
+              <List component="nav" aria-label={`step-progress-${step.id}`}>
+                {stepProgress[step.id] &&
+                  stepProgress[step.id].map((progress: { id: React.Key; in_progress: any; }) => (
+                    <ListItem key={progress.id}>
+                      <ListItemText primary={`In Progress: ${progress.in_progress}`} />
+                    </ListItem>
+                  ))}
+              </List>
               <Divider />
             </React.Fragment>
           ))}
         </List>
-      <Button variant="contained" size="medium">
+
+      <Button
+        variant="contained"
+        size="medium"
+        value={username}
+        onChange={(e) => {setUsername(e.target.value)}}
+        onClick={() => {updateUsername()}}
+      >
           Update Username
         </Button>
     </Stack>

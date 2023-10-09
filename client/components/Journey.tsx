@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 
-import { User } from '../types/User';
+import { User } from '@this/types/User';
 
 
 const Journey = () => {
@@ -92,7 +92,6 @@ const Journey = () => {
                       <br />
                       <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
                       <br />
-                      {/* Display other step details as needed */}
                     </Typography>
                   </CardContent>
 

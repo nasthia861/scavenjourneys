@@ -21,16 +21,17 @@ journeyRouter.get('/', async(req, res) => {
 })
 
 //get most recent 20 journeys
-journeyRouter.get('/recent/:latitude/:longitude', async (req, res) => {
-  const { latitude, longitude } = req.params
+journeyRouter.get('/recent/:latitude/:longitude/:alignment', async (req, res) => {
+  const { latitude, longitude, alignment } = req.params
   const latNum = Number(latitude);
   const longNum = Number(longitude);
+  const distance = Number(alignment);
   try {
     const recentJourneys = await journeyRepository.find({
       relations: ['user'],
       where: {
-        latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
-        longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3))//10 mile radius
+        latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
+        longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance))
       },
       //take: 20, // Limit to the most recent 20 journeys
       //order: { created_at: 'DESC'} , // Sort by creation date in descending order
@@ -43,15 +44,16 @@ journeyRouter.get('/recent/:latitude/:longitude', async (req, res) => {
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:latitude/:longitude/:name', async(req, res) => {
-  const { latitude, longitude, name } = req.params
+journeyRouter.get('/tag/:latitude/:longitude/:alignment/:name', async(req, res) => {
+  const { latitude, longitude, alignment, name } = req.params
   const latNum = Number(latitude);
   const longNum = Number(longitude);
+  const distance = Number(alignment);
   AppDataSource.manager.find(Journey, {
     relations: ['user', 'tag'],
     where: {
-      latitude: Between(latNum - (0.0725 * 3), latNum + (0.0725 * 3)),//10 mile radius
-      longitude: Between(longNum - (0.0725 * 3), longNum + (0.0725 * 3)),//10 mile radius
+      latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
+      longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
       tag: {
         name: name
       }
@@ -235,7 +237,7 @@ journeyRouter.get('/progress/:journeyId', async (req, res) => {
 });
 
 // GET JourneyProgress by UserId
-journeyRouter.get('/progress/:userId', async (req, res) => {
+journeyRouter.get('/progress/user/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
