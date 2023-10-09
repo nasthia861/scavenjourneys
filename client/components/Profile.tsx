@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Container, Stack, TextField, Typography, Button, List, ListItem, ListItemText, Divider, ListItemButton, Accordion,
+import React, { useEffect, useState, useContext } from "react";
+import {
+  Avatar,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  List,
+  ListItemText,
+  Divider,
+  ListItemButton, Accordion,
   AccordionSummary,
-  AccordionDetails,} from '@mui/material';
-import { deepPurple } from '@mui/material/colors';
-import { Box } from '@mui/system';
-import axios from 'axios';
+  AccordionDetails,} from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
+import { Box } from "@mui/system";
+import axios from "axios";
+import { myContext } from "./Context";
+
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -69,11 +81,45 @@ const Profile = () => {
     getUserData();
   }, []);
 
+  // useEffect(() => {
+  //   // get steps for the selected journey
+  //     axios.get(`/step/journey/${journey.id}`)
+  //       .then((stepAndJourney: {data: []}) => {
+  //         setSteps(stepAndJourney.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error getting steps for journey:', error);
+  //       })
+
+  // }, []);
+
+  useEffect(() => {
+    // Fetching step progress for each step
+    steps.forEach((step) => {
+      axios.get(`/step/step_progress/${step.id}`)
+        .then((progressResponse) => {
+          setStepProgress((prevProgress) => ({
+            ...prevProgress,
+            [step.id]: progressResponse.data,
+          }));
+        })
+        .catch((error) => {
+          console.error(`Error getting step progress for step ${step.id}:`, error);
+        });
+    });
+  }, [steps]);
 
 
   const updateUsername = () => {
-    axios.patch('')
-  }
+    axios.patch("/user/" + user.id, {username: user.username} )
+    .then((res) => {
+      setUser(res.data);
+    })
+    .catch((err) => {
+      console.error('Could not Axios patch', err)
+    });
+  };
+
 
   const handleChange = (panel: string) =>
   (event: React.SyntheticEvent, isExpanded: boolean) =>
@@ -84,12 +130,16 @@ const Profile = () => {
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        Profile
+        {user.username}
       </Typography>
 
 
       {/* For other variants, adjust the size with `width` and `height` */}
-      <Avatar sx={{ bgcolor: deepPurple[500],  width: 56, height: 56 }}>H</Avatar>
+      <Avatar
+      sx={{ bgcolor: deepPurple[500],
+      width: 56, height: 56 }}
+      src={user.img_url}
+      ></Avatar>
       <Box
        component='form'
        sx={{
@@ -101,6 +151,7 @@ const Profile = () => {
       <TextField
           id="outlined-basic"
           label="Username"
+          // onChange={(e) => setUser(e.target.value)}
         />
       </Box>
       <List component="nav" aria-label="journeys">

@@ -4,6 +4,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import AppDataSource from '../db/index';
 import { User } from '../db/entities/User';
+import { Any } from 'typeorm';
 
 passport.use(new GoogleStrategy ({
 
@@ -47,6 +48,7 @@ passport.use(new GoogleStrategy ({
         .into(User)
         .values([
           {
+
             google_id: authUser.googleId,
             username: authUser.username,
             img_url: authUser.picture,
