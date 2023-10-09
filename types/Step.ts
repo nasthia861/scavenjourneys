@@ -1,10 +1,14 @@
 
-export type Steps = {
+export type StepType = {
+  journeyId: any;
   id: number;
   name: string;
   hint: string;
-  location: Location;
+  location: {
+    latitude: string,
+    longitude: string
+  };
   journey_id: number;
   user_id: number;
-  created_at: string; 
+  created_at: string;
 }
