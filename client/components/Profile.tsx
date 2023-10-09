@@ -10,7 +10,7 @@ import {
   ListItemText,
   Divider,
   ListItemButton} from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+import { deepOrange, deepPurple } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { myContext } from "./Context";
@@ -21,10 +21,34 @@ import { StepType } from "@this/types/Step"
 
 const Profile = () => {
 
+  //Use useContext to set the user state
+  const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>({});
+
+  const [username, setUsername] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>('');
+
+  useEffect(() => {
+    setUser(userObj)
+  });
+
+  useEffect(() => {
+    axios.get('/user/' + user.id)
+    .then((userData) => {
+      console.log('data ===>', userData.data)
+      setUsername(userData.data.username);
+      setUserImg(userData.data.img_url);
+    })
+    .catch((err) => {
+      console.error('Could not retrieve user information', err);
+    })
+  })
+
   const [journey, setJourney] = useState<JourneyType[]>([]);
   const [journeys, setJourneys] = useState([]);
   const [steps, setSteps] = useState<StepType[]>([]);
   const [stepProgress, setStepProgress] = useState([]);
+
 
 
 
@@ -70,17 +94,9 @@ const Profile = () => {
   }, [steps]);
 
 
-  const userObj = useContext(myContext);
-  const [user, setUser] = useState<any>({});
-
-  useEffect(() => {
-    setUser(userObj);
-  });
-
-  axios.get('/step/')
 
 
-  // update user information
+  //Request to update user information
   const updateUsername = () => {
     axios.patch("/user/" + user.id, {username: user.username} )
     .then((res) => {
@@ -97,15 +113,15 @@ const Profile = () => {
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        {user.username}
+        {username}
       </Typography>
 
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
-      sx={{ bgcolor: deepPurple[500],
+      sx={{ bgcolor: deepOrange[900],
       width: 56, height: 56 }}
-      src={user.img_url}
+      src={userImg}
       ></Avatar>
       <Box
        component='form'
