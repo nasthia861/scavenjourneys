@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
+import React, { useState, useEffect, ChangeEvent} from "react";
 import axios from "axios";
 import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
 import { Item } from '../styling/journeyStyle'
 import SearchIcon from '@mui/icons-material/Search';
-import { Tab, Box, Tabs, Container, Grid, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Tab, Box, Tabs, Stack } from '@mui/material';
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 
