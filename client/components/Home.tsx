@@ -35,7 +35,6 @@ const Home: React.FC = () => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
-      console.log(response.data);
       setJourneys(response.data);
     })
     .catch((error) => {

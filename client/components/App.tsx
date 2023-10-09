@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Welcome from './Welcome';
 import Home from './Home';
@@ -11,15 +11,11 @@ import CreateJourney from './CreateJourney';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
 import { themeOptions } from './Theme'; //theme import
-// import { myContext } from './Context';
-// import { ReactSession } from 'react-client-session';
 
 
 
 const App = () => {
 
-  // const userObj = useContext(myContext);
-  // console.log(userObj);
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu

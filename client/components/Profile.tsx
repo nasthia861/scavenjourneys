@@ -10,10 +10,8 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  ListItemButton, Accordion,
-  AccordionSummary,
-  AccordionDetails,} from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+  ListItemButton} from "@mui/material";
+import { deepOrange } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { myContext } from "./Context";
@@ -25,6 +23,31 @@ import { StepType } from "@this/types/Step"
 
 
 const Profile = () => {
+
+  //Use useContext to set the user state
+  const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>({});
+
+  const [username, setUsername] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>('');
+
+  useEffect(() => {
+    setUser(userObj)
+  }, []);
+
+  useEffect(() => {
+    axios.get('/user/' + user.id)
+    .then((userData) => {
+      console.log('data ===>', userData.data)
+      setUsername(userData.data.username);
+      setUserImg(userData.data.img_url);
+    })
+    .catch((err) => {
+      console.error('Could not retrieve user information', err);
+    })
+  })
+
+  const [journey, setJourney] = useState<JourneyType[]>([]);
  // const journey: {journey: JourneyType} ;
   //const [journey, setJourney] = useState<JourneyType[]>([]);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
@@ -64,6 +87,9 @@ const Profile = () => {
     }
   };
 
+
+
+
   useEffect(() => {
     // GET user's journeys and journey progress
     const getUserData = async () => {
@@ -82,15 +108,6 @@ const Profile = () => {
     getUserData();
   }, []);
 
-  const userObj = useContext(myContext);
-  const [user, setUser] = useState<any>({});
-
-  useEffect(() => {
-    setUser(userObj);
-  });
-
-  axios.get('/step/')
-
   useEffect(() => {
     // Fetching step progress for each step
     steps.forEach((step) => {
@@ -108,6 +125,9 @@ const Profile = () => {
   }, [steps]);
 
 
+
+
+  //Request to update user information
   const updateUsername = () => {
     axios.patch("/user/" + user.id, {username: user.username} )
     .then((res) => {
@@ -128,15 +148,15 @@ const Profile = () => {
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        {user.username}
+        {username}
       </Typography>
 
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
-      sx={{ bgcolor: deepPurple[500],
+      sx={{ bgcolor: deepOrange[900],
       width: 56, height: 56 }}
-      src={user.img_url}
+      src={userImg}
       ></Avatar>
       <Box
        component='form'
@@ -202,7 +222,13 @@ const Profile = () => {
           ))}
         </List>
 
-      <Button variant="contained" size="medium">
+      <Button
+        variant="contained"
+        size="medium"
+        value={username}
+        onChange={(e) => {setUsername(e.target.value)}}
+        onClick={() => {updateUsername()}}
+      >
           Update Username
         </Button>
     </Stack>

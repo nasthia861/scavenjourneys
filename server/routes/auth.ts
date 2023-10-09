@@ -8,7 +8,7 @@ const authRoutes = Router();
 const successLoginUrl = process.env.HOST + '/home';
 const failedLoginUrl = process.env.HOST + '/welcome';
 
-//routes to google oauth
+//Routes to google oauth
 authRoutes.get('/google', passport.authenticate('google',
 {
   scope: ['email', 'profile']
@@ -28,6 +28,7 @@ authRoutes.get('/google/redirect', passport.authenticate('google',
   }
 });
 
+//Route used to request user data for the front-end
 authRoutes.get('/getuser', (req, res) => {
   res.send(req.user);
 } )
