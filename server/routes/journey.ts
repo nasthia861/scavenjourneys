@@ -237,7 +237,7 @@ journeyRouter.get('/progress/:journeyId', async (req, res) => {
 });
 
 // GET JourneyProgress by UserId
-journeyRouter.get('/progress/:userId', async (req, res) => {
+journeyRouter.get('/progress/user/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {

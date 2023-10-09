@@ -1,5 +1,6 @@
 
 export type StepType = {
+  journeyId: any;
   id: number;
   name: string;
   location: {
