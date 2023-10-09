@@ -10,6 +10,9 @@ export class Step {
   @Column()
   name: string;
 
+  @Column()
+  hint: string;
+
   @Column('json', { nullable: true })
   location: { latitude: number; longitude: number };
 
