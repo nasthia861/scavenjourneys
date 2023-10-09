@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
+import React, { useState, useEffect, ChangeEvent} from "react";
 import axios from "axios";
 import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
 import { Item } from '../styling/journeyStyle'
 import SearchIcon from '@mui/icons-material/Search';
-import { Tab, Box, Tabs, Container, Grid, Stack } from '@mui/material';
+import { Tab, Box, Tabs, Stack } from '@mui/material';
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 
@@ -11,12 +11,15 @@ type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   userLat: number;
   userLong: number;
+  alignment: number
 };
 
-const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
+const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
+
+  // const [alignment, setAlignment] = useState(3);
 
   const getTags = () => {
     axios.get("/tag").then((tags: { data: [] }) => {
@@ -34,7 +37,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
   };
 
   const getJourneyByTag = async (tagName: string) => {
-    axios.get(`/journey/tag/${userLat}/${userLong}/${tagName}`)
+    axios.get(`/journey/tag/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
@@ -55,6 +58,13 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
   const handleScrollChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  // const handleToggleChange = (
+  //   event: React.MouseEvent<HTMLElement>,
+  //   newAlignment: number,
+  // ) => {
+  //   setAlignment(newAlignment);
+  // };
 
   useEffect(() => {
     getTags();
@@ -99,6 +109,21 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong}) => {
           </Tabs>
         </Box>
       </Item>
+
+      {/* <Item>
+        <ToggleButtonGroup
+        color="primary"
+        value={alignment}
+        exclusive
+        onChange={handleToggleChange}
+        aria-label="Platform"
+        >
+          <ToggleButton value={1}>5 miles</ToggleButton>
+          <ToggleButton value={2}>10 miles</ToggleButton>
+          <ToggleButton value={3}>15 miles</ToggleButton>
+          <ToggleButton value={4}>20 miles</ToggleButton>
+        </ToggleButtonGroup>
+      </Item> */}
 
     </Stack>
   );
