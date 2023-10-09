@@ -1,29 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-
-const StyledPaper = styled(Paper)(() => ({
-  padding: '16px',
-  maxWidth: '400px',
-  margin: '0 auto',
-}));
-
-const StyledForm = styled('form')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '16px',
-}));
-
-const StyledInput = styled(TextField)(() => ({
-  width: '100%',
-}));
-
-const StyledButton = styled(Button)(() => ({
-  marginTop: '16px',
-}));
+import {StyledPaper, StyledForm, StyledInput, StyledButton} from '../styling/createJourneyStyle';
 
 const CreateJourney: React.FC = () => {
   const [journeyData, setJourneyData] = useState({
