@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Button, Container, Grid, TextField } from '@mui/material';
 import axios from 'axios';
 
-import { User } from '../types/User';
+import { User } from '@this/types/User';
 
 
 const Journey = () => {
