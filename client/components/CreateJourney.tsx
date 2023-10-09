@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Paper from '@mui/material/Paper'; // Import Paper
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles'; // Import styled
+import { styled } from '@mui/material/styles';
 
 const StyledPaper = styled(Paper)(() => ({
   padding: '16px',
@@ -32,23 +32,41 @@ const CreateJourney: React.FC = () => {
     img_url: '',
   });
 
+  const [stepData, setStepData] = useState({
+    name: '',
+    hint: '',
+    journey: null,
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJourneyData({ ...journeyData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleStepInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setStepData({ ...stepData, [name]: value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    axios
-      .post('/journey', journeyData)
-      .then((response) => {
-        console.log('Journey created successfully:', response.data);
-        // Redirect to the home page
-        window.location.href = '/home';
-      })
-      .catch((error) => {
-        console.error('Error creating journey:', error);
-      });
+    try {
+      // First, create the journey to get its ID
+      const response = await axios.post('/journey', journeyData);
+      const newJourney = response.data;
+
+      // Set the journey property of the step
+      setStepData({ ...stepData, journey: newJourney.id });
+
+      // Create the step with the journey ID
+      await axios.post('/step', stepData);
+
+      console.log('Journey and step created successfully', stepData, newJourney);
+      // Redirect to the home page or another page
+      window.location.href = '/home';
+    } catch (error) {
+      console.error('Error creating journey and step:', error);
+    }
   };
 
   return (
@@ -75,6 +93,21 @@ const CreateJourney: React.FC = () => {
           name="img_url"
           value={journeyData.img_url}
           onChange={handleInputChange}
+        />
+        <h3>Add Steps</h3>
+        <StyledInput
+          label="Step Name"
+          type="text"
+          name="name"
+          value={stepData.name}
+          onChange={handleStepInputChange}
+        />
+        <StyledInput
+          label="Step Hint"
+          type="text"
+          name="hint"
+          value={stepData.hint}
+          onChange={handleStepInputChange}
         />
         <StyledButton type="submit">Create Journey</StyledButton>
       </StyledForm>

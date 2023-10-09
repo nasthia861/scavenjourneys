@@ -3,6 +3,7 @@ export type StepType = {
   journeyId: any;
   id: number;
   name: string;
+  hint: string;
   location: {
     latitude: string,
     longitude: string

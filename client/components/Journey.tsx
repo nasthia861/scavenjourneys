@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 
-import { User } from '../types/User';
+import { User } from '@this/types/User';
 
 
 const Journey = () => {
