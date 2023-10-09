@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Paper from '@mui/material/Paper'; // Import Paper
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Button, TextField, Paper } from '@mui/material'
 import { styled } from '@mui/material/styles'; // Import styled
 
 const StyledPaper = styled(Paper)(() => ({

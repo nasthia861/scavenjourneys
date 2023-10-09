@@ -13,7 +13,6 @@ const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = MiniCssExtractPlugin.loader;
 
 
-
 const config = {
     entry: path.resolve(__dirname, "client/index.tsx"),
     output: {
@@ -82,6 +81,7 @@ module.exports = () => {
 
     } else {
         config.mode = 'development';
+        config.devtool = 'inline-source-map';
         config.plugins.push(new Dotenv())
     }
     return config;
