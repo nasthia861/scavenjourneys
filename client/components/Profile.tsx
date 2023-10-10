@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
 import {
   Avatar,
   Container,
@@ -38,7 +38,6 @@ const Profile = () => {
   useEffect(() => {
     axios.get('/user/' + user.id)
     .then((userData) => {
-      console.log('data ===>', userData.data)
       setUsername(userData.data.username);
       setUserImg(userData.data.img_url);
     })
@@ -169,7 +168,11 @@ const Profile = () => {
       <TextField
           id="outlined-basic"
           label="Username"
-          // onChange={(e) => setUser(e.target.value)}
+          onChange={(e: SyntheticEvent) => {
+          const target = e.target as HTMLInputElement;
+          const value = target.value;
+          setUsername(value);
+        }}
         />
       </Box>
       <List component="nav" aria-label="journeys">
@@ -225,9 +228,7 @@ const Profile = () => {
       <Button
         variant="contained"
         size="medium"
-        value={username}
-        onChange={(e) => {setUsername(e.target.value)}}
-        onClick={() => {updateUsername()}}
+        onClick={ updateUsername }
       >
           Update Username
         </Button>
