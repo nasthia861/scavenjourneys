@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 
 
-const TextToSpeech = ({onceSpoken} : any) => {
+const TextToSpeech = ({ onceSpoken } : any) => {
 
   const [spoken, setSpoken] = useState('');
 

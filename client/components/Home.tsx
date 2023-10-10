@@ -2,9 +2,16 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { StyledCreateJourneyButton } from '../styling/homeStyle';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';

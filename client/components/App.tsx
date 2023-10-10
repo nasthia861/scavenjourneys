@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Welcome from './Welcome';
+const Welcome = lazy(() => import('./Welcome.tsx'))
+// import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
-import SignUp from './SignUp';
 import CreateJourney from './CreateJourney';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles'; //theme container
+import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme container
 import { themeOptions } from './Theme'; //theme import
 
 
@@ -35,12 +35,15 @@ const App = () => {
     <BrowserRouter>
      <NavBar menuItems={menuItems} />
       <Routes>
-        <Route path="/" element={<Welcome />} />
+        <Route path="/" element={
+          <Suspense fallback={<Loading />}>
+            <Welcome />
+          </Suspense>
+        } />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/journey" element={<Journey />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
-        <Route path="/signup" element={<SignUp />} />
         <Route path="/create-journey" element={<CreateJourney />} />
       </Routes>
     </BrowserRouter>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import styled from '@mui/material/styles/styled';
 
 const StyledPaper = styled(Paper)(() => ({
   padding: '16px',
