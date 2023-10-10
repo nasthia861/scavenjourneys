@@ -49,8 +49,8 @@ const Profile = () => {
         setJourneys(userJourneys.data);
 
 
-        const journeyProgressResponse = await axios.get(`/journey/progress/user/${userObj.id}`);
-        setJourneyProgress(journeyProgressResponse.data);
+        const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
+        //setJourneyProgress(journeyProgressResponse.data);
         //console.log(journeyProgressResponse)
 
 
@@ -69,6 +69,11 @@ const Profile = () => {
 
 
     try {
+
+      const journeyProgressResponse = await axios.get(`/journey/progress/${ journeyId}`);
+        setJourneyProgress(journeyProgressResponse.data);
+        //console.log(journeyProgressResponse)
+
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
       setSteps(stepAndJourney.data);
@@ -155,20 +160,38 @@ const Profile = () => {
                 <>
                   <Typography variant="h5">Journey Progress</Typography>
                   <List>
-                  {journeyProgress.map((progress) => (
-                    <ListItem key={progress.id}>
-                      <ListItemText
-                        primary={`In Progress: ${progress.in_progress}`}
-                        secondary={`Difficulty: ${progress.difficulty}`}
-                      />
-                      <Typography variant="caption">
-                        Started: {progress.started_at.slice(0, 10)}
-                      </Typography>
-                      <Typography variant="caption">
-                        Journeyed on: {progress.last_progress_at.slice(0, 10)}
-                      </Typography>
-                    </ListItem>
-                  ))}
+                  {journeyProgress
+
+                    .filter((progress) => {
+                       console.log(journeyProgress)
+                      // console.log("Selected Journey ID:", selectedJourney.id);
+                       console.log("Progress Journey IDs:", progress);
+                      return progress.journey.id === selectedJourney.id;
+                    })
+                    .map((progress) => {
+                      console.log("Mapping Progress ID:", progress.id);
+                      const { tagId, img_url } = progress.journey;
+                      return (
+                        <ListItem key={progress.id}>
+                          <ListItemText
+
+                            primary={`In Progress: ${progress.in_progress}`}
+                            secondary={`Difficulty: ${progress.difficulty}`}
+                          />
+                          <Typography variant="caption">
+                            Started: {progress.started_at.slice(0, 10)}
+                          </Typography>
+                          <Typography variant="caption">
+                            Journeyed on: {progress.last_progress_at.slice(0, 10)}
+                            <Typography variant="caption">Tag ID: {tagId}</Typography>
+                            {/* <img src={`${img_url}?w=20&h=20`}
+                             alt="Journey Preview"
+                             sx={{ marginLeft: theme.spacing(2) }}
+                             /> */}
+                          </Typography>
+                        </ListItem>
+                      );
+                    })}
                   </List>
 
                   <Typography variant="h5">Steps & Step Progress</Typography>
