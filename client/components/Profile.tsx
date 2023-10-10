@@ -145,31 +145,30 @@ const Profile = () => {
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() => handleJourneyClick(journey.id)}
-                              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
-                              >
+              <ListItemButton onClick={() =>
+              handleJourneyClick(journey.id)}
+              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+               >
                 <ListItemText primary={journey.name} secondary={journey.description} />
               </ListItemButton>
               {selectedJourney && selectedJourney.id === journey.id && (
                 <>
                   <Typography variant="h5">Journey Progress</Typography>
                   <List>
-                  {journeyProgress
-                      .filter((progress) => progress.journey_id === journey.id)
-                      .map((progress) => (
-                      <ListItem key={progress.id}>
-                        <ListItemText
-                          primary={`In Progress: ${progress.in_progress}`}
-                          secondary={`Difficulty: ${progress.difficulty}`}
-                        />
-                        <Typography variant="caption">
-                          Started: {progress.started_at.slice(0, 10)}
-                        </Typography>
-                        <Typography variant="caption">
-                          Journeyed on: {progress.last_progress_at.slice(0, 10)}
-                        </Typography>
-                      </ListItem>
-                    ))}
+                  {journeyProgress.map((progress) => (
+                    <ListItem key={progress.id}>
+                      <ListItemText
+                        primary={`In Progress: ${progress.in_progress}`}
+                        secondary={`Difficulty: ${progress.difficulty}`}
+                      />
+                      <Typography variant="caption">
+                        Started: {progress.started_at.slice(0, 10)}
+                      </Typography>
+                      <Typography variant="caption">
+                        Journeyed on: {progress.last_progress_at.slice(0, 10)}
+                      </Typography>
+                    </ListItem>
+                  ))}
                   </List>
 
                   <Typography variant="h5">Steps & Step Progress</Typography>
@@ -185,7 +184,7 @@ const Profile = () => {
                             stepProgress[step.id].map((progress: any) => (
                               <ListItem key={progress.id}>
                                 <ListItemText secondary={`In Progress: ${progress.in_progress}`}
-                                sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }} />
+                                sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: `${theme.spacing(1)} 0` }} />
                               </ListItem>
                             ))}
                         </List>
