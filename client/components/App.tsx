@@ -1,7 +1,6 @@
-import React, {Suspense, lazy} from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-const Welcome = lazy(() => import('./Welcome.tsx'))
-// import Welcome from './Welcome';
+import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
 import Journey from './Journey';
@@ -35,11 +34,7 @@ const App = () => {
     <BrowserRouter>
      <NavBar menuItems={menuItems} />
       <Routes>
-        <Route path="/" element={
-          <Suspense fallback={<Loading />}>
-            <Welcome />
-          </Suspense>
-        } />
+        <Route path="/" element={<Welcome />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/journey" element={<Journey />} />
