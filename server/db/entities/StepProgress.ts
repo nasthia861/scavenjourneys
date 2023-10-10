@@ -7,16 +7,16 @@ export class StepProgress {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: true })
   in_progress: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   image_url: string ;
 
-  @Column()
-  focus: boolean;
+  // @Column()
+  // focus: boolean;
 
-  @Column()
+  @Column({ default: () => "NOW()"})
   started_at: Date;
 
   @ManyToOne(() => JourneyProgress, (journeyProgress: JourneyProgress) => journeyProgress.id)

@@ -6,22 +6,22 @@ import { Journey } from './Journey'
 export class JourneyProgress {
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @Column()
   difficulty: number;
-  
+
   @Column()
   in_progress: boolean;
-  
-  @Column()
+
+  @Column({ default: () => "NOW()"})
   started_at: Date;
-  
-  @Column()
+
+  @Column({ default: () => "NOW()"})
   last_progress_at: Date;
-  
+
   @ManyToOne(() => User, (user: User) => user.id)
   user: User;
-  
+
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
   journey: Journey;
 }

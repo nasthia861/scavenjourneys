@@ -29,7 +29,7 @@ const Profile = () => {
   //const [journey, setJourney] = useState<JourneyType[]>([]);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [step, setStep] = useState<StepType[]>([]);
+  // const [step, setStep] = useState<StepType[]>([]);
   const [stepProgress, setStepProgress] = useState([]);
   const [journeyProgress, setJourneyProgress] = useState([])
   const [selectedJourney, setSelectedJourney] = useState(null);

@@ -177,7 +177,7 @@ journeyRouter.delete('/:id', async (req, res) => {
 });
 
 // POST journey_progress assigned to user/journey (test: pending )
-journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
+journeyRouter.post('/progress', async (req, res) => {
   const { difficulty, in_progress, started_at, last_progress_at, user, journey }  = req.body;
 
   try {
@@ -185,9 +185,9 @@ journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
       difficulty,
       in_progress,
       started_at,
-       last_progress_at,
-       user,
-        journey,
+      last_progress_at,
+      user,
+      journey,
     });
     await journeyProgressRepo.save(addProgress);
     res.status(201).send(addProgress);

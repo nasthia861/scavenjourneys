@@ -7,15 +7,19 @@ const CreateJourney: React.FC = () => {
     name: '',
     description: '',
     img_url: '',
+    //import from home
+    latitude: '',
+    longitude: ''
   });
 
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
-    journey: null,
+    journeyId: null,
   });
 
   const [image, setImage] = useState<string | null>('');
+  //const [video, setVideo] = useState<HTMLVideoElement | null>()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,10 +52,32 @@ const CreateJourney: React.FC = () => {
     }
   };
 
+  //for webcam access
+  // useEffect(() => {
+
+  //   const video = document.getElementById('video') as HTMLVideoElement;
+  //   setVideo(video)
+
+  //   if(navigator.mediaDevices.getUserMedia) {
+  //     navigator.mediaDevices.getUserMedia({video: true})
+  //     .then((stream) => {
+  //       video.srcObject = stream;
+  //       video.play();
+  //     })
+  //   }
+  // }, [])
+
+  // const takePicture = async() => {
+  //   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  //   const context = canvas.getContext('2d');
+  //   context.drawImage(video, 0, 0, 320, 240)
+  // }
+
   const saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {files} = e.target;
-    console.log(URL.createObjectURL(files[0]))
-    setImage(URL.createObjectURL(files[0]))
+    let imgSrc = URL.createObjectURL(files[0])
+    setImage(imgSrc);
+    setJourneyData({ ...journeyData, img_url: imgSrc.slice(5)});
   }
 
 
@@ -73,19 +99,20 @@ const CreateJourney: React.FC = () => {
           value={journeyData.description}
           onChange={handleInputChange}
         />
-        <StyledInput
-          label="Image URL"
-          type="text"
-          name="img_url"
-          value={journeyData.img_url}
-          onChange={handleInputChange}
-        />
+        {/* <video id="video" width="320" height="240"></video>
+        <button
+          id="snap"
+          onClick={takePicture}
+        >Snap Photo</button>
+        <canvas id="canvas" width="320" height="240"></canvas> */}
         <input
+          id="cameraInput"
           type="file"
           accept="image/*"
           capture
           onChange={(e) => saveImage(e)}/>
-        <img src={image}/>
+        <img
+          src={image} />
         <h3>Add Steps</h3>
         <StyledInput
           label="Step Name"
