@@ -19,7 +19,7 @@ import { StepType } from "@this/types/Step"
 
 
 
-const Profile = () => {
+export const Profile: React.FC = () => {
 
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
@@ -235,4 +235,3 @@ const Profile = () => {
   )
 }
 
-export default Profile;

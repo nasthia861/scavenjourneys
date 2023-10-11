@@ -17,7 +17,7 @@ import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -148,5 +148,3 @@ return (
 ;
 };
 // key={journey.id}
-
-export default Home;

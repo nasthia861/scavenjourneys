@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 
 
 
-const Welcome = () => {
+export const Welcome: React.FC = () => {
 
   const googleLogin = () => {
     window.open('/auth/google', '_self');
@@ -37,4 +37,3 @@ const Welcome = () => {
   )
 }
 
-export default Welcome;

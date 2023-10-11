@@ -14,7 +14,7 @@ import { StepType } from "@this/types/Step"
 import { User } from '@this/types/User';
 
 
-const Journey = () => {
+export const Journey: React.FC = () => {
 
   //set user state to User or null
   //const [user, setUser] = useState<User | null>(null);
@@ -109,5 +109,3 @@ const Journey = () => {
     </Container>
   );
 };
-
-export default Journey;
