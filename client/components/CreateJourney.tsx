@@ -25,7 +25,7 @@ const StyledButton = styled(Button)(() => ({
   marginTop: '16px',
 }));
 
-export const CreateJourney: React.FC = () => {
+  const CreateJourney: React.FC = () => {
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
@@ -159,3 +159,5 @@ export const CreateJourney: React.FC = () => {
     </StyledPaper>
   );
 };
+
+export default CreateJourney;
