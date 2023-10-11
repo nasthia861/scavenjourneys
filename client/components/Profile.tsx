@@ -1,27 +1,21 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  Avatar,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  useTheme,
-  Divider,
-  ListItemButton, Accordion,
-  AccordionSummary,
-  AccordionDetails,} from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
-import { Box } from "@mui/system";
+import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
+import Avatar from "@mui/material/Avatar";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import useTheme from "@mui/material/styles/useTheme";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import deepPurple from "@mui/material/colors/deepPurple";
 import axios from "axios";
 import { myContext } from "./Context";
-//import { UserType } from "@this/types/User";
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 
@@ -38,9 +32,33 @@ export const Profile: React.FC = () => {
 
   const userObj = useContext(myContext);
   const [user, setUser] = useState<any>({});
+  const [username, setUsername] = useState<string>('');
+  const [updatedUsername, setUpdatedUsername] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>('');
+
+  /** User Functionality for User Profile*/
+  const updateUsername = () => {
+    axios.patch("/user/" + user.id, {username: updatedUsername} )
+    .then(() => {})
+    .catch((err) => {
+      console.error('Could not Axios patch', err)
+    });
+  };
+
+  const getUserNameImg = () => {
+    axios.get('/user/' + user.id)
+    .then((userData) => {
+      setUsername(userData.data.username);
+      setUserImg(userData.data.img_url);
+    })
+    .catch((err) => {
+      console.error('Could not retrieve user information', err);
+    })
+  };
 
   useEffect(() => {
     setUser(userObj);
+    getUserNameImg();
 
     // GET user's journeys and journey progress
     const getUserData = async () => {
@@ -50,8 +68,6 @@ export const Profile: React.FC = () => {
 
 
         const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
-        //setJourneyProgress(journeyProgressResponse.data);
-        //console.log(journeyProgressResponse)
 
 
 
@@ -63,8 +79,7 @@ export const Profile: React.FC = () => {
     getUserData();
   });
 
-
-
+  /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
 
 
@@ -108,28 +123,13 @@ export const Profile: React.FC = () => {
     }
   };
 
-
-
-
-
-  const updateUsername = () => {
-    axios.patch("/user/" + user.id, {username: user.username} )
-    .then((res) => {
-      setUser(res.data);
-    })
-    .catch((err) => {
-      console.error('Could not Axios patch', err)
-    });
-  };
-
-
   const theme = useTheme();
 
   return (
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        {user.username}
+        {username}
       </Typography>
 
 
@@ -137,11 +137,23 @@ export const Profile: React.FC = () => {
       <Avatar
       sx={{ bgcolor: deepPurple[500],
       width: 56, height: 56 }}
-      src={user.img_url}
+      src={userImg}
       ></Avatar>
      <Stack direction="row" spacing={1}>
-          <TextField id="outlined-basic" label="Username" variant="outlined" value={''} />
-          <Button variant="contained" onClick={updateUsername}>
+          <TextField
+            id="outlined-basic"
+            label="Username"
+            variant="outlined"
+            onChange={(e: SyntheticEvent) => {
+              const target = e.target as HTMLInputElement;
+              const value = target.value;
+              setUpdatedUsername(value)
+            }}
+           />
+          <Button
+            variant="contained"
+            onClick={() => {updateUsername();}}
+          >
             Update Username
           </Button>
         </Stack>
@@ -163,13 +175,10 @@ export const Profile: React.FC = () => {
                   {journeyProgress
 
                     .filter((progress) => {
-                       console.log(journeyProgress)
-                      // console.log("Selected Journey ID:", selectedJourney.id);
-                       console.log("Progress Journey IDs:", progress);
+
                       return progress.journey.id === selectedJourney.id;
                     })
                     .map((progress) => {
-                      console.log("Mapping Progress ID:", progress.id);
                       const { tagId, img_url } = progress.journey;
                       return (
                         <ListItem key={progress.id}>

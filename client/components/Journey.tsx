@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Grid, Card, CardContent, CardMedia, Typography , Stack} from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
