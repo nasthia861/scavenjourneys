@@ -1,8 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {StyledPaper, StyledForm, StyledInput, StyledButton} from '../styling/createJourneyStyle';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styled from '@mui/material/styles/styled';
 
-const CreateJourney: React.FC = () => {
+const StyledPaper = styled(Paper)(() => ({
+  padding: '16px',
+  maxWidth: '400px',
+  margin: '0 auto',
+}));
+
+const StyledForm = styled('form')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+}));
+
+const StyledInput = styled(TextField)(() => ({
+  width: '100%',
+}));
+
+const StyledButton = styled(Button)(() => ({
+  marginTop: '16px',
+}));
+
+export const CreateJourney: React.FC = () => {
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
@@ -15,7 +38,7 @@ const CreateJourney: React.FC = () => {
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
-    journeyId: null,
+    journeyId: null
   });
 
   const [image, setImage] = useState<string | null>('');
@@ -35,16 +58,19 @@ const CreateJourney: React.FC = () => {
     e.preventDefault();
     try {
       // First, create the journey to get its ID
-      const response = await axios.post('/journey', journeyData);
-      const newJourney = response.data;
+      const journeyResponse = await axios.post('/journey', journeyData);
+      const newJourney = journeyResponse.data;
+      console.log(journeyResponse.data)
+      console.log(newJourney.id)
 
       // Set the journey property of the step
-      setStepData({ ...stepData, journey: newJourney.id });
+      setStepData({ ...stepData, journeyId: newJourney.id });
+      console.log(stepData);
 
-      // Create the step with the journey ID
+      // Create the step with the associated journey ID
       await axios.post('/step', stepData);
 
-      console.log('Journey and step created successfully', stepData, newJourney);
+      console.log('Journey and step created successfully');
       // Redirect to the home page or another page
       window.location.href = '/home';
     } catch (error) {
@@ -133,5 +159,3 @@ const CreateJourney: React.FC = () => {
     </StyledPaper>
   );
 };
-
-export default CreateJourney;

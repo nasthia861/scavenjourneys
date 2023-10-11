@@ -1,14 +1,15 @@
-import React, {useState, useContext, lazy} from 'react';
+import React, { useContext } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AccountCircle } from '@mui/icons-material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
-const myContext = lazy(() => ("./Context"));
-// import InputBase from '@mui/material/InputBase';
-// import { styled, alpha} from '@mui/material/styles';
-import {  AppBar, Box, Toolbar, Typography, Menu, MenuItem, IconButton, Avatar } from '@mui/material';
+import { myContext } from './Context';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
 
-//we can use forms to anchor signed-in users to NavBar features (Profile Pic, username, etc..)
-import { FormControlLabel, FormGroup } from '@mui/material';
 
 //withheld from external types folder to exemplify interface/ assignments being passed to functional component
 //we have to assign types/interface to ensure proper typescript syntax
@@ -23,37 +24,9 @@ interface NavBarProps {
   //path and label props being passed to MenuItem array elements
   menuItems: MenuItem[];
 }
-// const Search = styled('div')(({ theme }) => ({
-//   position: 'relative',
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.15),
-//   '&:hover': {
-//     backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   },
-//   marginRight: theme.spacing(2),
-//   marginLeft: 0,
-//   width: '100%',
-//   [theme.breakpoints.up('sm')]: {
-//     marginLeft: theme.spacing(3),
-//     width: 'auto',
-//   },
-// }));
 
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: 'inherit',
-//   '& .MuiInputBase-input': {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(0)})`,
-//     transition: theme.transitions.create('width'),
-//     width: '100%',
-//     [theme.breakpoints.up('md')]: {
-//       width: '20ch',
-//     },
-//   },
-// }));
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-const NavBar = ( {menuItems}: NavBarProps ) => {
+export const NavBar: React.FC<NavBarProps> = ( {menuItems}) => {
 
   //Use useContext to set the user state
   const userObj = useContext(myContext);
@@ -137,11 +110,3 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
 }
 
 export default NavBar;
-/**
- *
- *  <ul>
-      <Link to="/journey" >Journey</Link>
-      <Link to="/profile" >Profile</Link>
-      <Link to="/leaderboard" >Leaderboard</Link>
-      </ul>
- */

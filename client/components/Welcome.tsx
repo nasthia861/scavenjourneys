@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 
 
-const Welcome = () => {
+export const Welcome: React.FC = () => {
 
   const googleLogin = () => {
     window.open('/auth/google', '_self');
@@ -40,4 +40,3 @@ const Welcome = () => {
   )
 }
 
-export default Welcome;
