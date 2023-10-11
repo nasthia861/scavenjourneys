@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -36,9 +36,9 @@ import { StepType } from "@this/types/Step"
   const [userImg, setUserImg] = useState<string>('');
 
   /** User Functionality for User Profile*/
-  const updateUsername = () => {
-    axios.patch("/user/" + user.id, {username: updatedUsername} )
-    .then(() => {})
+  const updateUsername = async (username: string) => {
+    await axios.patch("/user/" + user.id, {username: username} )
+    .then((res) => {console.log('update data ===>', res.data);})
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
@@ -97,7 +97,7 @@ import { StepType } from "@this/types/Step"
           };
         })
       );
-        //set stepPorgress data for every step on iteration (stePandJourney m)
+        //set stepProgress data for every step on iteration (stepAndJourney m)
       setStepProgress(Object.assign({}, ...progressData));
 
 
@@ -140,12 +140,12 @@ import { StepType } from "@this/types/Step"
             onChange={(e: SyntheticEvent) => {
               const target = e.target as HTMLInputElement;
               const value = target.value;
-              setUpdatedUsername(value)
+              setUpdatedUsername(value);
             }}
            />
           <Button
             variant="contained"
-            onClick={() => {updateUsername();}}
+            onClick={() => {updateUsername(updatedUsername);}}
           >
             Update Username
           </Button>
