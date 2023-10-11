@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent} from "react";
+import React, { useState, useEffect, ChangeEvent, lazy} from "react";
 import axios from "axios";
 import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
 import { Item } from '../styling/journeyStyle'
