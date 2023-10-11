@@ -9,6 +9,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
+import SpeechToText from "./SpeechToText";
 
 
 import { JourneyType } from '@this/types/Journey';
@@ -65,13 +66,6 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   const handleScrollChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-
-  // const handleToggleChange = (
-  //   event: React.MouseEvent<HTMLElement>,
-  //   newAlignment: number,
-  // ) => {
-  //   setAlignment(newAlignment);
-  // };
 
   useEffect(() => {
     getTags();

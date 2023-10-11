@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
+import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent, useRef } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -32,7 +32,7 @@ import SpeechToText from "./SpeechToText";
   /** User Functionality for User Profile*/
   const updateUsername = async (username: string) => {
     await axios.patch("/user/" + user.id, {username: username} )
-    .then((res) => {console.log('update data ===>', res.data);})
+    .then(() => {console.log('username updated')})
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
@@ -48,6 +48,11 @@ import SpeechToText from "./SpeechToText";
       console.error('Could not retrieve user information', err);
     })
   };
+
+  const handleUsernameChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement;
+    setUpdatedUsername(target.value);
+  }
 
   // GET user's journey progress
   const getUserData = async () => {
@@ -78,7 +83,7 @@ import SpeechToText from "./SpeechToText";
   };
 
   const theme = useTheme();
-
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
     <Container>
       <Stack spacing={1}>
@@ -98,16 +103,18 @@ import SpeechToText from "./SpeechToText";
             id="outlined-basic"
             label="Username"
             variant="outlined"
-            onChange={(e: SyntheticEvent) => {
-              const target = e.target as HTMLInputElement;
-              const value = target.value;
-              setUpdatedUsername(value);
-            }}
+            onChange={handleUsernameChange}
+            inputRef={inputRef}
             InputProps={{endAdornment: <SpeechToText onceSpoken={setUpdatedUsername} />}}
           />
           <Button
             variant="contained"
-            onClick={() => {updateUsername(updatedUsername);}}
+            onClick={async () => {
+              updateUsername(updatedUsername);
+              if (inputRef.current) {
+                  inputRef.current.value = '';
+              }
+            }}
           >
             Update Username
           </Button>
