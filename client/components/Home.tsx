@@ -1,4 +1,4 @@
-import React, {useState, useEffect, FunctionComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
@@ -142,6 +142,4 @@ return (
 };
 // key={journey.id}
 
-export default {
-  Home
-}
+export default Home;

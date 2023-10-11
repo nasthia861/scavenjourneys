@@ -6,7 +6,6 @@ import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
-import SignUp from './SignUp';
 import CreateJourney from './CreateJourney';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
@@ -23,8 +22,7 @@ const App = () => {
     { path: '/home', label: 'Home' },
     { path:`/profile`, label: 'Profile' },
     { path: '/journey', label: 'Journey' },
-    { path: '/leaderboard', label: 'Leaderboard' },
-    { path: '/signup', label: 'SignUp'}
+    { path: '/leaderboard', label: 'Leaderboard' }
   ];
   //CssBaseLine use mitigate conflicts between React 18 and Material UI/styles
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
@@ -35,7 +33,7 @@ const App = () => {
     <BrowserRouter>
      <NavBar menuItems={menuItems} />
       <Routes>
-        <Route path="/" element={lazy<Welcome />} />
+        <Route path="/" element={<Welcome />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/journey" element={<Journey />} />
