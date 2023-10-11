@@ -26,7 +26,7 @@ interface NavBarProps {
 }
 
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-export const NavBar: React.FC<NavBarProps> = ( {menuItems}) => {
+const NavBar: React.FC<NavBarProps> = ( {menuItems}) => {
 
   //Use useContext to set the user state
   const userObj = useContext(myContext);

@@ -30,8 +30,8 @@ export const Profile: React.FC = () => {
   const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
 
 
-  const userObj = useContext(myContext);
-  const [user, setUser] = useState<any>({});
+  //const userObj = useContext(myContext);
+  const [user, setUser] = useState<any>(useContext(myContext));
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
@@ -56,26 +56,20 @@ export const Profile: React.FC = () => {
     })
   };
 
+  // GET user's journeys and journey progress
+  const getUserData = async () => {
+    try {
+      const userJourneys = await axios.get(`/journey/user/${user.id}`);
+      setJourneys(userJourneys.data);
+      //const journeyProgressResponse = await axios.get(`/journey/progress/${ user.id}`);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
   useEffect(() => {
-    setUser(userObj);
+    //setUser(userObj);
     getUserNameImg();
-
-    // GET user's journeys and journey progress
-    const getUserData = async () => {
-      try {
-        const userJourneys = await axios.get(`/journey/user/${userObj.id}`);
-        setJourneys(userJourneys.data);
-
-
-        const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
-
-
-
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
     getUserData();
   });
 

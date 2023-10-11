@@ -35,7 +35,7 @@ const config = {
             template: path.join(__dirname, ".env"),
           }),
 
-        new BundleAnalyzerPlugin()
+        //new BundleAnalyzerPlugin()
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],

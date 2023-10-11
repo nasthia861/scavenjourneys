@@ -22,6 +22,11 @@ export const Journey: React.FC = () => {
   const [journey, setJourneys] = useState(location.state.journey);
   const [steps, setSteps] = useState<StepType[]>([]);
   const [stepProgress, setStepProgress] = useState([]);
+  const [userStarted, setUserStarted] = useState(false);
+
+  const startJourney = () => {
+    axios.get('./journey/')
+  }
 
 
 

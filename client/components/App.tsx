@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
+import NavBar from './NavBar';
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme container
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,9 +22,9 @@ const Journey = lazy(() =>
 const LeaderBoard = lazy(() =>
   import('./LeaderBoard.tsx').then((module) => ({ default: module.LeaderBoard }))
 );
-const NavBar = lazy(() =>
-  import('./NavBar.tsx').then((module) => ({ default: module.NavBar }))
-);
+// const NavBar = lazy(() =>
+//   import('./NavBar.tsx').then((module) => ({ default: module.NavBar }))
+// );
 const CreateJourney = lazy(() =>
   import('./CreateJourney.tsx').then((module) => ({ default: module.CreateJourney }))
 );
