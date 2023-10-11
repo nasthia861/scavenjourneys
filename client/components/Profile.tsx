@@ -1,27 +1,23 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  Avatar,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  useTheme,
-  Divider,
-  ListItemButton, Accordion,
-  AccordionSummary,
-  AccordionDetails,} from "@mui/material";
+import React, { lazy, Suspense, useEffect, useState, useContext } from "react";
+import Avatar from "@mui/material/Avatar";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import useTheme from "@mui/material/styles/useTheme";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+
 import { deepPurple } from "@mui/material/colors";
-import { Box } from "@mui/system";
 import axios from "axios";
 import { myContext } from "./Context";
 //import { UserType } from "@this/types/User";
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 
@@ -163,13 +159,10 @@ const Profile = () => {
                   {journeyProgress
 
                     .filter((progress) => {
-                       console.log(journeyProgress)
-                      // console.log("Selected Journey ID:", selectedJourney.id);
-                       console.log("Progress Journey IDs:", progress);
+
                       return progress.journey.id === selectedJourney.id;
                     })
                     .map((progress) => {
-                      console.log("Mapping Progress ID:", progress.id);
                       const { tagId, img_url } = progress.journey;
                       return (
                         <ListItem key={progress.id}>

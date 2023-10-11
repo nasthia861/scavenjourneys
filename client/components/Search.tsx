@@ -1,9 +1,16 @@
 import React, { useState, useEffect, ChangeEvent} from "react";
 import axios from "axios";
-import { SearchStyle, SearchIconWrapper, StyledInputBase } from '../styling/searchStyle'
+import { StyledInputBase } from '../styling/searchStyle'
+import { SearchStyle } from "../styling/searchStyle";
+import { SearchIconWrapper } from "../styling/searchStyle";
 import { Item } from '../styling/journeyStyle'
 import SearchIcon from '@mui/icons-material/Search';
-import { Tab, Box, Tabs, Stack } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Stack from '@mui/material/Stack';
+
+
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 
