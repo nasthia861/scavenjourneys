@@ -17,7 +17,7 @@ import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
 
-export const Home: React.FC = () => {
+const Home: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -43,11 +43,6 @@ export const Home: React.FC = () => {
         return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
       setJourneys(response.data);
-    // })
-    // .catch((error) => {
-    //   console.error('Error fetching recent journeys:', error);
-    // });
-
  }
 
  const handleToggleChange = (
@@ -82,20 +77,6 @@ export const Home: React.FC = () => {
 
   }, [userLat, userLong, alignment]);
 
-  //assign Journey to User
-  // const assignJourney = () => {
-  // if (user && selectedJourney) {
-  //   axios.post(`/journey/assign/${selectedJourney.id}`, { userId: user.id })
-  //     .then((response) => {
-  //       console.log('Journey assigned to user:', response.data);
-  //       setSuccessMessage('Journey assigned successfully!');
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error assigning journey to user:', error);
-  //       setSuccessMessage('');
-  //     });
-  // }
-  // };
 
 return (
   <Container>
@@ -147,4 +128,5 @@ return (
 );
 ;
 };
-// key={journey.id}
+
+export default Home;

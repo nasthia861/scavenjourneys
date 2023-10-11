@@ -19,7 +19,7 @@ import { StepType } from "@this/types/Step"
 
 
 
-export const Profile: React.FC = () => {
+  export const Profile: React.FC = () => {
 
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
@@ -29,9 +29,8 @@ export const Profile: React.FC = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
   const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
 
-
-  const userObj = useContext(myContext);
-  const [user, setUser] = useState<any>({});
+  //grabs user data from google oauth
+  const [user, setUser] = useState<any>(useContext(myContext));
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
@@ -57,18 +56,13 @@ export const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    setUser(userObj);
     getUserNameImg();
 
     // GET user's journeys and journey progress
     const getUserData = async () => {
       try {
-        const userJourneys = await axios.get(`/journey/user/${userObj.id}`);
+        const userJourneys = await axios.get(`/journey/user/${user.id}`);
         setJourneys(userJourneys.data);
-
-
-        const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
-
 
 
       } catch (error) {
@@ -87,7 +81,6 @@ export const Profile: React.FC = () => {
 
       const journeyProgressResponse = await axios.get(`/journey/progress/${ journeyId}`);
         setJourneyProgress(journeyProgressResponse.data);
-        //console.log(journeyProgressResponse)
 
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
@@ -235,3 +228,4 @@ export const Profile: React.FC = () => {
   )
 }
 
+// export default Profile;
