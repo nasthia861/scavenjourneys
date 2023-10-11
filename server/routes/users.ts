@@ -82,11 +82,12 @@ userRouter.put('/:id', async (req, res) => {
 //PATCH to update user username (tested: √ )
 userRouter.patch('/:id', async (req, res) => {
   const { id } = req.params
+  const { username } = req.body
 
   try {
     const user = await userRepo.findOne( { where: { id: +id } });
     if (user) {
-      userRepo.merge(user, req.body);
+      userRepo.merge(user, username);
       let result = await userRepo.save(user);
       return res.status(200).send(result);
 

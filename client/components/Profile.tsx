@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useContext } from "react";
+import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -11,11 +11,9 @@ import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
 import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
-
-import { deepPurple } from "@mui/material/colors";
+import deepPurple from "@mui/material/colors/deepPurple";
 import axios from "axios";
 import { myContext } from "./Context";
-//import { UserType } from "@this/types/User";
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
 
@@ -34,9 +32,33 @@ const Profile = () => {
 
   const userObj = useContext(myContext);
   const [user, setUser] = useState<any>({});
+  const [username, setUsername] = useState<string>('');
+  const [updatedUsername, setUpdatedUsername] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>('');
+
+  /** User Functionality for User Profile*/
+  const updateUsername = () => {
+    axios.patch("/user/" + user.id, {username: updatedUsername} )
+    .then(() => {})
+    .catch((err) => {
+      console.error('Could not Axios patch', err)
+    });
+  };
+
+  const getUserNameImg = () => {
+    axios.get('/user/' + user.id)
+    .then((userData) => {
+      setUsername(userData.data.username);
+      setUserImg(userData.data.img_url);
+    })
+    .catch((err) => {
+      console.error('Could not retrieve user information', err);
+    })
+  };
 
   useEffect(() => {
     setUser(userObj);
+    getUserNameImg();
 
     // GET user's journeys and journey progress
     const getUserData = async () => {
@@ -46,8 +68,6 @@ const Profile = () => {
 
 
         const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
-        //setJourneyProgress(journeyProgressResponse.data);
-        //console.log(journeyProgressResponse)
 
 
 
@@ -59,8 +79,7 @@ const Profile = () => {
     getUserData();
   });
 
-
-
+  /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
 
 
@@ -104,28 +123,13 @@ const Profile = () => {
     }
   };
 
-
-
-
-
-  const updateUsername = () => {
-    axios.patch("/user/" + user.id, {username: user.username} )
-    .then((res) => {
-      setUser(res.data);
-    })
-    .catch((err) => {
-      console.error('Could not Axios patch', err)
-    });
-  };
-
-
   const theme = useTheme();
 
   return (
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        {user.username}
+        {username}
       </Typography>
 
 
@@ -133,11 +137,23 @@ const Profile = () => {
       <Avatar
       sx={{ bgcolor: deepPurple[500],
       width: 56, height: 56 }}
-      src={user.img_url}
+      src={userImg}
       ></Avatar>
      <Stack direction="row" spacing={1}>
-          <TextField id="outlined-basic" label="Username" variant="outlined" value={''} />
-          <Button variant="contained" onClick={updateUsername}>
+          <TextField
+            id="outlined-basic"
+            label="Username"
+            variant="outlined"
+            onChange={(e: SyntheticEvent) => {
+              const target = e.target as HTMLInputElement;
+              const value = target.value;
+              setUpdatedUsername(value)
+            }}
+           />
+          <Button
+            variant="contained"
+            onClick={() => {updateUsername();}}
+          >
             Update Username
           </Button>
         </Stack>
