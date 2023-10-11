@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LeaderBoard = () => {
+export const LeaderBoard: React.FC = () => {
 
   return (
     <div>
@@ -8,5 +8,3 @@ const LeaderBoard = () => {
     </div>
   )
 }
-
-export default LeaderBoard;

@@ -10,7 +10,7 @@ import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -35,7 +35,6 @@ const Home: React.FC = () => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
-      console.log(response.data);
       setJourneys(response.data);
     })
     .catch((error) => {
@@ -142,5 +141,3 @@ return (
 ;
 };
 // key={journey.id}
-
-export default Home;

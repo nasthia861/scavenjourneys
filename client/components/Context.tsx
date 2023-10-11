@@ -1,19 +1,22 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios';
 
+//Context used to pass state down as props to children elements
 export const myContext = createContext({});
 const Context = (props: any) => {
 const [userObj, setUserObj] = useState<any>();
 
   useEffect(()=> {
+    //Request used to retrieve user data from the server
     axios.get('/auth/getuser', { withCredentials: true })
     .then((res: AxiosResponse)=> {
       if (res.data){
+        //set user data to state
         setUserObj(res.data);
       }
     })
     .catch((err)=> {
-      console.error('Could note create user state', err);
+      console.error('Could not create user state', err);
     })
 
   }, [])

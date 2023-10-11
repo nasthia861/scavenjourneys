@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  useTheme,
   Divider,
   ListItemButton, Accordion,
   AccordionSummary,
@@ -17,95 +18,98 @@ import { deepPurple } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { myContext } from "./Context";
-
+//import { UserType } from "@this/types/User";
 import { JourneyType } from '@this/types/Journey';
 import { StepType } from "@this/types/Step"
-//import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 
-const Profile = () => {
- // const journey: {journey: JourneyType} ;
-  //const [journey, setJourney] = useState<JourneyType[]>([]);
+export const Profile: React.FC = () => {
+
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [step, setStep] = useState<StepType[]>([]);
   const [stepProgress, setStepProgress] = useState([]);
   const [journeyProgress, setJourneyProgress] = useState([])
   const [selectedJourney, setSelectedJourney] = useState(null);
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
 
-
-
-
-  const handleJourneyClick = async (journeyId: number) => {
-    try {
-      // GET steps for the selected journey
-      const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
-      setSteps(stepAndJourney.data);
-
-      // GET step progress for each step
-      const progressData = await Promise.all(
-        stepAndJourney.data.map(async (step: { id: any; }) => {
-          const progressObj = await axios.get(`/step/step_progress/${step.id}`);
-          return {
-            [step.id]: progressObj.data,
-          };
-        })
-      );
-
-      setStepProgress(Object.assign({}, ...progressData));
-
-      // Update the selected journey
-      const selectedJourney = journeys.find((journey) => journey.id === journeyId);
-      setSelectedJourney(selectedJourney);
-    } catch (error) {
-      console.error('Error fetching journey details:', error);
-    }
-  };
-
-  useEffect(() => {
-    // GET user's journeys and journey progress
-    const getUserData = async () => {
-      try {
-        const userJourneys = await axios.get('/journey/user/5');
-        setJourneys(userJourneys.data);
-
-        const journeyProgressResponse = await axios.get('/journey/progress/user/5');
-        setJourneyProgress(journeyProgressResponse.data);
-        console.log(journeyProgressResponse)
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    getUserData();
-  }, []);
 
   const userObj = useContext(myContext);
   const [user, setUser] = useState<any>({});
 
   useEffect(() => {
     setUser(userObj);
+
+    // GET user's journeys and journey progress
+    const getUserData = async () => {
+      try {
+        const userJourneys = await axios.get(`/journey/user/${userObj.id}`);
+        setJourneys(userJourneys.data);
+
+
+        const journeyProgressResponse = await axios.get(`/journey/progress/${ userObj.id}`);
+        //setJourneyProgress(journeyProgressResponse.data);
+        //console.log(journeyProgressResponse)
+
+
+
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    getUserData();
   });
 
-  axios.get('/step/')
 
-  useEffect(() => {
-    // Fetching step progress for each step
-    steps.forEach((step) => {
-      axios.get(`/step/step_progress/${step.id}`)
-        .then((progressResponse) => {
-          setStepProgress((prevProgress) => ({
-            ...prevProgress,
-            [step.id]: progressResponse.data,
-          }));
+
+  const handleJourneyClick = async (journeyId: number) => {
+
+
+    try {
+
+      const journeyProgressResponse = await axios.get(`/journey/progress/${ journeyId}`);
+        setJourneyProgress(journeyProgressResponse.data);
+        //console.log(journeyProgressResponse)
+
+      // GET steps for the selected journey
+      const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
+      setSteps(stepAndJourney.data);
+
+
+
+      // GET step progress for each step
+      const progressData = await Promise.all(
+        stepAndJourney.data.map(async (step: { id: number; }) => {
+          const progressObj = await axios.get(`/step/step_progress/${step.id}`);
+          return {
+            [step.id]: progressObj.data,
+          };
         })
-        .catch((error) => {
-          console.error(`Error getting step progress for step ${step.id}:`, error);
-        });
-    });
-  }, [steps]);
+      );
+        //set stepPorgress data for every step on iteration (stePandJourney m)
+      setStepProgress(Object.assign({}, ...progressData));
+
+
+      // Update the selected journey
+      const selectedJourney = journeys.find((journey) => journey.id === journeyId);
+      setSelectedJourney((prevSelectedJourney: { id: number; }) => (
+        prevSelectedJourney && prevSelectedJourney.id === journeyId ? null : selectedJourney
+      ));
+
+      const progress = journeyProgress.find((progress) => progress.journey_id === journeyId);
+      setSelectedJourneyProgress(progress);
+
+
+    } catch (error) {
+      console.error('Error fetching journey details:', error);
+    }
+  };
+
+
+
 
 
   const updateUsername = () => {
@@ -119,11 +123,8 @@ const Profile = () => {
   };
 
 
-  const handleChange = (panel: string) =>
-  (event: React.SyntheticEvent, isExpanded: boolean) =>
-  {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const theme = useTheme();
+
   return (
     <Container>
       <Stack spacing={1}>
@@ -138,76 +139,90 @@ const Profile = () => {
       width: 56, height: 56 }}
       src={user.img_url}
       ></Avatar>
-      <Box
-       component='form'
-       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-       >
-      <TextField
-          id="outlined-basic"
-          label="Username"
-          // onChange={(e) => setUser(e.target.value)}
-        />
-      </Box>
-      <List component="nav" aria-label="journeys">
-        {journeys.map((journey) => (
-          <React.Fragment key={journey.id}>
-            <ListItemButton onClick={() => handleJourneyClick(journey.id)}>
-              <ListItemText primary={journey.name} />
-            </ListItemButton>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </List>
-        <Typography variant="h6" gutterBottom>
-          Journey Progress
-        </Typography>
-        <List component="nav" aria-label="journey-progress">
-          {journeyProgress.map((progress) => (
-            <ListItem key={progress.id}>
-              <ListItemText primary={`In Progress: ${progress.in_progress}`} />
-              <ListItemText primary={`Difficulty: ${progress.difficulty}`} />
-              <br/>
-              <ListItemText primary={`Started: ${progress.started_at.slice(0, 10)}`} />
-              <ListItemText primary={`Journeyed on: ${progress.last_progress_at.slice(0, 10)}`} />
+     <Stack direction="row" spacing={1}>
+          <TextField id="outlined-basic" label="Username" variant="outlined" value={''} />
+          <Button variant="contained" onClick={updateUsername}>
+            Update Username
+          </Button>
+        </Stack>
+       {/* List of Journeys */}
+      <Typography variant="h5">Journeys</Typography>
+      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+          {journeys.map((journey) => (
+            <React.Fragment key={journey.id}>
+              <ListItemButton onClick={() =>
+              handleJourneyClick(journey.id)}
+              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+               >
+                <ListItemText primary={journey.name} secondary={journey.description} />
+              </ListItemButton>
+              {selectedJourney && selectedJourney.id === journey.id && (
+                <>
+                  <Typography variant="h5">Journey Progress</Typography>
+                  <List>
+                  {journeyProgress
 
-            </ListItem>
-          ))}
-        </List>
+                    .filter((progress) => {
+                       console.log(journeyProgress)
+                      // console.log("Selected Journey ID:", selectedJourney.id);
+                       console.log("Progress Journey IDs:", progress);
+                      return progress.journey.id === selectedJourney.id;
+                    })
+                    .map((progress) => {
+                      console.log("Mapping Progress ID:", progress.id);
+                      const { tagId, img_url } = progress.journey;
+                      return (
+                        <ListItem key={progress.id}>
+                          <ListItemText
 
-        {/* Steps and Step Progress */}
-        <Typography variant="h6" gutterBottom>
-          Steps
-        </Typography>
-        <List component="nav" aria-label="steps">
-          {steps.map((step) => (
-            <React.Fragment key={step.id}>
-              <ListItem>
-                <ListItemText primary={`Step: ${step.name}`} />
-              </ListItem>
-              {/* Display step progress */}
-              <List component="nav" aria-label={`step-progress-${step.id}`}>
-                {stepProgress[step.id] &&
-                  stepProgress[step.id].map((progress: { id: React.Key; in_progress: any; }) => (
-                    <ListItem key={progress.id}>
-                      <ListItemText primary={`In Progress: ${progress.in_progress}`} />
-                    </ListItem>
-                  ))}
-              </List>
+                            primary={`In Progress: ${progress.in_progress}`}
+                            secondary={`Difficulty: ${progress.difficulty}`}
+                          />
+                          <Typography variant="caption">
+                            Started: {progress.started_at.slice(0, 10)}
+                          </Typography>
+                          <Typography variant="caption">
+                            Journeyed on: {progress.last_progress_at.slice(0, 10)}
+                            <Typography variant="caption">Tag ID: {tagId}</Typography>
+                            {/* <img src={`${img_url}?w=20&h=20`}
+                             alt="Journey Preview"
+                             sx={{ marginLeft: theme.spacing(2) }}
+                             /> */}
+                          </Typography>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+
+                  <Typography variant="h5">Steps & Step Progress</Typography>
+                  <List>
+                    {steps.map((step) => (
+                      <React.Fragment key={step.id}>
+                        <ListItem>
+                          <ListItemText primary={`Step: ${step.name}`}
+                          sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}/>
+                        </ListItem>
+                        <List>
+                          {stepProgress[step.id] &&
+                            stepProgress[step.id].map((progress: any) => (
+                              <ListItem key={progress.id}>
+                                <ListItemText secondary={`In Progress: ${progress.in_progress}`}
+                                sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: `${theme.spacing(1)} 0` }} />
+                              </ListItem>
+                            ))}
+                        </List>
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </>
+              )}
               <Divider />
             </React.Fragment>
           ))}
         </List>
 
-      <Button variant="contained" size="medium">
-          Update Username
-        </Button>
-    </Stack>
+      </Stack>
     </Container>
   )
 }
 
-export default Profile;

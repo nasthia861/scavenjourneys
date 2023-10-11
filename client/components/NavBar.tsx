@@ -1,16 +1,17 @@
-import * as React from 'react';
+import React, {useState, useContext} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AccountCircle } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { myContext } from './Context';
 // import InputBase from '@mui/material/InputBase';
 // import { styled, alpha} from '@mui/material/styles';
-import {  AppBar, Box, Toolbar, Typography, Menu, MenuItem, IconButton } from '@mui/material';
+import {  AppBar, Box, Toolbar, Typography, Menu, MenuItem, IconButton, Avatar } from '@mui/material';
 
 //we can use forms to anchor signed-in users to NavBar features (Profile Pic, username, etc..)
 import { FormControlLabel, FormGroup } from '@mui/material';
 
 //withheld from external types folder to exemplify interface/ assignments being passed to functional component
-//we have to assign types/interface to ensure proper typescript syntax 
+//we have to assign types/interface to ensure proper typescript syntax
 //interface to allocate types to MenuItems (path and label: string)
 interface MenuItem {
   path: string;
@@ -18,7 +19,7 @@ interface MenuItem {
 }
 //interface to set interface for NavBarProps: array of pages to link to (Profile:{path: '/', label: 'profile'} etc.)
 interface NavBarProps {
-  //menu items hold the value of MenuItem interface within an array to map over 
+  //menu items hold the value of MenuItem interface within an array to map over
   //path and label props being passed to MenuItem array elements
   menuItems: MenuItem[];
 }
@@ -52,14 +53,17 @@ interface NavBarProps {
 //   },
 // }));
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-const NavBar = ( {menuItems}: NavBarProps ) => {
+export const NavBar: React.FC<NavBarProps> = ( {menuItems}) => {
+
+  //Use useContext to set the user state
+  const userObj = useContext(myContext);
 
   //authenticate user
   const [auth, setAuth] = React.useState<boolean | null>(true);
-  //set anchor to display or close menu in navBar 
+  //set anchor to display or close menu in navBar
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  //handler for setting auth 
+  //handler for setting auth
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
   };
@@ -73,15 +77,15 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
-           onClick={handleMenu} 
-           style={{ cursor: 'pointer' }} 
+           onClick={handleMenu}
+           style={{ cursor: 'pointer' }}
             size="large"
             edge="start"
             color="inherit"
@@ -128,13 +132,12 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
         </Toolbar>
       </AppBar>
     </Box>
-    
+
   );
 }
 
-export default NavBar;
 /**
- * 
+ *
  *  <ul>
       <Link to="/journey" >Journey</Link>
       <Link to="/profile" >Profile</Link>
