@@ -1,16 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Index } from 'typeorm';
 import { User } from './User'
 import { Journey } from './Journey'
 
 @Entity()
+@Index(['id', 'journey'], { unique: true })
 export class JourneyProgress {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true})
   difficulty: number;
 
-  @Column()
+  @Column({ default: true})
   in_progress: boolean;
 
   @Column({ default: () => "NOW()"})

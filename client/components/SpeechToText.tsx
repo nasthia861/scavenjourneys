@@ -3,7 +3,7 @@ import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import IconButton from '@mui/material/IconButton';
 
 
-const TextToSpeech = ({ onceSpoken } : any) => {
+const SpeechToText = ({ onceSpoken } : any) => {
 
   const [spoken, setSpoken] = useState('');
 
@@ -12,13 +12,14 @@ const TextToSpeech = ({ onceSpoken } : any) => {
     const speak = new window.webkitSpeechRecognition();
     speak.lang = 'en-US';
 
+    speak.start();
+
     speak.onresult = (e: any) => {
       const spoke = e.results[0][0].transcript;
       setSpoken(spoke);
       //prop for passing the spoken data
       onceSpoken(spoke);
     };
-    speak.start();
 
     speak.onspeechend = () => {
       speak.stop();
@@ -39,4 +40,4 @@ const TextToSpeech = ({ onceSpoken } : any) => {
   )
 }
 
-export default TextToSpeech
+export default SpeechToText;

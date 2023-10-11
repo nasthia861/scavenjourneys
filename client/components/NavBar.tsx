@@ -26,7 +26,7 @@ interface NavBarProps {
 }
 
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-export const NavBar = ( {menuItems}: NavBarProps ) => {
+const NavBar = ( {menuItems}: NavBarProps ) => {
 
   //Use useContext to set the user state
   const userObj = useContext(myContext);
@@ -109,4 +109,4 @@ export const NavBar = ( {menuItems}: NavBarProps ) => {
   );
 }
 
-export default NavBar;
+export default NavBar

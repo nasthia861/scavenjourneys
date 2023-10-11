@@ -10,9 +10,6 @@ export class Tag {
   @Column()
   name: string;
 
-  // @Column()
-  // Fa: string;
-
   @OneToMany(() => Journey, (journey: Journey) => journey.id)
   journey: Journey;
 
