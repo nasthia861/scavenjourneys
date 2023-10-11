@@ -35,18 +35,18 @@ export const Home: React.FC = () => {
   }, () => console.log('Could not get location'))
  }
 
- const getJourney = () => {
+ const getJourney = async () => {
     // Fetch the journeys closest to you
-    axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
-      .then((response) => {
-        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+    const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
+      //.then((response) => {
+      response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+        return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
       setJourneys(response.data);
-    })
-    .catch((error) => {
-      console.error('Error fetching recent journeys:', error);
-    });
+    // })
+    // .catch((error) => {
+    //   console.error('Error fetching recent journeys:', error);
+    // });
 
  }
 
