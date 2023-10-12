@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
+/**TTS functionality used in other components */
 const TextToSpeech: React.FC = () => {
 
+  const synth = new window.SpeechSynthesis();
   const [text, setText] = useState<string>('');
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice | null>(null);
-  const synth = new window.SpeechSynthesis();
 
   useEffect(() => {
     setVoices(speechSynthesis.getVoices());
@@ -18,7 +19,7 @@ const TextToSpeech: React.FC = () => {
   }
 
   const speakText = () => {
-    if (speechSynthesis && chosenVoice) {
+    if (synth && chosenVoice) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = chosenVoice;
       synth.speak(utterance);
