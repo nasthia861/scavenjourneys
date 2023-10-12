@@ -13,10 +13,10 @@ export class Step {
   @Column({ default: "no hint, figure it out" })
   hint: string;
 
-  @Column({ nullable: true })
+  @Column('json', { nullable: true })
   latitude: number;
 
-  @Column({ nullable: true })
+  @Column('json', { nullable: true })
   longitude: number;
 
   @ManyToOne(() => User, (user: User) => user.id)
