@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent, useRef } from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent, useRef } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
