@@ -162,13 +162,12 @@ stepRouter.get('/journey/:journeyId', async (req, res) => {
 
 // POST to assign step_progress to step
 stepRouter.post('/progress', async (req, res) => {
-  const { in_progress, image_url, focus, started_at, journey_progress, step } = req.body;
+  const { in_progress, image_url, started_at, journey_progress, step } = req.body;
 
   try {
     const stepProgress = stepProgressRepo.create({
       in_progress,
       image_url,
-      // focus,
       started_at,
       journey_progress,
       step
@@ -182,10 +181,18 @@ stepRouter.post('/progress', async (req, res) => {
 
 });
 
-//GET all steps in prgress
-stepRouter.get('/progress', async (req, res) => {
+//GET all steps in journey progress
+stepRouter.get('/progress/:progressId', async (req, res) => {
+  const {progressId} = req.params;
   try {
-    const progress = await stepProgressRepo.find()
+    const progress = await stepProgressRepo.find({
+      relations: ['journey_progress', 'step'],
+      where: {
+        journey_progress: {
+          id: +progressId
+        }
+      }
+    })
     res.status(200).send(progress);
   } catch(err) {
     console.error(err);

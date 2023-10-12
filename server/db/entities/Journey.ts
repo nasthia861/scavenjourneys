@@ -23,9 +23,6 @@ export class Journey {
   @Column()
   img_url: string;
 
-  @Column({ nullable: true })
-  userId: number
-
   @ManyToOne(() => User, (user: User) => user.id)
   @JoinColumn()
   user: User;

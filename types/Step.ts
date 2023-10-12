@@ -1,13 +1,13 @@
-
+import { UserType } from "./User";
+import { JourneyType } from "./Journey";
 export type StepType = {
   journeyId: number;
   id: number;
   name: string;
   hint: string;
-  location: {
-    latitude: string,
-    longitude: string
-  };
-  user_id: number;
+  latitude: string,
+  longitude: string
+  user: UserType;
+  journey: JourneyType;
   created_at: string;
 }
