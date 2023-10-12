@@ -3,27 +3,7 @@ import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/material/styles/styled';
-
-const StyledPaper = styled(Paper)(() => ({
-  padding: '16px',
-  maxWidth: '400px',
-  margin: '0 auto',
-}));
-
-const StyledForm = styled('form')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '16px',
-}));
-
-const StyledInput = styled(TextField)(() => ({
-  width: '100%',
-}));
-
-const StyledButton = styled(Button)(() => ({
-  marginTop: '16px',
-}));
+import { useNavigate } from 'react-router-dom';
 
 export const CreateJourney: React.FC = () => {
   const [journeyData, setJourneyData] = useState({
@@ -32,88 +12,57 @@ export const CreateJourney: React.FC = () => {
     img_url: '',
   });
 
-  const [stepData, setStepData] = useState({
-    name: '',
-    hint: '',
-    journeyId: null
-  });
+  const [journeyId, setJourneyId] = useState(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJourneyData({ ...journeyData, [name]: value });
   };
 
-  const handleStepInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setStepData({ ...stepData, [name]: value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const createJourney = async () => {
     try {
-      // First, create the journey to get its ID
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
-      console.log(journeyResponse.data)
-      console.log(newJourney.id)
-
-      // Set the journey property of the step
-      setStepData({ ...stepData, journeyId: newJourney.id });
-      console.log(stepData);
-
-      // Create the step with the associated journey ID
-      await axios.post('/step', stepData);
-
-      console.log('Journey and step created successfully');
-      // Redirect to the home page or another page
-      window.location.href = '/home';
+      setJourneyId(newJourney.id);
     } catch (error) {
-      console.error('Error creating journey and step:', error);
+      console.error('Error creating journey:', error);
     }
   };
 
+  const navigate = useNavigate();
+
   return (
-    <StyledPaper>
+    <Paper>
       <h2>Create a New Journey</h2>
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledInput
-          label="Name"
-          type="text"
-          name="name"
-          value={journeyData.name}
-          onChange={handleInputChange}
-        />
-        <StyledInput
-          label="Description"
-          type="text"
-          name="description"
-          value={journeyData.description}
-          onChange={handleInputChange}
-        />
-        <StyledInput
-          label="Image URL"
-          type="text"
-          name="img_url"
-          value={journeyData.img_url}
-          onChange={handleInputChange}
-        />
-        <h3>Add Steps</h3>
-        <StyledInput
-          label="Step Name"
-          type="text"
-          name="name"
-          value={stepData.name}
-          onChange={handleStepInputChange}
-        />
-        <StyledInput
-          label="Step Hint"
-          type="text"
-          name="hint"
-          value={stepData.hint}
-          onChange={handleStepInputChange}
-        />
-        <StyledButton type="submit">Create Journey</StyledButton>
-      </StyledForm>
-    </StyledPaper>
+      <TextField
+        label="Name"
+        type="text"
+        name="name"
+        value={journeyData.name}
+        onChange={handleInputChange}
+      />
+      <TextField
+        label="Description"
+        type="text"
+        name="description"
+        value={journeyData.description}
+        onChange={handleInputChange}
+      />
+      <TextField
+        label="Image URL"
+        type="text"
+        name="img_url"
+        value={journeyData.img_url}
+        onChange={handleInputChange}
+      />
+      <Button onClick={createJourney}>Create Journey</Button>
+        {journeyId && (
+          <Button
+            onClick={() => navigate(`/StepForm/${journeyId}`)}
+          >
+            Add Steps
+          </Button>
+        )}
+    </Paper>
   );
 };

@@ -27,6 +27,9 @@ const NavBar = lazy(() =>
 const CreateJourney = lazy(() =>
   import('./CreateJourney.tsx').then((module) => ({ default: module.CreateJourney }))
 );
+const StepForm = lazy(() =>
+  import('./StepForm.tsx').then((module) => ({ default: module.StepForm }))
+);
 
 
 const App = () => {
@@ -56,6 +59,7 @@ const App = () => {
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney/>} />
+              <Route path="/StepForm/:journeyId" element={<StepForm/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>

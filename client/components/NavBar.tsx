@@ -108,5 +108,3 @@ export const NavBar: React.FC<NavBarProps> = ( {menuItems}) => {
 
   );
 }
-
-export default NavBar;
