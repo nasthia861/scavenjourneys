@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Index } from 'typeorm';
 import { User } from './User'
 import { Journey } from './Journey'
 
 @Entity()
+@Index(['id', 'journey'], { unique: true })
 export class JourneyProgress {
   @PrimaryGeneratedColumn()
   id: number;
