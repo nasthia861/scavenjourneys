@@ -11,6 +11,7 @@ import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
+import StepForm from './StepForm.tsx';
 
 // lazy load components
 // const Welcome = lazy(() =>
@@ -63,6 +64,7 @@ const App = () => {
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney/>} />
+              <Route path="/StepForm/:journeyId" element={<StepForm/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>

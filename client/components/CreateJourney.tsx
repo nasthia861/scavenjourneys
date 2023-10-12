@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { StyledPaper, StyledForm, StyledButton, StyledInput } from '../styling/createJourneyStyle';
+
+import StepForm from './StepForm.tsx';
+
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
   const CreateJourney: React.FC = () => {
   const [journeyData, setJourneyData] = useState({
@@ -12,69 +18,28 @@ import { StyledPaper, StyledForm, StyledButton, StyledInput } from '../styling/c
     longitude: ''
   });
 
-  const [stepData, setStepData] = useState({
-    name: '',
-    hint: '',
-    journeyId: null
-  });
+  const [journeyId, setJourneyId] = useState(null);
 
   const [image, setImage] = useState<string | null>('');
-  //const [video, setVideo] = useState<HTMLVideoElement | null>()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJourneyData({ ...journeyData, [name]: value });
   };
 
-  const handleStepInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setStepData({ ...stepData, [name]: value });
-  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const createJourney = async () => {
     try {
-      // First, create the journey to get its ID
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
-      console.log(journeyResponse.data)
-      console.log(newJourney.id)
-
-      // Set the journey property of the step
-      setStepData({ ...stepData, journeyId: newJourney.id });
-      console.log(stepData);
-
-      // Create the step with the associated journey ID
-      await axios.post('/step', stepData);
-
-      console.log('Journey and step created successfully');
-      // Redirect to the home page or another page
-      window.location.href = '/home';
+      setJourneyId(newJourney.id);
+      navigate(`/StepForm/${newJourney.id}`);
     } catch (error) {
-      console.error('Error creating journey and step:', error);
+      console.error('Error creating journey:', error);
     }
   };
 
-  //for webcam access
-  // useEffect(() => {
-
-  //   const video = document.getElementById('video') as HTMLVideoElement;
-  //   setVideo(video)
-
-  //   if(navigator.mediaDevices.getUserMedia) {
-  //     navigator.mediaDevices.getUserMedia({video: true})
-  //     .then((stream) => {
-  //       video.srcObject = stream;
-  //       video.play();
-  //     })
-  //   }
-  // }, [])
-
-  // const takePicture = async() => {
-  //   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  //   const context = canvas.getContext('2d');
-  //   context.drawImage(video, 0, 0, 320, 240)
-  // }
+  const navigate = useNavigate();
 
   const saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {files} = e.target;
@@ -85,29 +50,22 @@ import { StyledPaper, StyledForm, StyledButton, StyledInput } from '../styling/c
 
 
   return (
-    <StyledPaper>
+    <Paper>
       <h2>Create a New Journey</h2>
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledInput
-          label="Name"
-          type="text"
-          name="name"
-          value={journeyData.name}
-          onChange={handleInputChange}
-        />
-        <StyledInput
-          label="Description"
-          type="text"
-          name="description"
-          value={journeyData.description}
-          onChange={handleInputChange}
-        />
-        {/* <video id="video" width="320" height="240"></video>
-        <button
-          id="snap"
-          onClick={takePicture}
-        >Snap Photo</button>
-        <canvas id="canvas" width="320" height="240"></canvas> */}
+      <TextField
+        label="Name"
+        type="text"
+        name="name"
+        value={journeyData.name}
+        onChange={handleInputChange}
+      />
+      <TextField
+        label="Description"
+        type="text"
+        name="description"
+        value={journeyData.description}
+        onChange={handleInputChange}
+      />
         <input
           id="cameraInput"
           type="file"
@@ -116,24 +74,10 @@ import { StyledPaper, StyledForm, StyledButton, StyledInput } from '../styling/c
           onChange={(e) => saveImage(e)}/>
         <img
           src={image} />
-        <h3>Add Steps</h3>
-        <StyledInput
-          label="Step Name"
-          type="text"
-          name="name"
-          value={stepData.name}
-          onChange={handleStepInputChange}
-        />
-        <StyledInput
-          label="Step Hint"
-          type="text"
-          name="hint"
-          value={stepData.hint}
-          onChange={handleStepInputChange}
-        />
-        <StyledButton type="submit">Create Journey</StyledButton>
-      </StyledForm>
-    </StyledPaper>
+        {!journeyId ? (
+          <Button onClick={createJourney}>Add Steps</Button>
+        ) : null}
+    </Paper>
   );
 };
 
