@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent, useRef } from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent} from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -19,7 +19,7 @@ import SpeechToText from "./SpeechToText";
 
 
   export const Profile: React.FC = () => {
-
+  const theme = useTheme();
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
 
@@ -93,8 +93,8 @@ import SpeechToText from "./SpeechToText";
     }
   };
 
-  const theme = useTheme();
-  const inputRef = useRef<HTMLInputElement>(null);
+  /**Text to Speech Functionality */
+
   return (
     <Container>
       <Stack spacing={1}>
@@ -117,7 +117,6 @@ import SpeechToText from "./SpeechToText";
             variant="outlined"
             onChange={handleUsernameChange}
             value={ updatedUsername }
-            inputRef={inputRef}
             InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
           />
           <Button
@@ -125,9 +124,6 @@ import SpeechToText from "./SpeechToText";
             type='submit'
             onClick={async () => {
               updateUsername(updatedUsername);
-              if (inputRef.current) {
-                inputRef.current.value = '';
-              }
             }}
             >
             Update Username
