@@ -7,10 +7,10 @@ export class JourneyProgress {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true})
   difficulty: number;
 
-  @Column()
+  @Column({ default: true})
   in_progress: boolean;
 
   @Column({ default: () => "NOW()"})

@@ -13,9 +13,6 @@ export class StepProgress {
   @Column({ nullable: true })
   image_url: string ;
 
-  // @Column()
-  // focus: boolean;
-
   @Column({ default: () => "NOW()"})
   started_at: Date;
 

@@ -17,7 +17,7 @@ import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
 
 
-export const Home: React.FC = () => {
+const Home: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -38,16 +38,10 @@ export const Home: React.FC = () => {
  const getJourney = async () => {
     // Fetch the journeys closest to you
     const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
-      //.then((response) => {
       response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
         return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
-      setJourneys(response.data);
-    // })
-    // .catch((error) => {
-    //   console.error('Error fetching recent journeys:', error);
-    // });
-
+      setJourneys(response.data)
  }
 
  const handleToggleChange = (
@@ -58,23 +52,6 @@ export const Home: React.FC = () => {
 };
 
   useEffect(() => {
-   // grab user location
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLat(position.coords.latitude)
-      setUserLong(position.coords.longitude)
-    }, () => console.log('Could not get location'))
-
-   // Fetch the journeys closest to you
-    axios.get(`/journey/recent/${userLat}/${userLong}`)
-      .then((response) => {
-        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
-        })
-        setJourneys(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching recent journeys:', error);
-      });
     getLocation()
     if(userLat && userLong) {
       getJourney()
@@ -82,20 +59,6 @@ export const Home: React.FC = () => {
 
   }, [userLat, userLong, alignment]);
 
-  //assign Journey to User
-  // const assignJourney = () => {
-  // if (user && selectedJourney) {
-  //   axios.post(`/journey/assign/${selectedJourney.id}`, { userId: user.id })
-  //     .then((response) => {
-  //       console.log('Journey assigned to user:', response.data);
-  //       setSuccessMessage('Journey assigned successfully!');
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error assigning journey to user:', error);
-  //       setSuccessMessage('');
-  //     });
-  // }
-  // };
 
 return (
   <Container>
@@ -147,4 +110,5 @@ return (
 );
 ;
 };
-// key={journey.id}
+
+export default Home;

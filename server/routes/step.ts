@@ -162,13 +162,12 @@ stepRouter.get('/journey/:journeyId', async (req, res) => {
 
 // POST to assign step_progress to step
 stepRouter.post('/progress', async (req, res) => {
-  const { in_progress, image_url, focus, started_at, journey_progress, step } = req.body;
+  const { in_progress, image_url, started_at, journey_progress, step } = req.body;
 
   try {
     const stepProgress = stepProgressRepo.create({
       in_progress,
       image_url,
-      // focus,
       started_at,
       journey_progress,
       step
