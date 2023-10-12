@@ -40,7 +40,7 @@ const StepForm: React.FC = () => {
           // Delete the journey once steps are deleted
           await axios.delete(`/journey/${journeyId}`);
           // Redirect to the CreateJourney page
-          navigate('/home');
+          navigate('/create-journey');
         }
       }
     };
