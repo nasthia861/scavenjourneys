@@ -182,7 +182,7 @@ stepRouter.post('/progress', async (req, res) => {
 });
 
 //GET all steps in prgress
-stepRouter.get('/progress', async (req, res) => {
+stepRouter.get('/progress/:progressId', async (req, res) => {
   try {
     const progress = await stepProgressRepo.find()
     res.status(200).send(progress);

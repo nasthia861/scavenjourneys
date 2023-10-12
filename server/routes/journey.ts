@@ -200,9 +200,17 @@ journeyRouter.post('/progress', async (req, res) => {
 });
 
 //GET all journey progress
-journeyRouter.get('/journey_progress', async (req, res) => {
+journeyRouter.get('/progress/:userId', async (req, res) => {
+  const { userId } = req.params
   try {
-    const progress = await journeyProgressRepo.find()
+    const progress = await journeyProgressRepo.find({
+      relations: ['journey', 'user'],
+      where: {
+        user: {
+          id: +userId
+        }
+      }
+    })
     res.status(200).send(progress);
 
   } catch(err) {

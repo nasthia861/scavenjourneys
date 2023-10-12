@@ -23,11 +23,11 @@ import { StepType } from "@this/types/Step"
 
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [stepProgress, setStepProgress] = useState([]);
-  const [journeyProgress, setJourneyProgress] = useState([])
+  // const [stepProgress, setStepProgress] = useState([]);
+  // const [journeyProgress, setJourneyProgress] = useState([])
   const [selectedJourney, setSelectedJourney] = useState(null);
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
+  // const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
 
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
@@ -55,12 +55,11 @@ import { StepType } from "@this/types/Step"
     })
   };
 
-  // GET user's journeys and journey progress
+  // GET user's journey progress
   const getUserData = async () => {
     try {
-      const userJourneys = await axios.get(`/journey/user/${user.id}`);
+      const userJourneys = await axios.get(`/journey/progress/${user.id}`);
       setJourneys(userJourneys.data);
-      //const journeyProgressResponse = await axios.get(`/journey/progress/${ user.id}`);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -68,26 +67,11 @@ import { StepType } from "@this/types/Step"
 
   useEffect(() => {
     getUserNameImg();
-
-    // GET user's journeys and journey progress
-    const getUserData = async () => {
-      try {
-        const userJourneys = await axios.get(`/journey/user/${user.id}`);
-        setJourneys(userJourneys.data);
-
-
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
     getUserData();
   });
 
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
-
-
     try {
 
       const journeyProgressResponse = await axios.get(`/journey/progress/${ journeyId}`);

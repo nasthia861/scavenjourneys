@@ -20,6 +20,9 @@ export class Step {
   @JoinColumn()
   user: User;
 
+  @Column({ nullable: true })
+  journeyId: number
+
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
   @JoinColumn()
   journey: Journey;
