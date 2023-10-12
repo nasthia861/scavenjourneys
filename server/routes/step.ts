@@ -181,10 +181,18 @@ stepRouter.post('/progress', async (req, res) => {
 
 });
 
-//GET all steps in prgress
+//GET all steps in journey progress
 stepRouter.get('/progress/:progressId', async (req, res) => {
+  const {progressId} = req.params;
   try {
-    const progress = await stepProgressRepo.find()
+    const progress = await stepProgressRepo.find({
+      relations: ['journey_progress'],
+      where: {
+        journey_progress: {
+          id: +progressId
+        }
+      }
+    })
     res.status(200).send(progress);
   } catch(err) {
     console.error(err);

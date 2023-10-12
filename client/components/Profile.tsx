@@ -25,7 +25,7 @@ import { StepType } from "@this/types/Step"
   const [steps, setSteps] = useState<StepType[]>([]);
   // const [stepProgress, setStepProgress] = useState([]);
   // const [journeyProgress, setJourneyProgress] = useState([])
-  const [selectedJourney, setSelectedJourney] = useState(null);
+  const [selectedJourney, setSelectedJourney] = useState<JourneyType>();
   const [expanded, setExpanded] = useState<string | false>(false);
   // const [selectedJourneyProgress, setSelectedJourneyProgress] = useState<any>(null);
 
@@ -74,36 +74,38 @@ import { StepType } from "@this/types/Step"
   const handleJourneyClick = async (journeyId: number) => {
     try {
 
-      const journeyProgressResponse = await axios.get(`/journey/progress/${ journeyId}`);
-        setJourneyProgress(journeyProgressResponse.data);
+      // const journeyProgressResponse = await axios.get(`/step/progress/${ journeyId}`);
+      //   setJourneyProgress(journeyProgressResponse.data);
+
 
       // GET steps for the selected journey
-      const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
+      const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
 
 
 
-      // GET step progress for each step
-      const progressData = await Promise.all(
-        stepAndJourney.data.map(async (step: { id: number; }) => {
-          const progressObj = await axios.get(`/step/step_progress/${step.id}`);
-          return {
-            [step.id]: progressObj.data,
-          };
-        })
-      );
-        //set stepPorgress data for every step on iteration (stePandJourney m)
-      setStepProgress(Object.assign({}, ...progressData));
+
+      // // GET step progress for each step
+      // const progressData = await Promise.all(
+      //   stepAndJourney.data.map(async (step: { id: number; }) => {
+      //     const progressObj = await axios.get(`/step/step_progress/${step.id}`);
+      //     return {
+      //       [step.id]: progressObj.data,
+      //     };
+      //   })
+      // );
+      //   //set stepPorgress data for every step on iteration (stePandJourney m)
+      // setStepProgress(Object.assign({}, ...progressData));
 
 
-      // Update the selected journey
-      const selectedJourney = journeys.find((journey) => journey.id === journeyId);
-      setSelectedJourney((prevSelectedJourney: { id: number; }) => (
-        prevSelectedJourney && prevSelectedJourney.id === journeyId ? null : selectedJourney
-      ));
+      // // Update the selected journey
+      // const selectedJourney = journeys.find((journey) => journey.id === journeyId);
+      // setSelectedJourney((prevSelectedJourney: { id: number; }) => (
+      //   prevSelectedJourney && prevSelectedJourney.id === journeyId ? null : selectedJourney
+      // ));
 
-      const progress = journeyProgress.find((progress) => progress.journey_id === journeyId);
-      setSelectedJourneyProgress(progress);
+      // const progress = journeyProgress.find((progress) => progress.journey_id === journeyId);
+      // setSelectedJourneyProgress(progress);
 
 
     } catch (error) {
