@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import ImageList from '@mui/material/ImageList';
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
@@ -22,14 +21,14 @@ import SpeechToText from "./SpeechToText";
 
   export const Profile: React.FC = () => {
   const theme = useTheme();
-  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
-  const [steps, setSteps] = useState<StepProgressType[]>([]);
-
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
+  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
+  const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
+
 
   /** User Functionality for User Profile*/
   const updateUsername = async (username: string) => {
@@ -95,8 +94,6 @@ import SpeechToText from "./SpeechToText";
     }
   };
 
-  /**Text to Speech Functionality */
-
   return (
     <Container>
       <Stack spacing={1}>
@@ -124,7 +121,7 @@ import SpeechToText from "./SpeechToText";
           <Button
             variant="contained"
             type='submit'
-            onClick={async () => {
+            onClick={() => {
               updateUsername(updatedUsername);
             }}
             >
@@ -148,7 +145,10 @@ import SpeechToText from "./SpeechToText";
           <Typography variant="h5">Steps & Step Progress</Typography>
           <Grid>
             {steps.map((step) => (
-                <StepProgress key={step.id} step={step}/>
+                <StepProgress
+                  key={step.id}
+                  step={step}
+                />
             ))}
           </Grid>
 
@@ -159,4 +159,3 @@ import SpeechToText from "./SpeechToText";
   )
 }
 
-// export default Profile;
