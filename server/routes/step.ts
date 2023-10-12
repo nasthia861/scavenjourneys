@@ -161,20 +161,20 @@ stepRouter.get('/journey/:journeyId', async (req, res) => {
 });
 
 // POST to assign step_progress to step
-stepRouter.post('/step_progress/:journeyPorgressId/:stepId', async (req, res) => {
+stepRouter.post('/progress', async (req, res) => {
   const { in_progress, image_url, focus, started_at, journey_progress, step } = req.body;
 
   try {
     const stepProgress = stepProgressRepo.create({
       in_progress,
       image_url,
-      focus,
+      // focus,
       started_at,
       journey_progress,
       step
     });
     await stepProgressRepo.save(stepProgress);
-    res.status(200).send(200);
+    res.sendStatus(201);
   } catch(err) {
     console.error(err);
     res.send(500).send('Internal Server Error')
@@ -183,7 +183,7 @@ stepRouter.post('/step_progress/:journeyPorgressId/:stepId', async (req, res) =>
 });
 
 //GET all steps in prgress
-stepRouter.get('/step_progress', async (req, res) => {
+stepRouter.get('/progress', async (req, res) => {
   try {
     const progress = await stepProgressRepo.find()
     res.status(200).send(progress);
@@ -194,7 +194,7 @@ stepRouter.get('/step_progress', async (req, res) => {
 })
 
 // GET stepPorgress by stepId
-stepRouter.get('/step_progress/:stepId', async (req, res) => {
+stepRouter.get('/progress/:stepId', async (req, res) => {
   const { stepId } = req.params;
 
   try {

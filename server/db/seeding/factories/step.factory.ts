@@ -9,6 +9,6 @@ export default setSeederFactory(Step, (faker) => {
       longitude: faker.location.longitude()
     };
     step.journeyId = faker.number.int({min: 1, max: 20});
-    //step.userId = faker.number.int({min: 1, max: 5});
+    step.userId = faker.number.int({min: 1, max: 6});
     return step;
 })

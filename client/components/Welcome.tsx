@@ -1,10 +1,13 @@
 import React from 'react';
 import GoogleButton from 'react-google-button'
-import { Box, Grid, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 
 
-export const Welcome: React.FC = () => {
+
+const Welcome: React.FC = () => {
 
   const googleLogin = () => {
     window.open('/auth/google', '_self');
@@ -37,3 +40,4 @@ export const Welcome: React.FC = () => {
   )
 }
 
+export default Welcome;

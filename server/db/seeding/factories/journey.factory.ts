@@ -13,6 +13,6 @@ export default setSeederFactory(Journey, (faker) => {
     journey.longitude = faker.location.longitude(-91.017364, -91.204131);
     journey.tagId = faker.number.int({min:1, max: 5});
     journey.img_url= faker.image.url();
-    journey.userId = faker.number.int({min: 1, max: 5});
+    journey.userId = faker.number.int({min: 1, max: 6});
     return journey;
 })

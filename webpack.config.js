@@ -5,13 +5,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const isProduction = process.env.NODE_ENV == 'production';
 
 
 const stylesHandler = MiniCssExtractPlugin.loader;
-
 
 
 const config = {
@@ -29,12 +29,13 @@ const config = {
             template: 'client/index.html',
         }),
 
-        new MiniCssExtractPlugin(),
+        //new MiniCssExtractPlugin(),
 
         new Dotenv({
             template: path.join(__dirname, ".env"),
           }),
 
+        // new BundleAnalyzerPlugin()
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],
@@ -76,13 +77,13 @@ module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
 
-        config.plugins.push(new MiniCssExtractPlugin());
-        config.plugins.push(new Dotenv());
+        //config.plugins.push(new MiniCssExtractPlugin());
+        //config.plugins.push(new Dotenv());
         config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
 
     } else {
         config.mode = 'development';
-        config.plugins.push(new Dotenv())
+        //config.plugins.push(new Dotenv())
     }
     return config;
 };
