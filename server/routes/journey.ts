@@ -3,12 +3,14 @@ import { Journey } from "../db/entities/Journey";
 import AppDataSource from '../db';
 import { Between } from 'typeorm';
 import { JourneyProgress } from '../db/entities/JourneyProgress';
+import { StepProgress } from '../db/entities/StepProgress';
 
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
 const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
-//const tagRepository = AppDataSource.getRepository(Tag);
+const stepProgressRepo = AppDataSource.getRepository(StepProgress);
+
 
 //get all journeys
 journeyRouter.get('/', async(req, res) => {
@@ -178,14 +180,10 @@ journeyRouter.delete('/:id', async (req, res) => {
 
 // POST journey_progress assigned to user/journey (test: pending )
 journeyRouter.post('/progress', async (req, res) => {
-  const { difficulty, in_progress, started_at, last_progress_at, user, journey }  = req.body;
+  const { user, journey }  = req.body;
 
   try {
     const addProgress = journeyProgressRepo.create({
-      difficulty,
-      in_progress,
-      started_at,
-      last_progress_at,
       user,
       journey,
     });

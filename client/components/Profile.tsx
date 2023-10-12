@@ -3,9 +3,11 @@ import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
+import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import ImageList from '@mui/material/ImageList';
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -126,11 +128,11 @@ import { StepProgressType } from "@this/types/StepProgress"
             </React.Fragment>
           ))}
           <Typography variant="h5">Steps & Step Progress</Typography>
-          <List>
+          <Grid>
             {steps.map((step) => (
-              <StepProgress key={step.id} step={step}/>
+                <StepProgress key={step.id} step={step}/>
             ))}
-          </List>
+          </Grid>
 
         </List>
 

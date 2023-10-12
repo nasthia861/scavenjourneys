@@ -1,15 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
+import { myContext } from "./Context";
 
 // import { UserType } from '@this/types/User';
 
@@ -19,12 +21,33 @@ import { StepType } from "@this/types/Step"
   //set user state to User or null
   //const [user, setUser] = useState<User | null>(null);
   const location: {state: {journey: JourneyType}} = useLocation();
-  const [journey, setJourneys] = useState(location.state.journey);
+  const journey = location.state.journey
+  //const [journey, setJourneys] = useState(location.state.journey);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [stepProgress, setStepProgress] = useState([]);
-  const [userStarted, setUserStarted] = useState(false);
+   const [user, setUser] = useState<any>(useContext(myContext));
+  // const [stepProgress, setStepProgress] = useState([]);
+  // const [userStarted, setUserStarted] = useState(false);
 
-
+  const assignJourney = async() => {
+    // POST to assign journey to user
+    const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
+    axios.post(`/journey/progress`, {
+      user: user.id,
+      journey: journey.id,
+    })
+      .then((response) => {
+        steps.data.forEach((step: {id:number}) => {
+          axios.post('/step/progress', {
+            journey_progress: response.data.id,
+            step: step.id
+          })
+          .catch((error) => console.error('Error assigning steps', error))
+        })
+      })
+      .catch((error) => {
+        console.error('Error assigning journey:', error);
+      });
+  };
 
 
 
@@ -39,23 +62,6 @@ import { StepType } from "@this/types/Step"
         })
 
   }, []);
-
-
-  // useEffect(() => {
-  //   // Fetching step progress for each step
-  //   steps.forEach((step) => {
-  //     axios.get(`/step/step_progress/${step.id}`)
-  //       .then((progressResponse) => {
-  //         setStepProgress((prevProgress) => ({
-  //           ...prevProgress,
-  //           [step.id]: progressResponse.data,
-  //         }));
-  //       })
-  //       .catch((error) => {
-  //         console.error(`Error getting step progress for step ${step.id}:`, error);
-  //       });
-  //   });
-  // }, [steps]);
 
 
   return (
@@ -82,6 +88,9 @@ import { StepType } from "@this/types/Step"
               </Typography>
             </CardContent>
           </Card>
+          <Button onClick={assignJourney} variant="contained" color="primary">
+            Assign Journey
+          </Button>
         </Item>
       {/* Display selected journey details steps */}
         <h3>Steps:</h3>
@@ -94,11 +103,9 @@ import { StepType } from "@this/types/Step"
 
                   <CardContent>
                     <Typography variant="h6" component="div">
-                      <b>Details: {step.name}</b>
-                      <p>Location: {step.latitude}, {step.longitude}</p>
+                      <b>{step.name}</b>
                       <br />
-                      {/* <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i> */}
-                      <br />
+                      <p>{step.hint}</p>
                     </Typography>
                   </CardContent>
 
