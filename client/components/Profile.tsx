@@ -49,6 +49,17 @@ import SpeechToText from "./SpeechToText";
     })
   };
 
+  /**Speech To Text Input Handling */
+  const { onceSpoken } = SpeechToText;
+  useEffect(() => {
+    setUpdatedUsername(onceSpoken);
+  }, [onceSpoken])
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    setUpdatedUsername('');
+  }
+
   const handleUsernameChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
     setUpdatedUsername(target.value);
@@ -98,26 +109,30 @@ import SpeechToText from "./SpeechToText";
       width: 56, height: 56 }}
       src={userImg}
       ></Avatar>
-     <Stack direction="row" spacing={1}>
+     <Stack direction="row" spacing={1}  >
+      <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
             label="Username"
             variant="outlined"
             onChange={handleUsernameChange}
+            value={ updatedUsername }
             inputRef={inputRef}
-            InputProps={{endAdornment: <SpeechToText onceSpoken={setUpdatedUsername} />}}
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
           />
           <Button
             variant="contained"
+            type='submit'
             onClick={async () => {
               updateUsername(updatedUsername);
               if (inputRef.current) {
-                  inputRef.current.value = '';
+                inputRef.current.value = '';
               }
             }}
-          >
+            >
             Update Username
           </Button>
+        </form>
         </Stack>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
