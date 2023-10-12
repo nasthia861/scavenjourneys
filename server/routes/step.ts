@@ -186,7 +186,7 @@ stepRouter.get('/progress/:progressId', async (req, res) => {
   const {progressId} = req.params;
   try {
     const progress = await stepProgressRepo.find({
-      relations: ['journey_progress'],
+      relations: ['journey_progress', 'step'],
       where: {
         journey_progress: {
           id: +progressId

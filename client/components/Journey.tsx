@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 
-import { User } from '@this/types/User';
+// import { UserType } from '@this/types/User';
 
 
   const Journey: React.FC = () => {
@@ -24,9 +24,6 @@ import { User } from '@this/types/User';
   const [stepProgress, setStepProgress] = useState([]);
   const [userStarted, setUserStarted] = useState(false);
 
-  const startJourney = () => {
-    axios.get('./journey/')
-  }
 
 
 
@@ -44,21 +41,21 @@ import { User } from '@this/types/User';
   }, []);
 
 
-  useEffect(() => {
-    // Fetching step progress for each step
-    steps.forEach((step) => {
-      axios.get(`/step/step_progress/${step.id}`)
-        .then((progressResponse) => {
-          setStepProgress((prevProgress) => ({
-            ...prevProgress,
-            [step.id]: progressResponse.data,
-          }));
-        })
-        .catch((error) => {
-          console.error(`Error getting step progress for step ${step.id}:`, error);
-        });
-    });
-  }, [steps]);
+  // useEffect(() => {
+  //   // Fetching step progress for each step
+  //   steps.forEach((step) => {
+  //     axios.get(`/step/step_progress/${step.id}`)
+  //       .then((progressResponse) => {
+  //         setStepProgress((prevProgress) => ({
+  //           ...prevProgress,
+  //           [step.id]: progressResponse.data,
+  //         }));
+  //       })
+  //       .catch((error) => {
+  //         console.error(`Error getting step progress for step ${step.id}:`, error);
+  //       });
+  //   });
+  // }, [steps]);
 
 
   return (
@@ -79,7 +76,7 @@ import { User } from '@this/types/User';
               <Typography variant="h6" component="div">
                 <b>{journey.name}</b>
                 <br/>
-                <i>by: {journey.user.username}</i>
+                {/* <i>by: {journey.user.username}</i> */}
                 <br/>
                 {journey.description}
               </Typography>
@@ -90,7 +87,7 @@ import { User } from '@this/types/User';
         <h3>Steps:</h3>
         {
         steps.map((step) => {
-          const progress = stepProgress[step.id] || { in_progress: false };          console.log(progress)
+          //const progress = stepProgress[step.id] || { in_progress: false };
           return (
             <Item key={step.id}>
               <Card>
@@ -98,9 +95,9 @@ import { User } from '@this/types/User';
                   <CardContent>
                     <Typography variant="h6" component="div">
                       <b>Details: {step.name}</b>
-                      <p>Location: {step.location.latitude}, {step.location.longitude}</p>
+                      <p>Location: {step.latitude}, {step.longitude}</p>
                       <br />
-                      <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
+                      {/* <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i> */}
                       <br />
                     </Typography>
                   </CardContent>
