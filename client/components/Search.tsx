@@ -117,20 +117,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
         </Box>
       </Item>
 
-      {/* <Item>
-        <ToggleButtonGroup
-        color="primary"
-        value={alignment}
-        exclusive
-        onChange={handleToggleChange}
-        aria-label="Platform"
-        >
-          <ToggleButton value={1}>5 miles</ToggleButton>
-          <ToggleButton value={2}>10 miles</ToggleButton>
-          <ToggleButton value={3}>15 miles</ToggleButton>
-          <ToggleButton value={4}>20 miles</ToggleButton>
-        </ToggleButtonGroup>
-      </Item> */}
+    
 
     </Stack>
   );

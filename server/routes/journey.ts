@@ -116,30 +116,30 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// GET journeys by userId
-journeyRouter.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
+// // GET journeys by userId
+// journeyRouter.get('/user/:userId', async (req, res) => {
+//   const { userId } = req.params;
 
-  try {
-    const journeys = await AppDataSource.manager.find(Journey, {
-      relations: ['user'],
-      where: {
-        user :  {
-          id: +userId,
-        }
-      }
-    });
-    if (journeys) {
-      res.status(200).json(journeys);
-    } else {
-      res.status(404).send('No Journeys found');
-    }
-  } catch (error) {
+//   try {
+//     const journeys = await AppDataSource.manager.find(Journey, {
+//       relations: ['user'],
+//       where: {
+//         user :  {
+//           id: +userId,
+//         }
+//       }
+//     });
+//     if (journeys) {
+//       res.status(200).json(journeys);
+//     } else {
+//       res.status(404).send('No Journeys found');
+//     }
+//   } catch (error) {
 
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 // update a journey by id
 journeyRouter.put('/:id', async (req, res) => {
@@ -200,9 +200,17 @@ journeyRouter.post('/progress', async (req, res) => {
 });
 
 //GET all journey progress
-journeyRouter.get('/journey_progress', async (req, res) => {
+journeyRouter.get('/progress/:userId', async (req, res) => {
+  const { userId } = req.params
   try {
-    const progress = await journeyProgressRepo.find()
+    const progress = await journeyProgressRepo.find({
+      relations: ['journey', 'user'],
+      where: {
+        user: {
+          id: +userId
+        }
+      }
+    })
     res.status(200).send(progress);
 
   } catch(err) {
