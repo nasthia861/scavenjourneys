@@ -100,12 +100,13 @@ journeyRouter.get('/name/:name', async(req, res) => {
 // Create a new journey
 journeyRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const { name, description, img_url } = req.body;
+    const { name, description, img_url, user } = req.body;
 
     const journey = journeyRepository.create({
       name,
       description,
       img_url,
+      user,
     });
 
     const createdJourney = await journeyRepository.save(journey);

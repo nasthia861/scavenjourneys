@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useParams, useNavigate } from 'react-router-dom';
+import { myContext } from "./Context";
 
 const StepForm: React.FC = () => {
   const { journeyId: routeJourneyId } = useParams();
   const navigate = useNavigate();
 
   const [journeyId, setJourneyId] = useState<number | null>(routeJourneyId ? Number(routeJourneyId) : null);
+
+  //grabs user data from google oauth
+  const [user, setUser] = useState<any>(useContext(myContext));
+
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
+    user: user.id,
   });
-
-  useEffect(() => {
-    // Fetch journey ID data if it's not available (e.g., due to a page reload)
-    if (journeyId === null && routeJourneyId) {
-      setJourneyId(Number(routeJourneyId));
-    }
-  }, [journeyId, routeJourneyId]);
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
   const [stepIds, setStepIds] = useState<number[]>([]); // Array to store step IDs
@@ -63,7 +62,7 @@ const StepForm: React.FC = () => {
       const response = await axios.post('/step', stepWithJourneyId);
       const newStepId = response.data.id;
       setStepIds([...stepIds, newStepId]);
-      setStepData({ name: '', hint: '' });
+      setStepData({ name: '', hint: '', user: user.id });
     } catch (error) {
       console.error('Error adding step:', error);
     }
@@ -76,7 +75,7 @@ const StepForm: React.FC = () => {
       // Post the step to the database
       const stepWithJourneyId = { ...stepData, journeyId};
       await axios.post('/step', stepWithJourneyId);
-      setStepData({ name: '', hint: '' });
+      setStepData({ name: '', hint: '', user: user.id });
       // Navigate to the home page
       navigate('/home');
     } catch (error) {

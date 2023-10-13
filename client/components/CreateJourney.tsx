@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
-import StepForm from './StepForm.tsx';
+import { myContext } from "./Context";
 
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { UserType } from '@this/types/User';
 
   const CreateJourney: React.FC = () => {
+  //grabs user data from google oauth
+  const [user, setUser] = useState<any>(useContext(myContext));
+
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
+    user: user.id,
     img_url: '',
     //import from home
     latitude: '',
@@ -25,7 +30,7 @@ import { useNavigate } from 'react-router-dom';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setJourneyData({ ...journeyData, [name]: value });
+    setJourneyData({ ...journeyData, [name]: value});
   };
 
   //for webcam access
@@ -54,7 +59,8 @@ import { useNavigate } from 'react-router-dom';
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
       setJourneyId(newJourney.id);
-      navigate(`/StepForm/${newJourney.id}`);
+      console.log(journeyData)
+      // navigate(`/StepForm/${newJourney.id}`);
     } catch (error) {
       console.error('Error creating journey:', error);
     }
