@@ -16,7 +16,9 @@ import { UserType } from '@this/types/User';
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
-    user: user.id,
+    user: {
+      id: user.id
+    },
     img_url: '',
     //import from home
     latitude: '',
@@ -38,8 +40,8 @@ import { UserType } from '@this/types/User';
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
       setJourneyId(newJourney.id);
-      console.log(journeyData)
-      // navigate(`/StepForm/${newJourney.id}`);
+      // console.log(journeyData)
+      navigate(`/StepForm/${newJourney.id}`);
     } catch (error) {
       console.error('Error creating journey:', error);
     }

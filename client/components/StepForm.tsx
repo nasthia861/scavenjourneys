@@ -17,7 +17,9 @@ const StepForm: React.FC = () => {
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
-    user: user.id,
+    user: {
+      id: user.id
+    },
   });
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
@@ -58,11 +60,13 @@ const StepForm: React.FC = () => {
 
   const addStep = async () => {
     try {
-      const stepWithJourneyId = { ...stepData, journeyId };
+      const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
       const response = await axios.post('/step', stepWithJourneyId);
       const newStepId = response.data.id;
       setStepIds([...stepIds, newStepId]);
-      setStepData({ name: '', hint: '', user: user.id });
+      setStepData({ name: '', hint: '', user: {
+        id: user.id
+      }, });
     } catch (error) {
       console.error('Error adding step:', error);
     }
@@ -73,9 +77,11 @@ const StepForm: React.FC = () => {
       // Mark the journey as created
       setJourneyCreated(true);
       // Post the step to the database
-      const stepWithJourneyId = { ...stepData, journeyId};
+      const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
       await axios.post('/step', stepWithJourneyId);
-      setStepData({ name: '', hint: '', user: user.id });
+      setStepData({ name: '', hint: '', user: {
+        id: user.id
+      }, });
       // Navigate to the home page
       navigate('/home');
     } catch (error) {
