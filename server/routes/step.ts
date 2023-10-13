@@ -1,6 +1,7 @@
 import express from 'express';
 import { Step } from "../db/entities/Step";
 import { StepProgress } from '../db/entities/StepProgress';
+import { Journey } from '../db/entities/Journey';
 import AppDataSource from '../db';
 import { User } from '../db/entities/User';
 import { RateReviewSharp } from '@mui/icons-material';
@@ -85,28 +86,6 @@ stepRouter.delete('/:id', async (req, res) => {
   }
 });
 
-// get Steps by userId
-// stepRouter.get('/user/:userId', async (req, res) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const steps = await stepRepository.find({
-//       relations: ['user'],
-//      where: {
-//       user: {
-//         id: +userId
-//       }
-//     }
-//      })
-//      //debugger;
-//     console.log(steps)
-//     res.status(200).send(steps)
-
-//   } catch(err) {
-//     console.error("Error getting user Steps", err);
-//     res.status(404).send(err)
-//   }
-// });
 
 // GET all steps assigned to a user
 stepRouter.get('/user/:userId', async (req, res) => {
@@ -161,14 +140,11 @@ stepRouter.get('/journey/:journeyId', async (req, res) => {
 });
 
 // POST to assign step_progress to step
-stepRouter.post('/progress', async (req, res) => {
-  const { in_progress, image_url, started_at, journey_progress, step } = req.body;
+stepRouter.post('/progress/', async (req, res) => {
+  const { journey_progress, step } = req.body;
 
   try {
     const stepProgress = stepProgressRepo.create({
-      in_progress,
-      image_url,
-      started_at,
       journey_progress,
       step
     });

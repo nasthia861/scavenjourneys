@@ -26,33 +26,12 @@ import { UserType } from '@this/types/User';
   const [journeyId, setJourneyId] = useState(null);
 
   const [image, setImage] = useState<string | null>('');
-  //const [video, setVideo] = useState<HTMLVideoElement | null>()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJourneyData({ ...journeyData, [name]: value});
   };
 
-  //for webcam access
-  // useEffect(() => {
-
-  //   const video = document.getElementById('video') as HTMLVideoElement;
-  //   setVideo(video)
-
-  //   if(navigator.mediaDevices.getUserMedia) {
-  //     navigator.mediaDevices.getUserMedia({video: true})
-  //     .then((stream) => {
-  //       video.srcObject = stream;
-  //       video.play();
-  //     })
-  //   }
-  // }, [])
-
-  // const takePicture = async() => {
-  //   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  //   const context = canvas.getContext('2d');
-  //   context.drawImage(video, 0, 0, 320, 240)
-  // }
 
   const createJourney = async () => {
     try {
@@ -93,12 +72,6 @@ import { UserType } from '@this/types/User';
         value={journeyData.description}
         onChange={handleInputChange}
       />
-        {/* <video id="video" width="320" height="240"></video>
-        <button
-          id="snap"
-          onClick={takePicture}
-        >Snap Photo</button>
-        <canvas id="canvas" width="320" height="240"></canvas> */}
         <input
           id="cameraInput"
           type="file"
