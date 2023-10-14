@@ -14,7 +14,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
-import { User } from '@this/types/User';
+import { UserType } from '@this/types/User';
 
 
 const Home: React.FC = () => {
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
  //set user state to User or null
- const [user, setUser] = useState<User | null>(null);
+ const [user, setUser] = useState<UserType | null>(null);
  const [userLat, setUserLat] = useState<number | null>(null)
  const [userLong, setUserLong] = useState<number | null>(null)
  const [alignment, setAlignment] = useState(3);
