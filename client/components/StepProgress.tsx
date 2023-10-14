@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StepProgressType } from '@this/types/StepProgress';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -22,22 +22,29 @@ type IHeaderProps = {
 
 const StepProgress: React.FC<IHeaderProps> = ({step}) => {
   const [image, setImage] = useState<string | null>(step.image_url)
-  const [description, setDescription] = useState('')
+  const [closeEnough, setCloseEnough] = useState(false)
 
 
-  const toggleDescription = () => {
-    if(description.length === 0) {
-      setDescription(step.step.hint)
-    } else {
-      setDescription('');
-    }
-  }
 
   const solveStep = (e: React.ChangeEvent<HTMLInputElement>) => {
       const {files} = e.target;
       let imgSrc = URL.createObjectURL(files[0])
       setImage(imgSrc);
   }
+
+   /**Text to Speech Functionality */
+   const synth = window.speechSynthesis
+   const voices = synth.getVoices();
+   const [text, setText] = useState<string>(step.step.hint);
+   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>(voices[4]);
+
+   const speakText = () => {
+     if (synth && chosenVoice) {
+       const utterance = new SpeechSynthesisUtterance(text);
+       utterance.voice = chosenVoice;
+       synth.speak(utterance);
+     }
+   }
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -49,12 +56,25 @@ const StepProgress: React.FC<IHeaderProps> = ({step}) => {
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {step.step.hint}
+        <Typography variant="body2" color="text.secondary" >
+          {text}
+          <Button
+              variant='outlined'
+              size='small'
+              onClick={() => {speakText()}}
+            >TTS</Button>
         </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={solveStep}>Found it!</Button>
+          {closeEnough && (
+              <input
+              id="cameraInput"
+              // label="Solve Step"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={(e) => solveStep(e)}/>
+           )}
         </CardActions>
     </Card>
 
