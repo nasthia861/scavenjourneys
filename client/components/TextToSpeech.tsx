@@ -1,41 +1,34 @@
-import React, { useState } from 'react';
-import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
-import IconButton from '@mui/material/IconButton';
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
+/**TTS functionality used in other components */
+const TextToSpeech: React.FC = () => {
 
-const TextToSpeech = ({ onceSpoken } : any) => {
+  const synth = new window.SpeechSynthesis();
+  const [text, setText] = useState<string>('');
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice | null>(null);
 
-  const [spoken, setSpoken] = useState('');
+  useEffect(() => {
+    setVoices(speechSynthesis.getVoices());
+  }, []);
 
-  const handleSpeak = () => {
+  const handleVoice = (e: ChangeEvent<HTMLSelectElement>) => {
+    const chosenVoiceName = e.target.value;
+    const chosenVoice = voices.find((voice) => voice.name === chosenVoiceName);
+    setChosenVoice(chosenVoice || null);
+  }
 
-    const speak = new window.webkitSpeechRecognition();
-    speak.lang = 'en-US';
-
-    speak.onresult = (e: any) => {
-      const spoke = e.results[0][0].transcript;
-      setSpoken(spoke);
-      //prop for passing the spoken data
-      onceSpoken(spoke);
-    };
-    speak.start();
-
-    speak.onspeechend = () => {
-      speak.stop();
-    };
-
+  const speakText = () => {
+    if (synth && chosenVoice) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = chosenVoice;
+      synth.speak(utterance);
+    }
   }
 
 
-
   return (
-    <div>
-      <IconButton
-        onClick={handleSpeak}
-      >
-        <MicNoneRoundedIcon />
-      </IconButton>
-    </div>
+    <div>TextToSpeech</div>
   )
 }
 

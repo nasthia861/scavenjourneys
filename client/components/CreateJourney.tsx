@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
-import StepForm from './StepForm.tsx';
+import { myContext } from "./Context";
 
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { UserType } from '@this/types/User';
 
-type IHeaderProps = {
-  userLat: number;
-  userLong: number;
-};
+  const CreateJourney: React.FC = () => {
+  //grabs user data from google oauth
+  const [user, setUser] = useState<any>(useContext(myContext));
 
-  const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
+    user: {
+      id: user.id
+    },
     img_url: '',
     //import from home
     latitude: '',
@@ -29,7 +31,7 @@ type IHeaderProps = {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setJourneyData({ ...journeyData, [name]: value });
+    setJourneyData({ ...journeyData, [name]: value});
   };
 
 
@@ -38,6 +40,7 @@ type IHeaderProps = {
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
       setJourneyId(newJourney.id);
+      // console.log(journeyData)
       navigate(`/StepForm/${newJourney.id}`);
     } catch (error) {
       console.error('Error creating journey:', error);

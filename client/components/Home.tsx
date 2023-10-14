@@ -27,8 +27,6 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
  //set user state to User or null
  const [user, setUser] = useState<UserType | null>(null);
-//  const [userLat, setUserLat] = useState<number | null>()
-//  const [userLong, setUserLong] = useState<number | null>()
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
 

@@ -57,6 +57,20 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
     getLocation()
   }, [userLat])
 
+   /**Text to Speech Functionality */
+   const synth = window.speechSynthesis
+   const voices = synth.getVoices();
+   const [text, setText] = useState<string>(step.step.hint);
+   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>(voices[4]);
+
+   const speakText = () => {
+     if (synth && chosenVoice) {
+       const utterance = new SpeechSynthesisUtterance(text);
+       utterance.voice = chosenVoice;
+       synth.speak(utterance);
+     }
+   }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
         {!step.in_progress && (<CardMedia
@@ -71,8 +85,13 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {step.step.hint}
+        <Typography variant="body2" color="text.secondary" >
+          {text}
+          <Button
+              variant='outlined'
+              size='small'
+              onClick={() => {speakText()}}
+            >TTS</Button>
         </Typography>
         </CardContent>
         <CardActions>
