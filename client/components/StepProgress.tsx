@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import uploadImage from '../../server/cloudinary/cloudinary';
 
 // import ImageList from '@mui/material/ImageList';
 // import ImageListItem from '@mui/material/ImageListItem';
@@ -28,13 +29,18 @@ const StepProgress: React.FC<IHeaderProps> = ({step}) => {
 
   const solveStep = (e: React.ChangeEvent<HTMLInputElement>) => {
       const {files} = e.target;
+      const folder = 'stepProgress'
+      console.log(files[0]);
       let imgSrc = URL.createObjectURL(files[0])
       setImage(imgSrc);
       axios.put(`/step/progress/${step.id}`, {
         in_progress: false,
         image_url: imgSrc
       })
+      uploadImage(files[0], step.id.toString(), folder)
+      //axios.post(`cloud/stepProgress/${step.id}`, files);
   }
+
 
   const getLocation = () => {
     //0.00005 20ft

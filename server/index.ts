@@ -10,20 +10,21 @@ import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
 import tagRouter from './routes/tag';
-// import homeRouter from './routes/home';
+//import cloudRouter from './routes/cloudinary';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 import { v2 as cloudinary } from 'cloudinary'
 
 
 dotenv.config();
-//console.log(cloudinary.config().cloud_name);
 require('./auth/passport')
+
 
 const app = express();
 
 const port = process.env.port || 8080;
 const distPath = path.resolve(__dirname, '..', 'dist');
+
 
 //generate a secret
 let secretKey = uuidv4();
@@ -42,14 +43,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
+
+
+
 //routes
 app.use('/auth', authRoutes);
-// app.use('/home', homeRouter);
 app.use('/user', userRouter);
 app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);
 app.use('/achievement', achievementRouter);
 app.use('/tag', tagRouter);
+//app.use('/cloud', cloudRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {
