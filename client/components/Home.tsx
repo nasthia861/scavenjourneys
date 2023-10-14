@@ -30,16 +30,11 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
-//  const getLocation = () => {
-//   navigator.geolocation.getCurrentPosition((position) => {
-//     setUserLat(position.coords.latitude)
-//     setUserLong(position.coords.longitude)
-//   }, () => console.log('Could not get location'))
-//  }
 
  const getJourney = async () => {
     // Fetch the journeys closest to you
     const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
+    console.log(response)
       response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
         return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -54,6 +49,7 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 };
 
   useEffect(() => {
+    console.log(userLat)
     if(userLat && userLong) {
       getJourney()
     }

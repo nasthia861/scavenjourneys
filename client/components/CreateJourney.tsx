@@ -8,12 +8,19 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@this/types/User';
+import { JourneyType } from '@this/types/Journey'
+import { createCompletion, loadModel } from 'gpt4all'
 
-  const CreateJourney: React.FC = () => {
+
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
+  const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
 
-  const [journeyData, setJourneyData] = useState({
+  const [journeyData, setJourneyData] = useState<JourneyType>({
     name: '',
     description: '',
     user: {
@@ -21,8 +28,8 @@ import { UserType } from '@this/types/User';
     },
     img_url: '',
     //import from home
-    latitude: '',
-    longitude: ''
+    latitude: userLat,
+    longitude: userLong
   });
 
   const [journeyId, setJourneyId] = useState(null);
