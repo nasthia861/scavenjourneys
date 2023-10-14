@@ -29,15 +29,6 @@ cloudRouter.post('/:folder/:filename', async(req, res) => {
 
 })
 
-cloudRouter.get('/:folder/:fileName', async(req, res) => {
-  const { folder, fileName } = req.params
-
-  try {
-    
-  } catch (error) {
-    console.error('could not get image from cloudinary', error);
-  }
-})
 
 export default cloudRouter
 
