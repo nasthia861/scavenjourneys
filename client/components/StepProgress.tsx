@@ -20,9 +20,11 @@ import Typography from '@mui/material/Typography';
 
 type IHeaderProps = {
   step: StepProgressType
+  userLat: number;
+  userLong: number;
 };
 
-const StepProgress: React.FC<IHeaderProps> = ({step}) => {
+const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>()
   const [closeEnough, setCloseEnough] = useState(false)
 
@@ -31,31 +33,36 @@ const StepProgress: React.FC<IHeaderProps> = ({step}) => {
       const reader = await new FileReader()
       reader.addEventListener('load', (event) => {
         axios.post(`cloud/stepProgress/${step.id}`, {data: event.target.result})
+          .then((response) => {
+            axios.put(`/step/progress/${step.id}`, {
+              in_progress: false,
+              image_url: response.data.secure_url
+            })
+          })
         setImage(event.target.result)
       });
       reader.readAsDataURL(e.target.files[0]);
-      axios.put(`/step/progress/${step.id}`, {
-        in_progress: false,
-      })
   }
+
 
 
   const getLocation = () => {
     //0.00005 20ft
-  navigator.geolocation.watchPosition((position) => {
-    console.log(Math.abs(+step.step.latitude - position.coords.latitude))
-    if(Math.abs(+step.step.latitude - position.coords.latitude) <  0.5) {
+    if(Math.abs(+step.step.latitude - userLat) <  0.5) {
       setCloseEnough(true)
     }
-  }, () => console.log('Could not get location'))
  }
 
   useEffect(() => {
     getLocation()
-  }, [])
+  }, [userLat])
 
   return (
     <Card sx={{ maxWidth: 345 }}>
+        {!step.in_progress && (<CardMedia
+          sx={{ height: 140 }}
+          image={step.image_url}
+        />)}
         {image && (<CardMedia
           sx={{ height: 140 }}
           image={image}
@@ -69,7 +76,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step}) => {
         </Typography>
         </CardContent>
         <CardActions>
-          {closeEnough && (
+          {closeEnough && step.in_progress && (
               <input
               id="cameraInput"
               // label="Solve Step"

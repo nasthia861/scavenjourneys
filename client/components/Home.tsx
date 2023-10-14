@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,26 +14,30 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
-import { User } from '@this/types/User';
+import { UserType } from '@this/types/User';
 
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
 
-const Home: React.FC = () => {
+const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
   const navigate = useNavigate();
 
  //set user state to User or null
- const [user, setUser] = useState<User | null>(null);
- const [userLat, setUserLat] = useState<number | null>(null)
- const [userLong, setUserLong] = useState<number | null>(null)
+ const [user, setUser] = useState<UserType | null>(null);
+//  const [userLat, setUserLat] = useState<number | null>()
+//  const [userLong, setUserLong] = useState<number | null>()
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
- const getLocation = () => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    setUserLat(position.coords.latitude)
-    setUserLong(position.coords.longitude)
-  }, () => console.log('Could not get location'))
- }
+//  const getLocation = () => {
+//   navigator.geolocation.getCurrentPosition((position) => {
+//     setUserLat(position.coords.latitude)
+//     setUserLong(position.coords.longitude)
+//   }, () => console.log('Could not get location'))
+//  }
 
  const getJourney = async () => {
     // Fetch the journeys closest to you
@@ -52,7 +56,6 @@ const Home: React.FC = () => {
 };
 
   useEffect(() => {
-    getLocation()
     if(userLat && userLong) {
       getJourney()
     }

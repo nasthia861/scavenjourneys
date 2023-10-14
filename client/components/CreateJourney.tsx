@@ -8,7 +8,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-  const CreateJourney: React.FC = () => {
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
+
+  const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   const [journeyData, setJourneyData] = useState({
     name: '',
     description: '',
