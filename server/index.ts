@@ -10,7 +10,7 @@ import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
 import tagRouter from './routes/tag';
-//import cloudRouter from './routes/cloudinary';
+import cloudRouter from './routes/cloudinary';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 import { v2 as cloudinary } from 'cloudinary'
@@ -29,7 +29,10 @@ const distPath = path.resolve(__dirname, '..', 'dist');
 //generate a secret
 let secretKey = uuidv4();
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({
+  limit: '50mb'
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(distPath));
 
@@ -53,7 +56,7 @@ app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);
 app.use('/achievement', achievementRouter);
 app.use('/tag', tagRouter);
-//app.use('/cloud', cloudRouter);
+app.use('/cloud', cloudRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {
