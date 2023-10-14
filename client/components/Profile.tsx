@@ -18,8 +18,13 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
 
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
 
-  export const Profile: React.FC = () => {
+  export const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+
   const theme = useTheme();
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
@@ -145,10 +150,7 @@ import SpeechToText from "./SpeechToText";
           <Typography variant="h5">Steps & Step Progress</Typography>
           <Grid>
             {steps.map((step) => (
-                <StepProgress
-                  key={step.id}
-                  step={step}
-                />
+                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
             ))}
           </Grid>
 

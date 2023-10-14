@@ -21,24 +21,6 @@ stepRouter.get('/', async (req, res) => {
   }
 });
 
-// get steps by journey
-// stepRouter.get('/journey/:journeyId', async (req, res) => {
-//   const { journeyId } = req.params;
-//   try {
-//     const steps = await stepRepository.find({
-//       relations: {
-//         journey_id: true,
-//       },
-//       where: {
-//         journey_id: Number(journeyId)
-//       },
-//     });
-//     res.status(200).json(steps);
-//   } catch (error) {
-//     console.error('Could not get steps by journey', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 // create a step
 stepRouter.post('/', async (req, res) => {
@@ -87,31 +69,31 @@ stepRouter.delete('/:id', async (req, res) => {
 });
 
 
-// GET all steps assigned to a user
-stepRouter.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
+// // GET all steps assigned to a user
+// stepRouter.get('/user/:userId', async (req, res) => {
+//   const { userId } = req.params;
 
-  try {
-    const steps = await AppDataSource.manager.find(Step, {
-      relations: ['user'],
-      where: {
-        user :  {
-          id: +userId,
-        }
-      }
-    });
+//   try {
+//     const steps = await AppDataSource.manager.find(Step, {
+//       relations: ['user'],
+//       where: {
+//         user :  {
+//           id: +userId,
+//         }
+//       }
+//     });
 
-    if (steps) {
-      res.status(200).json(steps);
-    } else {
-      res.status(404).send('Steps not found');
-    }
-  } catch (error) {
+//     if (steps) {
+//       res.status(200).json(steps);
+//     } else {
+//       res.status(404).send('Steps not found');
+//     }
+//   } catch (error) {
 
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 // // get Steps by journeyId
 stepRouter.get('/journey/:journeyId', async (req, res) => {
@@ -139,7 +121,7 @@ stepRouter.get('/journey/:journeyId', async (req, res) => {
   }
 });
 
-// POST to assign step_progress to step
+// POST to assign step_progress to user with journey progress
 stepRouter.post('/progress/', async (req, res) => {
   const { journey_progress, step } = req.body;
 
@@ -176,6 +158,24 @@ stepRouter.get('/progress/:progressId', async (req, res) => {
   }
 })
 
+
+// update a step_progress by id
+stepRouter.put('/progress/:id', async (req, res) => {
+  const stepId = req.params.id;
+  const updatedStepData = req.body; // Assuming the request body contains updated step data
+  try {
+    const result = await stepProgressRepo.update(stepId, updatedStepData);
+    if (result.affected > 0) {
+      res.status(200).json({ message: 'Step progress updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Step progress not found' });
+    }
+  } catch (error) {
+    console.error('Could not update step', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // GET stepPorgress by stepId
 stepRouter.get('/progress/:stepId', async (req, res) => {
   const { stepId } = req.params;
@@ -202,31 +202,6 @@ stepRouter.get('/progress/:stepId', async (req, res) => {
   }
 });
 
-// GET stepProgress by journeyProgress
-stepRouter.get('/journey_progress/:journeyProgressId', async (req, res) => {
-  const { journeyProgressId } = req.params;
-
-  try {
-    const userProgress = await AppDataSource.manager.find(StepProgress, {
-      relations: ['journey_progress'],
-      where: {
-        journey_progress :  {
-          id: +journeyProgressId,
-        }
-      }
-    });
-
-    if (userProgress) {
-      res.status(200).json(userProgress);
-    } else {
-      res.status(404).send('journey not found');
-    }
-  } catch (error) {
-
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
 
 
 
