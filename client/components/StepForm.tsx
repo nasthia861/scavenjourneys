@@ -2,24 +2,33 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
+import { StepType } from '@this/types/Step';
+import { JourneyType } from '@this/types/Journey';
 
 const StepForm: React.FC = () => {
   const { journeyId: routeJourneyId } = useParams();
   const navigate = useNavigate();
+  const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
+  const latitude = location.state.userLat
+  const longitude = location.state.userLong
+  const journeyData = location.state.journeyData
 
   const [journeyId, setJourneyId] = useState<number | null>(routeJourneyId ? Number(routeJourneyId) : null);
 
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
 
-  const [stepData, setStepData] = useState({
+  const [stepData, setStepData] = useState<StepType>({
     name: '',
     hint: '',
+    latitude: latitude,
+    longitude: longitude,
     user: {
       id: user.id
     },
+    journey: journeyData
   });
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation

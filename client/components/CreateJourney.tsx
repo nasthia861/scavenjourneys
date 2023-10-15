@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { myContext } from "./Context";
@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
-import { createCompletion, loadModel } from 'gpt4all'
+//import { createCompletion, loadModel } from 'gpt4all'
 
 
 type IHeaderProps = {
@@ -21,20 +21,20 @@ type IHeaderProps = {
   const [user, setUser] = useState<any>(useContext(myContext));
 
   const [journeyData, setJourneyData] = useState<JourneyType>({
+    latitude: userLat,
+    longitude: userLong,
     name: '',
     description: '',
     user: {
       id: user.id
     },
-    img_url: '',
+    img_url: ''
     //import from home
-    latitude: userLat,
-    longitude: userLong
   });
 
   const [journeyId, setJourneyId] = useState(null);
 
-  const [image, setImage] = useState<string | null>('');
+  const [image, setImage] = useState<string | null | ArrayBuffer>()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,12 +44,12 @@ type IHeaderProps = {
 
   const createJourney = async () => {
     try {
-
+      console.log(journeyData);
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
       setJourneyId(newJourney.id);
 
-      navigate(`/StepForm/${newJourney.id}`);
+      navigate(`/StepForm/${newJourney.id}`, {state:{userLat, userLong, journeyData}});
     } catch (error) {
       console.error('Error creating journey:', error);
     }
@@ -57,11 +57,17 @@ type IHeaderProps = {
 
   const navigate = useNavigate();
 
-  const saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {files} = e.target;
-    let imgSrc = URL.createObjectURL(files[0])
-    setImage(imgSrc);
-    setJourneyData({ ...journeyData, img_url: imgSrc.slice(5)});
+  const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = await new FileReader()
+    reader.addEventListener('load', (event) => {
+      axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
+        .then((response) => {
+          console.log(response.data.secure_url);
+          setJourneyData({ ...journeyData, img_url: response.data.secure_url});
+          setImage(response.data.secure_url)
+        });
+    })
+    reader.readAsDataURL(e.target.files[0]);
   }
 
 
@@ -89,7 +95,9 @@ type IHeaderProps = {
           capture
           onChange={(e) => saveImage(e)}/>
         <img
-          src={image} />
+          src={image}
+          width="300"
+          height="300"/>
         {!journeyId ? (
           <Button onClick={createJourney}>Add Steps</Button>
         ) : null}
