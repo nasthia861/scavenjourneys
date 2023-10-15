@@ -56,7 +56,7 @@ const App = () => {
     navigator.geolocation.watchPosition((position) => {
       setUserLat(position.coords.latitude)
       setUserLong(position.coords.longitude)
-    }, () => console.log('Could not get location'))
+    }, () => console.error('Could not get location'))
   }
 
   useEffect(() => {

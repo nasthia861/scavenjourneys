@@ -34,7 +34,6 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
  const getJourney = async () => {
     // Fetch the journeys closest to you
     const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
-    console.log(response)
       response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
         return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -49,7 +48,6 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 };
 
   useEffect(() => {
-    console.log(userLat)
     if(userLat && userLong) {
       getJourney()
     }
