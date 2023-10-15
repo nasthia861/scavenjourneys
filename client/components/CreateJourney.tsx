@@ -44,12 +44,11 @@ type IHeaderProps = {
 
   const createJourney = async () => {
     try {
-      console.log('before', journeyData)
+
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
-      console.log('responce', newJourney)
       setJourneyId(newJourney.id);
-      // console.log(journeyData)
+
       navigate(`/StepForm/${newJourney.id}`);
     } catch (error) {
       console.error('Error creating journey:', error);
