@@ -73,9 +73,7 @@ const StepForm: React.FC = () => {
       const response = await axios.post('/step', stepWithJourneyId);
       const newStepId = response.data.id;
       setStepIds([...stepIds, newStepId]);
-      setStepData({ name: '', hint: '', user: {
-        id: user.id
-      }, });
+      setStepData({...stepData,  name: '', hint: ''});
     } catch (error) {
       console.error('Error adding step:', error);
     }
