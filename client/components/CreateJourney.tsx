@@ -44,7 +44,6 @@ type IHeaderProps = {
 
   const createJourney = async () => {
     try {
-      console.log(journeyData);
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
       setJourneyId(newJourney.id);
