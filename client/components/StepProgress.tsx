@@ -7,6 +7,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import styled from '@mui/material/styles/styled';
+import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 
 
 type IHeaderProps = {
@@ -87,13 +90,15 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </CardContent>
         <CardActions>
           {closeEnough && step.in_progress && (
-              <input
-              id="cameraInput"
-              // label="Solve Step"
+            <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+            Solve Step
+            <VisuallyHiddenInput
               type="file"
               accept="image/*"
               capture="environment"
-              onChange={(e) => solveStep(e)}/>
+              onChange={(e) => solveStep(e)}
+              />
+            </Button>
            )}
         </CardActions>
     </Card>
