@@ -27,9 +27,9 @@ export class Journey {
   @JoinColumn()
   user: User;
 
-  //delete and switch to Manytomany once done with fake data
-  @Column({ nullable: true })
-  tagId: number
+  // //delete and switch to Manytomany once done with fake data
+  // @Column({ nullable: true })
+  // tagId: number
 
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   @JoinColumn()

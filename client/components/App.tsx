@@ -12,7 +12,7 @@ import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
-import Achievements from './ Achievement.tsx';
+import Achievements from './Achievement.tsx';
 import Context from './Context.tsx'
 
 // lazy load components

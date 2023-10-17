@@ -9,7 +9,6 @@ export default class UserSeeder implements Seeder {
     ): Promise<any> {
         const userFactory = factoryManager.get(User);
 
-        await userFactory.saveMany(5)
-
+        await userFactory.saveMany(1)
     }
 }
