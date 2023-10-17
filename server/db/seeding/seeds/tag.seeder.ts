@@ -15,7 +15,7 @@ export default class TagSeeder implements Seeder {
             {name: 'holiday'},
             {name: 'solo'},
         ])
-        const tagFactory = factoryManager.get(Tag);
+        // const tagFactory = factoryManager.get(Tag);
 
         // await tagFactory.saveMany(10)
 

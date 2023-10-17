@@ -16,7 +16,7 @@ import { UserAchievement } from './entities/UserAchievement'
 import { UserData } from './entities/UserData';
 
 // import JourneySeeder from './seeding/seeds/journey.seeder';
-// import UserSeeder from './seeding/seeds/user.seeder';
+import UserSeeder from './seeding/seeds/user.seeder';
 // import StepSeeder from './seeding/seeds/step.seeder';
 import TagSeeder from './seeding/seeds/tag.seeder';
 // import journeyFactory from './seeding/factories/journey.factory';
@@ -54,7 +54,7 @@ import AchievementSeeder from './seeding/seeds/achievement.seeder';
   dropDatabase({options})
     .then(() => createDatabase({options}))
     .then(() => runSeeders(AppDataSource, {
-      seeds: [TagSeeder],
+      seeds: [UserSeeder, TagSeeder],
       factories: [userFactory, tagFactory]
     }))
     // .then(() => runSeeders(AppDataSource, {
@@ -65,6 +65,6 @@ import AchievementSeeder from './seeding/seeds/achievement.seeder';
     //   seeds: [StepSeeder],
     //   factories: [stepFactory]
     // }))
-    //.then(() => AchievementSeeder(AppDataSource))
+    .then(() => AchievementSeeder(AppDataSource))
     .then(() => console.log('Seed has seeded'))
     .catch(error => console.error('Seed did not seed:', error));
