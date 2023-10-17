@@ -6,6 +6,9 @@ import { myContext } from "./Context";
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import styled from '@mui/material/styles/styled';
+import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
@@ -23,18 +26,18 @@ type IHeaderProps = {
   const [journeyData, setJourneyData] = useState<JourneyType>({
     latitude: userLat,
     longitude: userLong,
-    name: '',
-    description: '',
+    name: null,
+    description: null,
     user: {
       id: user.id
     },
-    img_url: ''
+    img_url: null,
+    tag: {}
     //import from home
   });
 
-  const [journeyId, setJourneyId] = useState(null);
-
   const [image, setImage] = useState<string | null >()
+  const [ready, setReady] = useState<boolean>(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,16 +46,23 @@ type IHeaderProps = {
 
 
   const createJourney = async () => {
+
     try {
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
-      setJourneyId(newJourney.id);
 
-      navigate(`/StepForm/${newJourney.id}`, {state:{userLat, userLong, journeyData}});
+      navigate(`/StepForm/${newJourney.id}`, {state:{userLat, userLong, newJourney}});
     } catch (error) {
       console.error('Error creating journey:', error);
     }
   };
+
+
+  useEffect(() => {
+    if(journeyData.name && journeyData.description && journeyData.img_url) {
+      setReady(true);
+    }
+  }, [journeyData])
 
   const navigate = useNavigate();
 
@@ -76,6 +86,7 @@ type IHeaderProps = {
         name="name"
         value={journeyData.name}
         onChange={handleInputChange}
+        error={!journeyData.name}
       />
       <TextField
         label="Description"
@@ -83,21 +94,37 @@ type IHeaderProps = {
         name="description"
         value={journeyData.description}
         onChange={handleInputChange}
+        error={!journeyData.description}
       />
-        <input
-          id="cameraInput"
-          type="file"
-          accept="image/*"
-          capture
-          onChange={(e) => saveImage(e)}/>
+
+
+    {/*
+      <input
+        id="icon-button-file"
+        type="file"
+        accept="image/*"
+        capture
+        onChange={(e) => saveImage(e)}
+      /> */}
+    <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+      Journey Photo
+      <VisuallyHiddenInput
+        type="file"
+        accept="image/*"
+        capture
+        onChange={(e) => saveImage(e)}
+       />
+    </Button>
+
         {image && (<img
           src={image}
           width="250"
-          height="auto"/>
+          height="auto"
+          />
         )}
-        {!journeyId ? (
+        {ready && (
           <Button onClick={createJourney}>Add Steps</Button>
-        ) : null}
+        )}
     </Paper>
   );
 };
