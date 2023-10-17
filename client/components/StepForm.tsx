@@ -20,23 +20,17 @@ const StepForm: React.FC = () => {
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
 
-  // const [stepData, setStepData] = useState<StepType>({
-  //   name: '',
-  //   hint: '',
-  //   latitude: latitude,
-  //   longitude: longitude,
-  //   user: {
-  //     id: user.id
-  //   },
-  //   journey: journeyData
-  // });
-  const [stepData, setStepData] = useState({
+  const [stepData, setStepData] = useState<StepType>({
     name: '',
     hint: '',
+    latitude: latitude,
+    longitude: longitude,
     user: {
       id: user.id
     },
+    journey: journeyData
   });
+
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
   const [stepIds, setStepIds] = useState<number[]>([]); // Array to store step IDs
   useEffect(() => {
