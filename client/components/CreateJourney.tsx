@@ -34,7 +34,7 @@ type IHeaderProps = {
 
   const [journeyId, setJourneyId] = useState(null);
 
-  const [image, setImage] = useState<string | null | ArrayBuffer>()
+  const [image, setImage] = useState<string | null >()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,13 +58,10 @@ type IHeaderProps = {
 
   const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = await new FileReader()
-    reader.addEventListener('load', (event) => {
-      axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
-        .then((response) => {
-          console.log(response.data.secure_url);
-          setJourneyData({ ...journeyData, img_url: response.data.secure_url});
-          setImage(response.data.secure_url)
-        });
+    reader.addEventListener('load', async(event) => {
+      const response = await axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
+      setJourneyData({ ...journeyData, img_url: response.data.secure_url});
+      setImage(response.data.secure_url)
     })
     reader.readAsDataURL(e.target.files[0]);
   }
@@ -93,10 +90,11 @@ type IHeaderProps = {
           accept="image/*"
           capture
           onChange={(e) => saveImage(e)}/>
-        <img
+        {image && (<img
           src={image}
-          width="300"
-          height="300"/>
+          width="250"
+          height="auto"/>
+        )}
         {!journeyId ? (
           <Button onClick={createJourney}>Add Steps</Button>
         ) : null}

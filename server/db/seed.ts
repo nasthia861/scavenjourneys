@@ -52,7 +52,7 @@ import tagFactory from './seeding/factories/tag.factory';
   dropDatabase({options})
     .then(() => createDatabase({options}))
     .then(() => runSeeders(AppDataSource, {
-      seeds: [UserSeeder, TagSeeder],
+      seeds: [TagSeeder],
       factories: [userFactory, tagFactory]
     }))
     .then(() => runSeeders(AppDataSource, {
