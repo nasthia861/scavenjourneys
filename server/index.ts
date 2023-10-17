@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
@@ -45,7 +44,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
@@ -70,7 +68,6 @@ app.get('*', (req, res) => {
     }
   })
 })
-
 app.listen(port, () => {
   console.log(`listening at: http://localhost:${port}`)
 })

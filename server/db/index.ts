@@ -1,8 +1,5 @@
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
-// eslint-disable-next-line import/no-extraneous-dependencies
-
-
 
 import { User } from './entities/User'
 import { Journey } from './entities/Journey'
@@ -14,7 +11,6 @@ import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
 import { UserData } from './entities/UserData';
-
   const options: DataSourceOptions = {
   type: 'mysql',
   host: '127.0.0.1',
@@ -36,10 +32,7 @@ import { UserData } from './entities/UserData';
     UserAchievement,
     UserData
   ]};
-
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()
     .then(() => {'AppDataSource has been successfully initialized'})
-
-
 export default AppDataSource;
