@@ -13,6 +13,8 @@ import { Tag } from './entities/Tag'
 import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
+import { UserData } from './entities/UserData';
+
 import JourneySeeder from './seeding/seeds/journey.seeder';
 import UserSeeder from './seeding/seeds/user.seeder';
 import StepSeeder from './seeding/seeds/step.seeder';
@@ -21,8 +23,7 @@ import journeyFactory from './seeding/factories/journey.factory';
 import userFactory from './seeding/factories/user.factory';
 import stepFactory from './seeding/factories/step.factory';
 import tagFactory from './seeding/factories/tag.factory';
-// import achievementFactory from './seeding/factories/achievement.factory';
-// import AchievementSeeder from './seeding/seeds/achievement.seeder';
+import AchievementSeeder from './seeding/seeds/achievement.seeder';
 // import userAchievementFactory from './seeding/factories/userAchievement.factory';
 // import userAchievementSeeder from './seeding/seeds/userAchievement.seeder';
 
@@ -44,7 +45,8 @@ import tagFactory from './seeding/factories/tag.factory';
     Tag,
     Likes,
     Achievement,
-    UserAchievement
+    UserAchievement,
+    UserData
   ]
 };
 
@@ -63,8 +65,6 @@ import tagFactory from './seeding/factories/tag.factory';
       seeds: [StepSeeder],
       factories: [stepFactory]
     }))
-    // .then(() => runSeeders(AppDataSource, {
-    //   seeds: [AchievementSeeder, userAchievementSeeder],
-    //   factories: [achievementFactory, userAchievementFactory]
-    // }))
+    .then(() => AchievementSeeder(AppDataSource))
     .then(() => console.log('Seed has seeded'))
+    .catch(error => console.error('Seed did not seed:', error));

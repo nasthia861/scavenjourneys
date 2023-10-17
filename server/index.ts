@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
@@ -10,6 +9,9 @@ import achievementRouter from './routes/achievements';
 import stepRouter from './routes/step';
 import userRouter from './routes/users';
 import tagRouter from './routes/tag';
+import userAchievementsRouter from './routes/userAchievement';
+import userDataRouter from './routes/userDataRouter';
+// import homeRouter from './routes/home';
 import cloudRouter from './routes/cloudinary';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
@@ -42,7 +44,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
@@ -56,6 +57,8 @@ app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);
 app.use('/achievement', achievementRouter);
 app.use('/tag', tagRouter);
+app.use('/userachievements', userAchievementsRouter);
+app.use('/userdata', userDataRouter);
 app.use('/cloud', cloudRouter);
 
 app.get('*', (req, res) => {
@@ -65,7 +68,6 @@ app.get('*', (req, res) => {
     }
   })
 })
-
 app.listen(port, () => {
   console.log(`listening at: http://localhost:${port}`)
 })
