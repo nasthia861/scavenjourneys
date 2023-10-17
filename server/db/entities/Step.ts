@@ -23,10 +23,6 @@ export class Step {
   @JoinColumn()
   user: User;
 
-    //delete and switch to Manytomany once done with fake data
-  @Column({ nullable: true })
-  journeyId: number
-
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
   @JoinColumn()
   journey: Journey;

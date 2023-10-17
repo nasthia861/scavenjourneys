@@ -4,7 +4,7 @@ cloudinary.config({
   secure: true
 });
 
-const uploadImage = async (imagePath, filename: string, folder: string) => {
+const uploadImage = async (imagePath: string, filename: string, folder: string) => {
 
   // Use the uploaded file's name as the asset's public ID and
   // allow overwriting the asset with new versions
@@ -16,7 +16,6 @@ const uploadImage = async (imagePath, filename: string, folder: string) => {
   try {
     // Upload the image
     const result = await cloudinary.uploader.upload(imagePath, options);
-    console.log(result);
     return result.public_id;
   } catch (error) {
     console.error(error);

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { useContext, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
 
@@ -12,7 +12,8 @@ import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
-import Context from './Context.tsx'
+import Achievements from './Achievement.tsx';
+import Context, {myContext} from './Context.tsx'
 
 // lazy load components
 // const Welcome = lazy(() =>
@@ -56,7 +57,7 @@ const App = () => {
     navigator.geolocation.watchPosition((position) => {
       setUserLat(position.coords.latitude)
       setUserLong(position.coords.longitude)
-    }, () => console.log('Could not get location'))
+    }, () => console.error('Could not get location'))
   }
 
   useEffect(() => {
@@ -80,6 +81,7 @@ const App = () => {
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:journeyId" element={<StepForm/>} />
+              <Route path="/achievements" element={<Achievements/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
@@ -88,4 +90,4 @@ const App = () => {
     );
   };
 
-export default App;
+  export default App;

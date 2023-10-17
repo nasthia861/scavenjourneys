@@ -5,6 +5,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import AppDataSource from '../db/index';
 import { User } from '../db/entities/User';
 import { Any } from 'typeorm';
+import { UserData } from '../db/entities/UserData';
 
 passport.use(new GoogleStrategy ({
 
@@ -42,7 +43,7 @@ passport.use(new GoogleStrategy ({
       }
 
       if (!user ) {
-         await AppDataSource
+        const userInsertResult = await AppDataSource
         .createQueryBuilder()
         .insert()
         .into(User)
@@ -52,7 +53,24 @@ passport.use(new GoogleStrategy ({
             google_id: authUser.googleId,
             username: authUser.username,
             img_url: authUser.picture,
-          }
+          },
+        ])
+        .execute();
+      
+      const user = userInsertResult.generatedMaps[0]; // Get the user object with the generated ID
+      
+      const userDataInsertResult = await AppDataSource
+        .createQueryBuilder()
+        .insert()
+        .into(UserData)
+        .values([
+          {
+            user: user, // Set the user association
+            journeysCreated: 0,
+            stepsCreated: 0,
+            journeysTaken: 0,
+            stepsTaken: 0,
+          },
         ])
         .execute();
       }

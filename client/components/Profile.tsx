@@ -17,6 +17,7 @@ import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
+import { Link } from "react-router-dom";
 
 type IHeaderProps = {
   userLat: number;
@@ -45,7 +46,6 @@ type IHeaderProps = {
       console.error('Could not Axios patch', err)
     });
   };
-
   const getUserNameImg = () => {
     axios.get('/user/' + user.id)
     .then((userData) => {
@@ -82,20 +82,16 @@ type IHeaderProps = {
       console.error('Error fetching user data:', error);
     }
   };
-
   useEffect(() => {
     getUserNameImg();
     getUserData();
   });
-
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
-
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
-
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
@@ -107,7 +103,6 @@ type IHeaderProps = {
       <Typography variant="h5" gutterBottom>
         {username}
       </Typography>
-
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
@@ -136,6 +131,10 @@ type IHeaderProps = {
           </Button>
         </form>
         </Stack>
+        {/* achievements page*/}
+        <Button component={Link} to="/achievements" variant="contained">
+          Achievements
+        </Button>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
@@ -157,7 +156,6 @@ type IHeaderProps = {
           </Grid>
 
         </List>
-
       </Stack>
     </Container>
   )

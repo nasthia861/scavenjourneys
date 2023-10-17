@@ -16,6 +16,6 @@
     "allowJs": true,
     "outDir": "dist",
     "jsx": "react",
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
   }
 }

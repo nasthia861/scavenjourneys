@@ -7,15 +7,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-//import uploadImage from '../../server/cloudinary/cloudinary';
-
-// import ImageList from '@mui/material/ImageList';
-// import ImageListItem from '@mui/material/ImageListItem';
-// import ImageListItemBar from '@mui/material/ImageListItemBar';
-// import IconButton from '@mui/material/IconButton';
-// import InfoIcon from '@mui/icons-material/Info';
-// import Button from "@mui/material/Button";
-
+import styled from '@mui/material/styles/styled';
+import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 
 
 type IHeaderProps = {
@@ -32,14 +26,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
       const reader = await new FileReader()
       reader.addEventListener('load', (event) => {
-        axios.post(`cloud/stepProgress/${step.id}`, {data: event.target.result})
+        axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
           .then((response) => {
             axios.put(`/step/progress/${step.id}`, {
               in_progress: false,
               image_url: response.data.secure_url
             })
+            setImage(response.data.secure_url)
           })
-        setImage(event.target.result)
       });
       reader.readAsDataURL(e.target.files[0]);
   }
@@ -99,13 +93,15 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </CardContent>
         <CardActions>
           {closeEnough && step.in_progress && (
-              <input
-              id="cameraInput"
-              // label="Solve Step"
+            <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+            Solve Step
+            <VisuallyHiddenInput
               type="file"
               accept="image/*"
               capture="environment"
-              onChange={(e) => solveStep(e)}/>
+              onChange={(e) => solveStep(e)}
+              />
+            </Button>
            )}
         </CardActions>
     </Card>

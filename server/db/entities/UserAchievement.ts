@@ -8,15 +8,7 @@ export class UserAchievement {
   id: number;
 
   @CreateDateColumn()
-  created_at: Date;
-
-    //delete and switch to Manytomany once done with fake data
-  @Column({ nullable: true })
-  userId: number
-
-    //delete and switch to Manytomany once done with fake data
-  @Column({ nullable: true })
-  achievementId: number
+  createdAt: Date;
 
   @ManyToOne(() => Achievement, (achievement: Achievement) => achievement.id)
   @JoinColumn()
