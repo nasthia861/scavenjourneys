@@ -16,6 +16,8 @@ import axios from "axios";
 import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
+import SpeechToText from "./SpeechToText";
+import { Link } from "react-router-dom";
 
 type IHeaderProps = {
   userLat: number;
@@ -42,7 +44,6 @@ type IHeaderProps = {
       console.error('Could not Axios patch', err)
     });
   };
-
   const getUserNameImg = () => {
     axios.get('/user/' + user.id)
     .then((userData) => {
@@ -55,10 +56,10 @@ type IHeaderProps = {
   };
 
   /**Speech To Text Input Handling */
-  const { onceSpoken } = SpeechToText;
-  useEffect(() => {
-    setUpdatedUsername(onceSpoken);
-  }, [onceSpoken])
+  // const { onceSpoken } = SpeechToText;
+  // useEffect(() => {
+  //   setUpdatedUsername(onceSpoken);
+  // }, [onceSpoken])
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -79,20 +80,16 @@ type IHeaderProps = {
       console.error('Error fetching user data:', error);
     }
   };
-
   useEffect(() => {
     getUserNameImg();
     getUserData();
   });
-
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
-
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
-
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
@@ -104,7 +101,6 @@ type IHeaderProps = {
       <Typography variant="h5" gutterBottom>
         {username}
       </Typography>
-
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
@@ -158,9 +154,7 @@ type IHeaderProps = {
           </Grid>
 
         </List>
-
       </Stack>
     </Container>
   )
 }
-

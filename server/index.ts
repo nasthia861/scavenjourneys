@@ -59,11 +59,8 @@ app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);
 app.use('/achievement', achievementRouter);
 app.use('/tag', tagRouter);
-<<<<<<< HEAD
 app.use('/userachievements', userAchievementsRouter);
 app.use('/userdata', userDataRouter);
-=======
->>>>>>> 58843efebfbb6ef4be0f24f14edfee25cdd0511d
 app.use('/cloud', cloudRouter);
 
 app.get('*', (req, res) => {

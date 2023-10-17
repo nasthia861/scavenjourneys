@@ -26,32 +26,25 @@ const StepForm: React.FC = () => {
   //   latitude: latitude,
   //   longitude: longitude,
   //   user: {
-  //     id: user.id,
+  //     id: user.id
   //   },
   //   journey: journeyData
   // });
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
-    latitude: latitude,
-    longitude: longitude,
     user: {
       id: user.id
     },
-    journey: journeyData
   });
-
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
   const [stepIds, setStepIds] = useState<number[]>([]); // Array to store step IDs
-
-
   useEffect(() => {
     // Add an event listener for the beforeunload event
     const unloadHandler = async (e: BeforeUnloadEvent) => {
       if (!journeyCreated) {
         // Display a confirmation message when the user tries to leave
         e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-
         if (journeyId) {
           // Delete steps first
           for (const stepId of stepIds) {
@@ -64,19 +57,15 @@ const StepForm: React.FC = () => {
         }
       }
     };
-
     window.addEventListener('beforeunload', unloadHandler);
-
     return () => {
       window.removeEventListener('beforeunload', unloadHandler);
     };
   }, [journeyCreated, journeyId, stepIds]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStepData({ ...stepData, [name]: value });
   };
-
   const addStep = async () => {
     try {
       const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
@@ -88,22 +77,17 @@ const StepForm: React.FC = () => {
       console.error('Error adding step:', error);
     }
   };
-
   const submitJourney = async () => {
     try {
       // Mark the journey as created
       setJourneyCreated(true);
-
       // Post the step to the database
       const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
       await axios.post('/step', stepWithJourneyId);
-
       // Calculate the number of steps created
       const stepCount = 1 + stepIds.length;
-
       // get the userData for logged in user
       const userDataResponse = await axios.get(`/userdata/byUserId/${user.id}`);
-
         // update said userData
         const existingUserData = userDataResponse.data;
         const updatedUserData = {
@@ -112,15 +96,12 @@ const StepForm: React.FC = () => {
           stepsCreated: existingUserData.stepsCreated + stepCount,
         };
         await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
-
       // remember the new userData
       const newJourneysCreated = existingUserData.journeysCreated + 1
       const newStepsCreated = existingUserData.stepsCreated + stepCount
-
       // Check for achievements if the user has any
       const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${user.id}`);
       const userAchievements = userAchievementsResponse.data;
-
       // Function to create a new user achievement if it doesn't exist
       const createNewUserAchievement = async (achievementId: number) => {
         await axios.post('/userachievements', {
@@ -128,7 +109,6 @@ const StepForm: React.FC = () => {
           achievement: { id: achievementId },
         });
       };
-
       // Check if the user needs an amateur journey maker achievement
       if (newJourneysCreated >= 5) {
         if (Array.isArray(userAchievements)) {
@@ -168,7 +148,6 @@ const StepForm: React.FC = () => {
           }
         }
       }
-
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 15) {
         if (Array.isArray(userAchievements)) {
@@ -208,7 +187,6 @@ const StepForm: React.FC = () => {
           }
         }
       }
-
         // Clear step data and navigate to the home page
         setStepData({ name: '', hint: '', user: { id: user.id } });
         navigate('/home');
@@ -216,7 +194,6 @@ const StepForm: React.FC = () => {
         console.error('Error submitting journey with steps:', error);
       }
     };
-
   return (
     <div>
       <h3>Add Steps</h3>
@@ -239,5 +216,4 @@ const StepForm: React.FC = () => {
     </div>
   );
 };
-
 export default StepForm;
