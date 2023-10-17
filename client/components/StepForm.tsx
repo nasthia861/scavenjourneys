@@ -75,13 +75,17 @@ const StepForm: React.FC = () => {
     try {
       // Mark the journey as created
       setJourneyCreated(true);
+
       // Post the step to the database
       const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
       await axios.post('/step', stepWithJourneyId);
+
       // Calculate the number of steps created
       const stepCount = 1 + stepIds.length;
+
       // get the userData for logged in user
       const userDataResponse = await axios.get(`/userdata/byUserId/${user.id}`);
+
         // update said userData
         const existingUserData = userDataResponse.data;
         const updatedUserData = {
@@ -90,12 +94,15 @@ const StepForm: React.FC = () => {
           stepsCreated: existingUserData.stepsCreated + stepCount,
         };
         await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
+
       // remember the new userData
       const newJourneysCreated = existingUserData.journeysCreated + 1
       const newStepsCreated = existingUserData.stepsCreated + stepCount
+
       // Check for achievements if the user has any
       const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${user.id}`);
       const userAchievements = userAchievementsResponse.data;
+
       // Function to create a new user achievement if it doesn't exist
       const createNewUserAchievement = async (achievementId: number) => {
         await axios.post('/userachievements', {
@@ -106,6 +113,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur journey maker achievement
       if (newJourneysCreated >= 5) {
         if (Array.isArray(userAchievements)) {
+
           // Check if the user has achievement ID 1
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 1
@@ -119,6 +127,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an expert journey maker achievement
       if (newJourneysCreated >= 20) {
         if (Array.isArray(userAchievements)) {
+
           // Check if the user has achievement ID 2
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 2
@@ -132,6 +141,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an master journey maker achievement
       if (newJourneysCreated >= 50) {
         if (Array.isArray(userAchievements)) {
+
           // Check if the user has achievement ID 3
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 3
@@ -145,6 +155,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 15) {
         if (Array.isArray(userAchievements)) {
+
           // Check if the user has achievement ID 4
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 4
@@ -158,6 +169,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 50) {
         if (Array.isArray(userAchievements)) {
+
           // Check if the user has achievement ID 5
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 5
@@ -171,6 +183,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 100) {
         if (Array.isArray(userAchievements)) {
+          
           // Check if the user has achievement ID 6
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 6

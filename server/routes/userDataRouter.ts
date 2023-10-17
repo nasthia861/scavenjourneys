@@ -31,6 +31,50 @@ userDataRouter.get('/', async (req, res) => {
   }
 });
 
+// Get user data by userID
+userDataRouter.get('/byUserId/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
+
+  try {
+    const userData = await AppDataSource.getRepository(UserData).findOne({ where: { user: { id: userId} } });
+
+    if (!userData) {
+      return res.status(404).json({ error: 'User data not found' });
+    }
+
+    res.json(userData);
+  } catch (error) {
+    console.error('Error fetching user data by userID:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Get user data by ID
+userDataRouter.get('/id/:id', async (req, res) => {
+  const userDataId = parseInt(req.params.id);
+
+  if (isNaN(userDataId)) {
+    return res.status(400).json({ error: 'Invalid user data ID' });
+  }
+
+  try {
+    const userData = await AppDataSource.getRepository(UserData).findOne({ where: { id: userDataId } });
+
+    if (!userData) {
+      return res.status(404).json({ error: 'User data not found' });
+    }
+
+    res.json(userData);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Get user data with optional sorting
 userDataRouter.get('/userdata', async (req, res) => {
   const orderBy = req.query.orderBy || 'default';
@@ -64,7 +108,6 @@ userDataRouter.get('/userdata', async (req, res) => {
         },
       });
     }
-
     if (!userData) {
       return res.status(404).json({ error: 'User data not found' });
     }
@@ -76,27 +119,6 @@ userDataRouter.get('/userdata', async (req, res) => {
   }
 });
 
-// Get user data by ID
-userDataRouter.get('/:id', async (req, res) => {
-  const userDataId = parseInt(req.params.id);
-
-  if (isNaN(userDataId)) {
-    return res.status(400).json({ error: 'Invalid user data ID' });
-  }
-
-  try {
-    const userData = await AppDataSource.getRepository(UserData).findOne({ where: { id: userDataId } });
-
-    if (!userData) {
-      return res.status(404).json({ error: 'User data not found' });
-    }
-
-    res.json(userData);
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 // Update user data by ID
 userDataRouter.put('/:id', async (req, res) => {
