@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
+import { Link } from 'react-router-dom';
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -114,6 +115,10 @@ import { StepProgressType } from "@this/types/StepProgress"
             Update Username
           </Button>
         </Stack>
+        {/* achievements page*/}
+        <Button component={Link} to="/achievements" variant="contained">
+          Achievements
+        </Button>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>

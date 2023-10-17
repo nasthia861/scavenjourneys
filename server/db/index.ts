@@ -2,8 +2,6 @@ import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 
-
-
 import { User } from './entities/User'
 import { Journey } from './entities/Journey'
 import { Step } from './entities/Step'
@@ -11,8 +9,9 @@ import { JourneyProgress } from './entities/JourneyProgress'
 import { StepProgress } from './entities/StepProgress'
 import { Tag } from './entities/Tag'
 import { Likes } from './entities/Likes'
-// import { Achievement } from './entities/Achievement'
-// import { UserAchievement } from './entities/UserAchievement'
+import { Achievement } from './entities/Achievement'
+import { UserAchievement } from './entities/UserAchievement'
+import { UserData } from './entities/UserData';
 
   const options: DataSourceOptions = {
   type: 'mysql',
@@ -31,8 +30,9 @@ import { Likes } from './entities/Likes'
     StepProgress,
     Tag,
     Likes,
-    // Achievement,
-    // UserAchievement
+    Achievement,
+    UserAchievement,
+    UserData
   ]};
 
   const AppDataSource = new DataSource(options);

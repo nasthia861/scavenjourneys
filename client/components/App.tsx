@@ -12,6 +12,7 @@ import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
+import Achievements from './ Achievement.tsx';
 
 // lazy load components
 // const Welcome = lazy(() =>
@@ -65,6 +66,7 @@ const App = () => {
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney/>} />
               <Route path="/StepForm/:journeyId" element={<StepForm/>} />
+              <Route path="/achievements" element={<Achievements/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
