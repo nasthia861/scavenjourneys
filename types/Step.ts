@@ -5,8 +5,8 @@ export type StepType = {
   id: number;
   name: string;
   hint: string;
-  latitude: string,
-  longitude: string
+  latitude: number,
+  longitude: number,
   user: UserType;
   journey: JourneyType;
   created_at: string;

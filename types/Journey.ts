@@ -5,7 +5,8 @@ export type JourneyType = {
   id: number;
   name: string;
   description: string;
-  location: Location;
+  latitude: number;
+  longitude: number
   img_url: string;
   user: UserType;
   tag: TagType

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
 
@@ -13,6 +13,7 @@ import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './ Achievement.tsx';
+import Context from './Context.tsx'
 
 // lazy load components
 // const Welcome = lazy(() =>
@@ -39,6 +40,8 @@ const Profile = lazy(() =>
 
 
 const App = () => {
+  const [userLat, setUserLat] = useState<number | null>()
+  const [userLong, setUserLong] = useState<number | null>()
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
@@ -49,10 +52,23 @@ const App = () => {
     { path: '/journey', label: 'Journey' },
     { path: '/leaderboard', label: 'Leaderboard' },
   ];
+
+  const getLocation = () => {
+    navigator.geolocation.watchPosition((position) => {
+      setUserLat(position.coords.latitude)
+      setUserLong(position.coords.longitude)
+    }, () => console.error('Could not get location'))
+  }
+
+  useEffect(() => {
+    getLocation()
+  }, [])
   //CssBaseLine use mitigate conflicts between React 18 and Material UI/styles
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
     //https://mui.com/system/styles/basics/
     return (
+      <Context>
+
       <ThemeProvider theme={themeOptions}>
         <CssBaseline />
         <BrowserRouter>
@@ -60,17 +76,18 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/home" element={<Home/>} />
-              <Route path="/profile" element={<Profile/>} />
+              <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
-              <Route path="/create-journey" element={<CreateJourney/>} />
+              <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:journeyId" element={<StepForm/>} />
               <Route path="/achievements" element={<Achievements/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
       </ThemeProvider>
+      </Context>
     );
   };
 

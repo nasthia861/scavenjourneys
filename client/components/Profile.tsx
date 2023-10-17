@@ -1,5 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useContext, SyntheticEvent } from "react";
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext, SyntheticEvent} from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -8,35 +7,39 @@ import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import ImageList from '@mui/material/ImageList';
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
-import deepPurple from "@mui/material/colors/deepPurple";
+import deepOrange from "@mui/material/colors/deepOrange";
 import axios from "axios";
 import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
+import SpeechToText from "./SpeechToText";
+import { Link } from "react-router-dom";
 
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
 
+  export const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
-  export const Profile: React.FC = () => {
-
-  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
-  const [steps, setSteps] = useState<StepProgressType[]>([]);
-
+  const theme = useTheme();
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
+  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
+  const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
 
+
   /** User Functionality for User Profile*/
-  const updateUsername = () => {
-    axios.patch("/user/" + user.id, {username: updatedUsername} )
-    .then(() => {})
+  const updateUsername = async (username: string) => {
+    await axios.patch("/user/" + user.id, {username: username} )
+    .then(() => {console.log('username updated')})
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
@@ -52,6 +55,22 @@ import { StepProgressType } from "@this/types/StepProgress"
       console.error('Could not retrieve user information', err);
     })
   };
+
+  /**Speech To Text Input Handling */
+  // const { onceSpoken } = SpeechToText;
+  // useEffect(() => {
+  //   setUpdatedUsername(onceSpoken);
+  // }, [onceSpoken])
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    setUpdatedUsername('');
+  }
+
+  const handleUsernameChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement;
+    setUpdatedUsername(target.value);
+  }
 
   // GET user's journey progress
   const getUserData = async () => {
@@ -81,8 +100,6 @@ import { StepProgressType } from "@this/types/StepProgress"
     }
   };
 
-  const theme = useTheme();
-
   return (
     <Container>
       <Stack spacing={1}>
@@ -93,27 +110,30 @@ import { StepProgressType } from "@this/types/StepProgress"
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
-      sx={{ bgcolor: deepPurple[500],
+      sx={{ bgcolor: deepOrange[900],
       width: 56, height: 56 }}
       src={userImg}
       ></Avatar>
-     <Stack direction="row" spacing={1}>
+     <Stack direction="row" spacing={1}  >
+      <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
             label="Username"
             variant="outlined"
-            onChange={(e: SyntheticEvent) => {
-              const target = e.target as HTMLInputElement;
-              const value = target.value;
-              setUpdatedUsername(value)
-            }}
-           />
+            onChange={handleUsernameChange}
+            value={ updatedUsername }
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
+          />
           <Button
             variant="contained"
-            onClick={() => {updateUsername();}}
-          >
+            type='submit'
+            onClick={() => {
+              updateUsername(updatedUsername);
+            }}
+            >
             Update Username
           </Button>
+        </form>
         </Stack>
         {/* achievements page*/}
         <Button component={Link} to="/achievements" variant="contained">
@@ -135,7 +155,7 @@ import { StepProgressType } from "@this/types/StepProgress"
           <Typography variant="h5">Steps & Step Progress</Typography>
           <Grid>
             {steps.map((step) => (
-                <StepProgress key={step.id} step={step}/>
+                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
             ))}
           </Grid>
 
@@ -146,4 +166,3 @@ import { StepProgressType } from "@this/types/StepProgress"
   )
 }
 
-// export default Profile;

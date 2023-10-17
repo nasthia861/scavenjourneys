@@ -85,18 +85,19 @@ userRouter.patch('/:id', async (req, res) => {
   const { username } = req.body
 
   try {
-    const user = await userRepo.findOne( { where: { id: +id } });
-    if (user) {
-      userRepo.merge(user, username);
-      let result = await userRepo.save(user);
-      return res.status(200).send(result);
 
-    }
+    await AppDataSource
+    .createQueryBuilder()
+    .update(User)
+    .set({username: username})
+    .where('id = :id', { id: id })
+    .execute();
+    res.sendStatus(200);
 
   } catch (err) {
-    console.error('Could not PUT username', err)
-    return res.sendStatus(500);
-  }
+      console.error('Could not PUT username', err)
+      return res.sendStatus(500);
+    }
 })
 
 

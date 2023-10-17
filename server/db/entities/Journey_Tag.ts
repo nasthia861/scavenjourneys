@@ -8,6 +8,7 @@ export class JourneyTag {
   @PrimaryColumn()
   journeyId: number;
 
+    //delete and switch to Manytomany once done with fake data
   @PrimaryColumn()
   tagId: number;
 

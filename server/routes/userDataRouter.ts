@@ -24,7 +24,6 @@ userDataRouter.get('/', async (req, res) => {
         user: true
       }
     });
-    console.log(userData)
     res.json(userData);
   } catch (error) {
     console.error('Error fetching user data:', error);

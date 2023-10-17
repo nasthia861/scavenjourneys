@@ -13,24 +13,29 @@ import tagRouter from './routes/tag';
 import userAchievementsRouter from './routes/userAchievement';
 import userDataRouter from './routes/userDataRouter';
 // import homeRouter from './routes/home';
+import cloudRouter from './routes/cloudinary';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 import { v2 as cloudinary } from 'cloudinary'
 
 
 dotenv.config();
-//console.log(cloudinary.config().cloud_name);
 require('./auth/passport')
+
 
 const app = express();
 
 const port = process.env.port || 8080;
 const distPath = path.resolve(__dirname, '..', 'dist');
 
+
 //generate a secret
 let secretKey = uuidv4();
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({
+  limit: '50mb'
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(distPath));
 
@@ -44,9 +49,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
+
+
+
 //routes
 app.use('/auth', authRoutes);
-// app.use('/home', homeRouter);
 app.use('/user', userRouter);
 app.use('/journey', journeyRouter);
 app.use('/step', stepRouter);
@@ -54,6 +61,7 @@ app.use('/achievement', achievementRouter);
 app.use('/tag', tagRouter);
 app.use('/userachievements', userAchievementsRouter);
 app.use('/userdata', userDataRouter);
+app.use('/cloud', cloudRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {
