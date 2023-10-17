@@ -56,10 +56,10 @@ type IHeaderProps = {
   };
 
   /**Speech To Text Input Handling */
-  // const { onceSpoken } = SpeechToText;
-  // useEffect(() => {
-  //   setUpdatedUsername(onceSpoken);
-  // }, [onceSpoken])
+  const { onceSpoken } = SpeechToText;
+  useEffect(() => {
+    setUpdatedUsername(onceSpoken);
+  }, [onceSpoken])
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();

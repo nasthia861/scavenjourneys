@@ -40,7 +40,7 @@ const Leaderboard = () => {
           Order by Steps Created
         </Button>
       </Box>
-      {userData.map((user, index) => (
+      {userData.reverse().map((user, index) => (
         <Box
           key={user.id}
           width="100%"
