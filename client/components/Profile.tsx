@@ -23,11 +23,12 @@ type IHeaderProps = {
   userLong: number;
 };
 
-  export const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+  const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+
+    //grabs user data from google oauth
+    const user = useContext(myContext);
 
   const theme = useTheme();
-  //grabs user data from google oauth
-  const [user, setUser] = useState<any>(useContext(myContext));
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
@@ -36,6 +37,7 @@ type IHeaderProps = {
 
 
   /** User Functionality for User Profile*/
+
   const updateUsername = async (username: string) => {
     await axios.patch("/user/" + user.id, {username: username} )
     .then(() => {console.log('username updated')})
@@ -160,4 +162,6 @@ type IHeaderProps = {
     </Container>
   )
 }
+
+export default Profile;
 

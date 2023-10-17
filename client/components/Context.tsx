@@ -1,11 +1,11 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios';
+import { User } from 'server/db/entities/User';
 
 //Context used to pass state down as props to children elements
 export const myContext = createContext({});
 const Context = (props: any) => {
-const [userObj, setUserObj] = useState<any>();
-
+const [userObj, setUserObj] = useState<User>();
   useEffect(()=> {
     //Request used to retrieve user data from the server
     axios.get('/auth/getuser', { withCredentials: true })
@@ -19,7 +19,7 @@ const [userObj, setUserObj] = useState<any>();
       console.error('Could not create user state', err);
     })
 
-  }, [])
+  })
 
   return (
     <myContext.Provider value={userObj}>{props.children}</myContext.Provider>

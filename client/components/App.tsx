@@ -6,7 +6,7 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme containe
 import CssBaseline from '@mui/material/CssBaseline';
 import Welcome from './Welcome';
 import Home from './Home';
-// import Profile from './Profile';
+import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
@@ -21,9 +21,9 @@ import Context from './Context.tsx'
 // const Home = lazy(() =>
 //   import('./Home.tsx').then((module) => ({ default: module.Home }))
 // );
-const Profile = lazy(() =>
-  import('./Profile.tsx').then((module) => ({ default: module.Profile }))
-);
+// const Profile = lazy(() =>
+//   import('./Profile.tsx').then((module) => ({ default: module.Profile }))
+// );
 // const Journey = lazy(() =>
 //   import('./Journey.tsx').then((module) => ({ default: module.Journey }))
 // );
@@ -67,7 +67,6 @@ const App = () => {
     //https://mui.com/system/styles/basics/
     return (
       <Context>
-
       <ThemeProvider theme={themeOptions}>
         <CssBaseline />
         <BrowserRouter>
