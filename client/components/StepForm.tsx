@@ -26,16 +26,19 @@ const StepForm: React.FC = () => {
   //   latitude: latitude,
   //   longitude: longitude,
   //   user: {
-  //     id: user.id
+  //     id: user.id,
   //   },
   //   journey: journeyData
   // });
   const [stepData, setStepData] = useState({
     name: '',
     hint: '',
+    latitude: latitude,
+    longitude: longitude,
     user: {
       id: user.id
     },
+    journey: journeyData
   });
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation

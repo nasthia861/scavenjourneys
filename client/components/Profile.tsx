@@ -16,8 +16,6 @@ import axios from "axios";
 import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
-import SpeechToText from "./SpeechToText";
-import { Link } from "react-router-dom";
 
 type IHeaderProps = {
   userLat: number;
@@ -57,10 +55,10 @@ type IHeaderProps = {
   };
 
   /**Speech To Text Input Handling */
-  // const { onceSpoken } = SpeechToText;
-  // useEffect(() => {
-  //   setUpdatedUsername(onceSpoken);
-  // }, [onceSpoken])
+  const { onceSpoken } = SpeechToText;
+  useEffect(() => {
+    setUpdatedUsername(onceSpoken);
+  }, [onceSpoken])
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();

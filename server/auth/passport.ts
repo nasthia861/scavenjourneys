@@ -49,6 +49,7 @@ passport.use(new GoogleStrategy ({
         .into(User)
         .values([
           {
+
             google_id: authUser.googleId,
             username: authUser.username,
             img_url: authUser.picture,
