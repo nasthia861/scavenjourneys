@@ -9,6 +9,9 @@ export class Achievement {
   name: string;
 
   @Column()
+  conditionText: string;
+
+  @Column()
   icon_url: string;
 }
 

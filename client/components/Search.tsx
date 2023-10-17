@@ -14,36 +14,29 @@ import SpeechToText from "./SpeechToText";
 
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
-
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   userLat: number;
   userLong: number;
   alignment: number
 };
-
 const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
-
   // const [alignment, setAlignment] = useState(3);
-
   const getTags = () => {
     axios.get("/tag").then((tags: { data: [] }) => {
       setTags(tags.data);
     });
   };
-
   const getJourneyByName = () => {
     axios.get(`journey/name/${searchInput}`)
     .then((journeys: { data: [] }) => {
       setJourneys(journeys.data);
       setSearchInput('')
     })
-
   };
-
   const getJourneyByTag = async (tagName: string) => {
     axios.get(`/journey/tag/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
@@ -56,13 +49,9 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
         console.error('Error fetching recent journeys:', error);
       });
   };
-
-
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.currentTarget.value);
   };
-
   const handleScrollChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
@@ -70,10 +59,8 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   useEffect(() => {
     getTags();
   }, []);
-
   return (
     <Stack>
-
       <Item>
         <SearchStyle>
           <SearchIconWrapper>
@@ -93,7 +80,6 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
             />
         </SearchStyle>
       </Item>
-
       <Item>
         <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
           <Tabs
@@ -116,5 +102,4 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
     </Stack>
   );
 };
-
 export default Search;
