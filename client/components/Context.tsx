@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios';
 import { Done } from '@mui/icons-material';
+import { UserType } from '@this/types/User';
 
 //Context used to pass state down as props to children elements
 export const myContext = createContext({});
 const Context = (props: any) => {
-const [userObj, setUserObj] = useState<any>();
+const [userObj, setUserObj] = useState<UserType>();
   useEffect(()=> {
 
     if (userObj) {

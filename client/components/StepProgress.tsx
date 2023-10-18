@@ -7,6 +7,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import styled from '@mui/material/styles/styled';
+import Alert from '@mui/material/Alert';
+
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
@@ -22,9 +25,12 @@ type IHeaderProps = {
 const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>()
   const [closeEnough, setCloseEnough] = useState(false)
+  const [sizeWarning, setSizeWarning] = useState<boolean>(false)
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files[0].size < 1000000) {
+      setSizeWarning(false);
       const reader = await new FileReader()
       reader.addEventListener('load', (event) => {
         axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
@@ -37,6 +43,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
           })
       });
       reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setSizeWarning(true);
+    }
   }
 
 
@@ -101,7 +110,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
               onChange={(e) => solveStep(e)}
               />
             </Button>
+
            )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
     </Card>
 

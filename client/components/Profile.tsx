@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent} from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -13,12 +13,12 @@ import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
 import deepOrange from "@mui/material/colors/deepOrange";
 import axios from "axios";
-import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link, useParams, useNavigate } from "react-router-dom";
-        
+import { Link, useNavigate } from "react-router-dom";
+import { UserType } from "@this/types/User";
+
 type IHeaderProps = {
   userLat: number;
   userLong: number;
@@ -26,11 +26,9 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
-    //grabs user data from google oauth
-    const user = useContext(myContext);
-    // const { userId } = useParams();
-
   const theme = useTheme();
+  const [user, setUser] = useState<UserType>()
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
@@ -41,15 +39,16 @@ type IHeaderProps = {
   /** User Functionality for User Profile*/
 
   const updateUsername = async (username: string) => {
-    await axios.patch("/user/" + user.id, {username: username} )
+    await axios.patch(`/user/${userId}`, {username: username} )
     .then(() => {console.log('username updated')})
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
   };
   const getUserNameImg = () => {
-    axios.get('/user/' + user.id)
+    axios.get(`/user/${userId}`)
     .then((userData) => {
+      setUser(userData.data);
       setUsername(userData.data.username);
       setUserImg(userData.data.img_url);
     })
@@ -77,7 +76,7 @@ type IHeaderProps = {
   // GET user's journey progress
   const getUserData = async () => {
     try {
-      const userJourneys = await axios.get(`/journey/progress/${user.id}`);
+      const userJourneys = await axios.get(`/journey/progress/${userId}`);
       setJourneys(userJourneys.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -87,6 +86,8 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
   }, []);
+
+
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { myContext } from "./Context";
-
+import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -38,6 +38,7 @@ type IHeaderProps = {
 
   const [image, setImage] = useState<string | null >()
   const [ready, setReady] = useState<boolean>(false)
+  const [sizeWarning, setSizeWarning] = useState<boolean>(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,20 +63,24 @@ type IHeaderProps = {
     if(journeyData.name && journeyData.description && journeyData.img_url) {
       setReady(true);
     }
-  }, [journeyData])
+  }, [journeyData, sizeWarning])
 
   const navigate = useNavigate();
 
   const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("e.target.files[0]", e.target.files[0])
-    const reader = await new FileReader()
-    reader.addEventListener('load', async(event) => {
-      const response = await axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
-      console.log("response.data.secure_url", response.data.secure_url)
-      setJourneyData({ ...journeyData, img_url: response.data.secure_url});
-      setImage(response.data.secure_url)
-    })
-    reader.readAsDataURL(e.target.files[0]);
+    if(e.target.files[0].size < 5000000) {
+      setSizeWarning(false);
+      const reader = await new FileReader()
+      reader.addEventListener('load', async(event) => {
+        const response = await axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
+        console.log("response.data.secure_url", response.data.secure_url)
+        setJourneyData({ ...journeyData, img_url: response.data.secure_url});
+        setImage(response.data.secure_url)
+      })
+      reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setSizeWarning(true);
+    }
   }
 
 
@@ -98,35 +103,28 @@ type IHeaderProps = {
         onChange={handleInputChange}
         error={!journeyData.description}
       />
+      <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+        Journey Photo
+        <VisuallyHiddenInput
+          type="file"
+          accept="image/*"
+          capture
+          onChange={(e) => saveImage(e)}
+        />
+      </Button>
 
+      {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
 
-    {/*
-      <input
-        id="icon-button-file"
-        type="file"
-        accept="image/*"
-        capture
-        onChange={(e) => saveImage(e)}
-      /> */}
-    <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-      Journey Photo
-      <VisuallyHiddenInput
-        type="file"
-        accept="image/*"
-        capture
-        onChange={(e) => saveImage(e)}
-       />
-    </Button>
+      {image && (<img
+        src={image}
+        width="250"
+        height="auto"
+        />
+      )}
 
-        {image && (<img
-          src={image}
-          width="250"
-          height="auto"
-          />
-        )}
-        {ready && (
-          <Button onClick={createJourney}>Add Steps</Button>
-        )}
+      {ready && (
+        <Button onClick={createJourney}>Add Steps</Button>
+      )}
     </Paper>
   );
 };
