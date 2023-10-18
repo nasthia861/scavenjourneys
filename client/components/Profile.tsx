@@ -17,7 +17,8 @@ import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 type IHeaderProps = {
   userLat: number;
@@ -97,6 +98,8 @@ type IHeaderProps = {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Stack spacing={1}>
@@ -132,7 +135,8 @@ type IHeaderProps = {
         </form>
         </Stack>
         {/* achievements page*/}
-        <Button component={Link} to="/achievements" variant="contained">
+        <Button onClick={() => navigate('/achievements',{state:{user}})}
+        variant="contained">
           Achievements
         </Button>
        {/* List of Journeys */}
@@ -162,4 +166,3 @@ type IHeaderProps = {
 }
 
 export default Profile;
-

@@ -12,7 +12,7 @@ const Leaderboard = () => {
   useEffect(() => {
     // Fetch user data ordered by the selected criterion (journeys or steps)
     axios
-      .get(`/userdata?orderBy=${orderBy}`)
+      .get(`/userdata/userdata?orderBy=${orderBy}`)
       .then((response) => {
         setUserData(response.data);
       })
@@ -20,6 +20,11 @@ const Leaderboard = () => {
         console.error('Error fetching leaderboard data:', error);
       });
   }, [orderBy]);
+
+  // Function to update the order and re-fetch data
+  const handleOrderBy = (order: React.SetStateAction<string>) => {
+    setOrderBy(order);
+  };
 
   return (
     <Box p={4}>
@@ -29,18 +34,18 @@ const Leaderboard = () => {
       <Box display="flex" alignItems="center" justifyContent="center" gap={2} marginBottom={2}>
         <Button
           variant="contained"
-          onClick={() => setOrderBy('journeys')}
+          onClick={() => handleOrderBy('journeys')}
         >
           Order by Journeys Created
         </Button>
         <Button
           variant="contained"
-          onClick={() => setOrderBy('steps')}
+          onClick={() => handleOrderBy('steps')}
         >
           Order by Steps Created
         </Button>
       </Box>
-      {userData.reverse().map((user, index) => (
+      {userData.map((user, index) => (
         <Box
           key={user.id}
           width="100%"
