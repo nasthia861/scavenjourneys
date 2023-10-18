@@ -55,7 +55,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
    const synth = window.speechSynthesis
    const voices = synth.getVoices();
    const [text, setText] = useState<string>(step.step.hint);
-   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>(voices[4]);
+   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>();
+   useEffect(() => {
+    setChosenVoice(voices[4]);
+   })
 
    const speakText = () => {
      if (synth && chosenVoice) {

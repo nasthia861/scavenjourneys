@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { useContext, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
 
@@ -13,8 +13,7 @@ import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
-import Context from './Context.tsx'
-
+import Context, {myContext} from './Context.tsx'
 
 const App = () => {
   const [userLat, setUserLat] = useState<number | null>()
@@ -45,7 +44,6 @@ const App = () => {
     //https://mui.com/system/styles/basics/
     return (
       <Context>
-
       <ThemeProvider theme={themeOptions}>
         <CssBaseline />
         <BrowserRouter>

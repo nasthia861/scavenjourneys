@@ -35,7 +35,7 @@ passport.use(new GoogleStrategy ({
       .createQueryBuilder()
       .select('user')
       .from(User, 'user')
-      .where('user.username = :username', { username: authUser.username})
+      .where('user.google_id= :googleId', { googleId: authUser.googleId})
       .getOne();
 
       if (user) {
@@ -56,9 +56,9 @@ passport.use(new GoogleStrategy ({
           },
         ])
         .execute();
-      
+
       const user = userInsertResult.generatedMaps[0]; // Get the user object with the generated ID
-      
+
       const userDataInsertResult = await AppDataSource
         .createQueryBuilder()
         .insert()

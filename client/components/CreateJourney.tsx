@@ -67,9 +67,11 @@ type IHeaderProps = {
   const navigate = useNavigate();
 
   const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("e.target.files[0]", e.target.files[0])
     const reader = await new FileReader()
     reader.addEventListener('load', async(event) => {
       const response = await axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
+      console.log("response.data.secure_url", response.data.secure_url)
       setJourneyData({ ...journeyData, img_url: response.data.secure_url});
       setImage(response.data.secure_url)
     })
