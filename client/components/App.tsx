@@ -40,6 +40,8 @@ import Context, {myContext} from './Context.tsx'
 
 
 const App = () => {
+  // // grabs user data from google oauth
+    const user = useContext(myContext);
   const [userLat, setUserLat] = useState<number | null>()
   const [userLong, setUserLong] = useState<number | null>()
 
@@ -48,7 +50,7 @@ const App = () => {
       //path: route/url, label: display name in menu
     { path: '/', label: 'Welcome' },
     { path: '/home', label: 'Home' },
-    { path:`/profile`, label: 'Profile' },
+    { path:`/profile/`, label: 'Profile' },
     { path: '/journey', label: 'Journey' },
     { path: '/leaderboard', label: 'Leaderboard' },
   ];
@@ -59,7 +61,7 @@ const App = () => {
       setUserLong(position.coords.longitude)
     }, () => console.error('Could not get location'))
   }
-
+  
   useEffect(() => {
     getLocation()
   }, [])
@@ -76,7 +78,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Welcome/>} />
               <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
-              <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />

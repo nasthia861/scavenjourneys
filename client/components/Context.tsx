@@ -1,11 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios';
+import { Done } from '@mui/icons-material';
 
 //Context used to pass state down as props to children elements
 export const myContext = createContext({});
 const Context = (props: any) => {
 const [userObj, setUserObj] = useState<any>();
   useEffect(()=> {
+
+    if (userObj) {
+      return;
+    } else {
     //Request used to retrieve user data from the server
     axios.get('/auth/getuser', { withCredentials: true })
     .then((res: AxiosResponse)=> {
@@ -17,6 +22,7 @@ const [userObj, setUserObj] = useState<any>();
     .catch((err)=> {
       console.error('Could not create user state', err);
     })
+  }
 
   })
 
