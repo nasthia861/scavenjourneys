@@ -68,7 +68,7 @@ const Journey = () => {
  const handleARButtonClick = (step: StepType) => {
     setSelectedStep(step.name);
   };
-  console.log(selectedStep)
+  //console.log(selectedStep)
 
   const assignJourney = () => {
 
@@ -140,7 +140,7 @@ const Journey = () => {
                       <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
                       <br />
                       <Link to="/ar">
-                      <button onClick={() => handleARButtonClick(step.name)} >
+                      <button onClick={() => handleARButtonClick(step)} >
                       AR
                       </button>
 
