@@ -1,0 +1,36 @@
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styled from '@mui/material/styles/styled';
+
+export const StyledPaper = styled(Paper)(() => ({
+  padding: '16px',
+  maxWidth: '400px',
+  margin: '0 auto',
+}));
+
+export const StyledForm = styled('form')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+}));
+
+export const StyledInput = styled(TextField)(() => ({
+  width: '100%',
+}));
+
+export const StyledButton = styled(Button)(() => ({
+  marginTop: '16px',
+}));
+
+export const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});

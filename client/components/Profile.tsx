@@ -1,133 +1,144 @@
-import React, { lazy, Suspense, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent} from "react";
+import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
+import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
-import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
-
-import { deepPurple } from "@mui/material/colors";
+import deepOrange from "@mui/material/colors/deepOrange";
 import axios from "axios";
 import { myContext } from "./Context";
-//import { UserType } from "@this/types/User";
-import { JourneyType } from '@this/types/Journey';
-import { StepType } from "@this/types/Step"
+import { JourneyProgressType } from '@this/types/JourneyProgress';
+import { StepProgressType } from "@this/types/StepProgress"
+import SpeechToText from "./SpeechToText";
+import { useNavigate } from "react-router-dom";
 
 
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
 
-const Profile = () => {
+  const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
-  const [journeys, setJourneys] = useState<JourneyType[]>([]);
-  const [steps, setSteps] = useState<StepType[]>([]);
-  const [stepProgress, setStepProgress] = useState([]);
-  const [journeyProgress, setJourneyProgress] = useState([])
-  const [selectedJourney, setSelectedJourney] = useState(null);
-  const [expanded, setExpanded] = useState<string | false>(false);
+    //grabs user data from google oauth
+    const user = useContext(myContext);
+
+  const theme = useTheme();
+  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
+  const [steps, setSteps] = useState<StepProgressType[]>([]);
+  const [username, setUsername] = useState<string>('');
+  const [updatedUsername, setUpdatedUsername] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>('');
 
 
-  const userObj = useContext(myContext);
-  const [user, setUser] = useState<any>({});
+  /** User Functionality for User Profile*/
 
+  const updateUsername = async (username: string) => {
+    await axios.patch("/user/" + user.id, {username: username} )
+    .then(() => {console.log('username updated')})
+    .catch((err) => {
+      console.error('Could not Axios patch', err)
+    });
+  };
+  const getUserNameImg = () => {
+    axios.get('/user/' + user.id)
+    .then((userData) => {
+      setUsername(userData.data.username);
+      setUserImg(userData.data.img_url);
+    })
+    .catch((err) => {
+      console.error('Could not retrieve user information', err);
+    })
+  };
+
+  /**Speech To Text Input Handling */
+  const { onceSpoken } = SpeechToText;
   useEffect(() => {
-    setUser(userObj);
+    setUpdatedUsername(onceSpoken);
+  }, [onceSpoken])
 
-    // GET user's journeys and journey progress
-    const getUserData = async () => {
-      try {
-        const userJourneys = await axios.get(`/journey/user/${userObj.id}`);
-        setJourneys(userJourneys.data);
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    setUpdatedUsername('');
+  }
 
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+  const handleUsernameChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement;
+    setUpdatedUsername(target.value);
+  }
 
+  // GET user's journey progress
+  const getUserData = async () => {
+    try {
+      const userJourneys = await axios.get(`/journey/progress/${user.id}`);
+      setJourneys(userJourneys.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  useEffect(() => {
+    getUserNameImg();
     getUserData();
   });
-
-
-
+  /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
-
-
     try {
-      // GET Journey Progress for signed in user's Journeys
-      const journeyProgressObj = await axios.get(`/journey/progress/${ journeyId}`);
-        setJourneyProgress(journeyProgressObj.data);
-
       // GET steps for the selected journey
-      const stepAndJourney = await axios.get(`/step/journey/${journeyId}`);
+      const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
-
-
-
-      // GET step progress for each step
-      const progressData = await Promise.all(
-        stepAndJourney.data.map(async (step: { id: number; }) => {
-          const progressObj = await axios.get(`/step/step_progress/${step.id}`);
-          return {
-            [step.id]: progressObj.data,
-          };
-        })
-      );
-        //set stepPorgress data for every step on iteration (stePandJourney m)
-      setStepProgress(Object.assign({}, ...progressData));
-
-
-      // Update the selected journey
-      const selectedJourney = journeys.find((journey) => journey.id === journeyId);
-      setSelectedJourney((prevSelectedJourney: { id: number; }) => (
-        prevSelectedJourney && prevSelectedJourney.id === journeyId ? null : selectedJourney
-      ));
-
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
   };
 
-
-
-
-
-  const updateUsername = () => {
-    axios.patch("/user/" + user.id, {username: user.username} )
-    .then((res) => {
-      setUser(res.data);
-    })
-    .catch((err) => {
-      console.error('Could not Axios patch', err)
-    });
-  };
-
-
-  const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Container>
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
-        {user.username}
+        {username}
       </Typography>
-
 
       {/* For other variants, adjust the size with `width` and `height` */}
       <Avatar
-      sx={{ bgcolor: deepPurple[500],
+      sx={{ bgcolor: deepOrange[900],
       width: 56, height: 56 }}
-      src={user.img_url}
+      src={userImg}
       ></Avatar>
-     <Stack direction="row" spacing={1}>
-          <TextField id="outlined-basic" label="Username" variant="outlined" value={''} />
-          <Button variant="contained" onClick={updateUsername}>
+     <Stack direction="row" spacing={1}  >
+      <form onSubmit= { handleSubmit } >
+          <TextField
+            id="outlined-basic"
+            label="Username"
+            variant="outlined"
+            onChange={handleUsernameChange}
+            value={ updatedUsername }
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
+          />
+          <Button
+            variant="contained"
+            type='submit'
+            onClick={() => {
+              updateUsername(updatedUsername);
+            }}
+            >
             Update Username
           </Button>
+        </form>
         </Stack>
+        {/* achievements page*/}
+        <Button onClick={() => navigate('/achievements',{state:{user}})}
+        variant="contained">
+          Achievements
+        </Button>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
@@ -136,67 +147,19 @@ const Profile = () => {
               <ListItemButton onClick={() =>
               handleJourneyClick(journey.id)}
               sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
-               >
-                <ListItemText primary={journey.name} secondary={journey.description} />
+              >
+                <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
-              {selectedJourney && selectedJourney.id === journey.id && (
-                <>
-                  <Typography variant="h5">Journey Progress</Typography>
-                  <List>
-                  {journeyProgress
-
-                    .filter((progress) => {
-
-                      return progress.journey.id === selectedJourney.id;
-                    })
-                    .map((progress) => {
-                      const { tagId, img_url } = progress.journey;
-                      const progressDetails = `In Progress: ${progress.in_progress} | Difficulty: ${progress.difficulty} | Started: ${progress.started_at.slice(0, 10)} | updated: ${progress.last_progress_at.slice(0, 10)} | Tag ID: ${tagId}`;
-
-                      return (
-                        <ListItem key={progress.id}>
-                          <ListItemText
-                          primary={progressDetails}
-                          sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: `${theme.spacing(2)} 0` }}
-
-                           />
-
-                            {/* <img src={`${img_url}?w=20&h=20`}
-                             alt="Journey Preview"
-                             sx={{ marginLeft: theme.spacing(2) }}
-                             /> */}
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-
-                  <Typography variant="h5">Steps & Step Progress</Typography>
-                  <List>
-                    {steps.map((step) => (
-                      <React.Fragment key={step.id}>
-                        <ListItem>
-                          <ListItemText primary={`Step: ${step.name}`}
-                          sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, padding: `${theme.spacing(2)} 0` }}/>
-                        </ListItem>
-                        <List>
-                          {stepProgress[step.id] &&
-                            stepProgress[step.id].map((progress: any) => (
-                              <ListItem key={progress.id}>
-                                <ListItemText secondary={`In Progress: ${progress.in_progress}`}
-                                sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: `${theme.spacing(2)} 0` }} />
-                              </ListItem>
-                            ))}
-                        </List>
-                      </React.Fragment>
-                    ))}
-                  </List>
-                </>
-              )}
-              <Divider />
             </React.Fragment>
           ))}
-        </List>
+          <Typography variant="h5">Steps & Step Progress</Typography>
+          <Grid>
+            {steps.map((step) => (
+                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
+            ))}
+          </Grid>
 
+        </List>
       </Stack>
     </Container>
   )

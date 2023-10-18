@@ -20,30 +20,20 @@ export class Journey {
   @Column('json', { nullable: true })
   longitude: number;
 
-  @Column()
-  img_url: string;
-
   @Column({ nullable: true })
-  userId: number
+  img_url: string;
 
   @ManyToOne(() => User, (user: User) => user.id)
   @JoinColumn()
   user: User;
 
-  //switch to Manytomany once done with fake data
-  @Column({ nullable: true })
-  tagId: number
+  // //delete and switch to Manytomany once done with fake data
+  // @Column({ nullable: true })
+  // tagId: number
 
   @ManyToOne(() => Tag, (tag: Tag) => tag.id)
   @JoinColumn()
   tag: Tag;
-
-  //jointable once we are no longer using fake data
-  // @ManyToMany(() => Tag)
-  // @JoinTable({
-  //   name: "journey_tag"
-  // })
-  // tags: Tag[]
 
   @OneToMany(() => Step, (step: Step) => step.id)
   step: Step;

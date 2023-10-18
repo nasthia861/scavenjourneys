@@ -8,13 +8,7 @@ export class UserAchievement {
   id: number;
 
   @CreateDateColumn()
-  created_at: Date;
-
-  @Column({ nullable: true })
-  userId: number
-
-  @Column({ nullable: true })
-  achievementId: number
+  createdAt: Date;
 
   @ManyToOne(() => Achievement, (achievement: Achievement) => achievement.id)
   @JoinColumn()

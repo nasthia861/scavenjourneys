@@ -1,23 +1,26 @@
-import React from 'react';
+import React, { useContext, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { themeOptions } from './Theme'; //theme import
+
+import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme container
+import CssBaseline from '@mui/material/CssBaseline';
 import Welcome from './Welcome';
 import Home from './Home';
 import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
-import SignUp from './SignUp';
 import CreateJourney from './CreateJourney';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles'; //theme container
-import { themeOptions } from './Theme'; //theme import
+import StepForm from './StepForm.tsx';
+import Achievements from './Achievement.tsx';
+import Context, {myContext} from './Context.tsx'
 import Box from './ARScence';
 import ARScene from './AR';
 
 
-
-
 const App = () => {
+  const [userLat, setUserLat] = useState<number | null>()
+  const [userLong, setUserLong] = useState<number | null>()
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
@@ -27,30 +30,45 @@ const App = () => {
     { path:`/profile`, label: 'Profile' },
     { path: '/journey', label: 'Journey' },
     { path: '/leaderboard', label: 'Leaderboard' },
-    { path: '/signup', label: 'SignUp'}
   ];
+
+  const getLocation = () => {
+    navigator.geolocation.watchPosition((position) => {
+      setUserLat(position.coords.latitude)
+      setUserLong(position.coords.longitude)
+    }, () => console.error('Could not get location'))
+  }
+
+  useEffect(() => {
+    getLocation()
+  }, [])
   //CssBaseLine use mitigate conflicts between React 18 and Material UI/styles
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
     //https://mui.com/system/styles/basics/
-  return (
-    <ThemeProvider theme={themeOptions}>
-    <CssBaseline />
-    <BrowserRouter>
-     <NavBar menuItems={menuItems} />
-      <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/home" element={<Home />} />
+    return (
+      <Context>
+      <ThemeProvider theme={themeOptions}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Suspense fallback={<div>Loading...</div>}>
+            <NavBar menuItems={menuItems} />
+            <Routes>
+              <Route path="/" element={<Welcome/>} />
+              <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
         <Route path="/ar" element={<ARScene />} />
 
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/journey" element={<Journey />} />
-        <Route path="/leaderboard" element={<LeaderBoard />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/create-journey" element={<CreateJourney />} />
-      </Routes>
-    </BrowserRouter>
-    </ThemeProvider>
-  )
-}
+              <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/journey" element={<Journey/>} />
+              <Route path="/leaderboard" element={<LeaderBoard/>} />
+              <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
+              <Route path="/StepForm/:journeyId" element={<StepForm/>} />
+              <Route path="/achievements" element={<Achievements/>} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </ThemeProvider>
+      </Context>
+    );
+  };
 
-export default App;
+  export default App;

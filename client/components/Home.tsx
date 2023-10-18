@@ -1,50 +1,46 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { StyledCreateJourneyButton } from '../styling/homeStyle';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
-import { User } from '@this/types/User';
+import { UserType } from '@this/types/User';
 import ARScene from './ARScence';
 
 
+type IHeaderProps = {
+  userLat: number;
+  userLong: number;
+};
 
-
-const Home: React.FC = () => {
+const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
   const navigate = useNavigate();
 
  //set user state to User or null
- const [user, setUser] = useState<User | null>(null);
- const [userLat, setUserLat] = useState<number | null>(null)
- const [userLong, setUserLong] = useState<number | null>(null)
+ const [user, setUser] = useState<UserType | null>(null);
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
 
- const getLocation = () => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    setUserLat(position.coords.latitude)
-    setUserLong(position.coords.longitude)
-  }, () => console.log('Could not get location'))
- }
 
- const getJourney = () => {
+ const getJourney = async () => {
     // Fetch the journeys closest to you
-    axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
-      .then((response) => {
-        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+    const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
+      response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+        return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
-      setJourneys(response.data);
-    })
-    .catch((error) => {
-      console.error('Error fetching recent journeys:', error);
-    });
-
+      setJourneys(response.data)
  }
 
  const handleToggleChange = (
@@ -55,44 +51,12 @@ const Home: React.FC = () => {
 };
 
   useEffect(() => {
-   // grab user location
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLat(position.coords.latitude)
-      setUserLong(position.coords.longitude)
-    }, () => console.log('Could not get location'))
-
-   // Fetch the journeys closest to you
-    axios.get(`/journey/recent/${userLat}/${userLong}`)
-      .then((response) => {
-        response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-          return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
-        })
-        setJourneys(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching recent journeys:', error);
-      });
-    getLocation()
     if(userLat && userLong) {
       getJourney()
     }
 
   }, [userLat, userLong, alignment]);
 
-  //assign Journey to User
-  // const assignJourney = () => {
-  // if (user && selectedJourney) {
-  //   axios.post(`/journey/assign/${selectedJourney.id}`, { userId: user.id })
-  //     .then((response) => {
-  //       console.log('Journey assigned to user:', response.data);
-  //       setSuccessMessage('Journey assigned successfully!');
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error assigning journey to user:', error);
-  //       setSuccessMessage('');
-  //     });
-  // }
-  // };
 
 return (
   <Container>
@@ -144,6 +108,5 @@ return (
 );
 ;
 };
-// key={journey.id}
 
 export default Home;

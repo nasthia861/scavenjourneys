@@ -1,34 +1,59 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Container, Grid, Card, CardContent, CardMedia, Typography , Stack, Button} from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { myContext } from "./Context";
+// import { myContextType } from "./Context";
 import ThreeStepDescription from './ARD';
 import MarkerEntity from './ARSteps';
 
 
-const Journey = () => {
-
-  const userObj = useContext(myContext);
-  //console.log(userObj.id)
-
+  const Journey: React.FC = () => {
 
   //set user state to User or null
   //const [user, setUser] = useState<User | null>(null);
   const location: {state: {journey: JourneyType}} = useLocation();
-  const [journey, setJourneys] = useState(location.state.journey);
+  const journey = location.state.journey
+  //const [journey, setJourneys] = useState(location.state.journey);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [stepProgress, setStepProgress] = useState([]);
+   const [user, setUser] = useState<any>(useContext(myContext));
+  // const [stepProgress, setStepProgress] = useState([]);
   const [showARScene, setShowARScene] = useState(false);
   const [selectedStep, setSelectedStep] = useState(null);
 
 
 
+  // const [userStarted, setUserStarted] = useState(false);
 
+  const assignJourney = async() => {
+    // POST to assign journey to user
+    const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
+    axios.post(`/journey/progress`, {
+      user: user.id,
+      journey: journey.id,
+    })
+      .then((response) => {
+        steps.data.forEach((step: {id:number}) => {
+          axios.post('/step/progress', {
+            journey_progress: response.data.id,
+            step: step.id
+          })
+          .catch((error) => console.error('Error assigning steps', error))
+        })
+      })
+      .catch((error) => {
+        console.error('Error assigning journey:', error);
+      });
+  };
 
 
 
@@ -47,23 +72,6 @@ const Journey = () => {
 
   }, []);
 
-
-
-  useEffect(() => {
-    // Fetching step progress for each step
-    steps.forEach((step) => {
-      axios.get(`/step/step_progress/${step.id}`)
-        .then((progressResponse) => {
-          setStepProgress((prevProgress) => ({
-            ...prevProgress,
-            [step.id]: progressResponse.data,
-          }));
-        })
-        .catch((error) => {
-          console.error(`Error getting step progress for step ${step.id}:`, error);
-        });
-    });
-  }, [steps]);
 
  const handleARButtonClick = (step: StepType) => {
     setSelectedStep(step.name);
@@ -112,7 +120,7 @@ const Journey = () => {
               <Typography variant="h6" component="div">
                 <b>{journey.name}</b>
                 <br/>
-                <i>by: {journey.user.username}</i>
+                {/* <i>by: {journey.user.username}</i> */}
                 <br/>
                 {journey.description}
               </Typography>
@@ -127,18 +135,16 @@ const Journey = () => {
         <h3>Steps:</h3>
         {
         steps.map((step) => {
-          const progress = stepProgress[step.id] || { in_progress: false };
+          //const progress = stepProgress[step.id] || { in_progress: false };
           return (
             <Item key={step.id}>
               <Card>
 
                   <CardContent>
                     <Typography variant="h6" component="div">
-                      <b>Details: {step.name}</b>
-                      <p>Location: {step.location.latitude}, {step.location.longitude}</p>
+                      <b>{step.name}</b>
                       <br />
-                      <i>Progress: {progress.in_progress === true ? 'In Progress' : 'Not Started' }</i>
-                      <br />
+                      <p>{step.hint}</p>
                       <Link to="/ar">
                       <button onClick={() => handleARButtonClick(step)} >
                       AR

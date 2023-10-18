@@ -4,13 +4,15 @@ import AppDataSource from '../db';
 import { Between } from 'typeorm';
 import { JourneyProgress } from '../db/entities/JourneyProgress';
 import { User } from '../db/entities/User';
+import { StepProgress } from '../db/entities/StepProgress';
 
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
 const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
 const userRepo = AppDataSource.getRepository(User)
-//const tagRepository = AppDataSource.getRepository(Tag);
+const stepProgressRepo = AppDataSource.getRepository(StepProgress);
+
 
 
 //get all journeys
@@ -103,12 +105,15 @@ journeyRouter.get('/name/:name', async(req, res) => {
 // Create a new journey
 journeyRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const { name, description, img_url } = req.body;
+    const { name, description, img_url, user, latitude, longitude } = req.body;
 
     const journey = journeyRepository.create({
       name,
       description,
       img_url,
+      user,
+      latitude,
+      longitude
     });
 
     const createdJourney = await journeyRepository.save(journey);
@@ -119,30 +124,30 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// GET journeys by userId
-journeyRouter.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
+// // GET journeys by userId
+// journeyRouter.get('/user/:userId', async (req, res) => {
+//   const { userId } = req.params;
 
-  try {
-    const journeys = await AppDataSource.manager.find(Journey, {
-      relations: ['user'],
-      where: {
-        user :  {
-          id: +userId,
-        }
-      }
-    });
-    if (journeys) {
-      res.status(200).json(journeys);
-    } else {
-      res.status(404).send('No Journeys found');
-    }
-  } catch (error) {
+//   try {
+//     const journeys = await AppDataSource.manager.find(Journey, {
+//       relations: ['user'],
+//       where: {
+//         user :  {
+//           id: +userId,
+//         }
+//       }
+//     });
+//     if (journeys) {
+//       res.status(200).json(journeys);
+//     } else {
+//       res.status(404).send('No Journeys found');
+//     }
+//   } catch (error) {
 
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 // update a journey by id
 journeyRouter.put('/:id', async (req, res) => {
@@ -180,9 +185,8 @@ journeyRouter.delete('/:id', async (req, res) => {
 });
 
 // POST journey_progress assigned to user/journey (test: pending )
-journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
-  const { userId, journeyId } = req.params;
-  const { difficulty, in_progress, started_at, last_progress_at, user, journey }  = req.body;
+journeyRouter.post('/progress', async (req, res) => {
+  const { user, journey }  = req.body;
 
   try {
     const user = await userRepo.findOneBy({id: +userId});
@@ -196,12 +200,8 @@ journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
 
 
     const addProgress = journeyProgressRepo.create({
-      difficulty,
-      in_progress,
-      started_at,
-       last_progress_at,
-       user: user,
-        journey,
+      user,
+      journey,
     });
     await journeyProgressRepo.save(addProgress);
 
@@ -243,9 +243,17 @@ journeyRouter.post('/assign/:userId/:journeyId', async (req, res) => {
 });
 
 //GET all journey progress
-journeyRouter.get('/journey_progress', async (req, res) => {
+journeyRouter.get('/progress/:userId', async (req, res) => {
+  const { userId } = req.params
   try {
-    const progress = await journeyProgressRepo.find()
+    const progress = await journeyProgressRepo.find({
+      relations: ['journey', 'user'],
+      where: {
+        user: {
+          id: +userId
+        }
+      }
+    })
     res.status(200).send(progress);
 
   } catch(err) {

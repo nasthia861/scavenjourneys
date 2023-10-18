@@ -10,21 +10,21 @@ export class Step {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: "no hint, figure it out" })
   hint: string;
 
   @Column('json', { nullable: true })
-  location: { latitude: number; longitude: number };
+  latitude: number;
+
+  @Column('json', { nullable: true })
+  longitude: number;
 
   @Column({ nullable: true })
-  userId: number
+  journeyId: number
 
   @ManyToOne(() => User, (user: User) => user.id)
   @JoinColumn()
   user: User;
-
-  @Column({ nullable: true })
-  journeyId: number
 
   @ManyToOne(() => Journey, (journey: Journey) => journey.id)
   @JoinColumn()
