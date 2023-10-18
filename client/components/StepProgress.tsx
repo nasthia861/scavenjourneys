@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 import Card from '@mui/material/Card';
@@ -7,9 +7,10 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import styled from '@mui/material/styles/styled';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import IconButton from '@mui/material/IconButton';
 
 
 type IHeaderProps = {
@@ -84,11 +85,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </Typography>
         <Typography variant="body2" color="text.secondary" >
           {text}
-          <Button
-              variant='outlined'
-              size='small'
-              onClick={() => {speakText()}}
-            >TTS</Button>
+          <IconButton onClick={() => {speakText()}} >
+            <VolumeUpOutlinedIcon fontSize='small' />
+          </IconButton>
         </Typography>
         </CardContent>
         <CardActions>

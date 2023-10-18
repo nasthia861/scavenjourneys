@@ -17,9 +17,8 @@ import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { useNavigate } from "react-router-dom";
-
-
+import { Link, useParams, useNavigate } from "react-router-dom";
+        
 type IHeaderProps = {
   userLat: number;
   userLong: number;
@@ -29,6 +28,7 @@ type IHeaderProps = {
 
     //grabs user data from google oauth
     const user = useContext(myContext);
+    // const { userId } = useParams();
 
   const theme = useTheme();
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
@@ -86,7 +86,7 @@ type IHeaderProps = {
   useEffect(() => {
     getUserNameImg();
     getUserData();
-  });
+  }, []);
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
