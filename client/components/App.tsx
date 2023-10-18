@@ -6,7 +6,7 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme containe
 import CssBaseline from '@mui/material/CssBaseline';
 import Welcome from './Welcome';
 import Home from './Home';
-// import Profile from './Profile';
+import Profile from './Profile';
 import Journey from './Journey';
 import LeaderBoard from './LeaderBoard';
 import NavBar from './NavBar';
@@ -14,29 +14,6 @@ import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
 import Context from './Context.tsx'
-
-// lazy load components
-// const Welcome = lazy(() =>
-//   import('./Welcome.tsx').then((module) => ({ default: module.Welcome }))
-// );
-// const Home = lazy(() =>
-//   import('./Home.tsx').then((module) => ({ default: module.Home }))
-// );
-const Profile = lazy(() =>
-  import('./Profile.tsx').then((module) => ({ default: module.Profile }))
-);
-// const Journey = lazy(() =>
-//   import('./Journey.tsx').then((module) => ({ default: module.Journey }))
-// );
-// const LeaderBoard = lazy(() =>
-//   import('./LeaderBoard.tsx').then((module) => ({ default: module.LeaderBoard }))
-// );
-// const NavBar = lazy(() =>
-//   import('./NavBar.tsx').then((module) => ({ default: module.NavBar }))
-// );
-// const CreateJourney = lazy(() =>
-//   import('./CreateJourney.tsx').then((module) => ({ default: module.CreateJourney }))
-// );
 
 
 const App = () => {

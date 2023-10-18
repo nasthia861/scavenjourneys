@@ -14,7 +14,7 @@ const Achievements = () => {
   const [user, setUser] = useState<any>(useContext(myContext));
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
-  const userId = user.id;
+  const userId = user?.id;
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, achievement: any) => {

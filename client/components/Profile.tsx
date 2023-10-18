@@ -17,14 +17,15 @@ import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 type IHeaderProps = {
   userLat: number;
   userLong: number;
 };
 
-  export const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
   const theme = useTheme();
   //grabs user data from google oauth
@@ -95,6 +96,8 @@ type IHeaderProps = {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Stack spacing={1}>
@@ -130,7 +133,8 @@ type IHeaderProps = {
         </form>
         </Stack>
         {/* achievements page*/}
-        <Button component={Link} to="/achievements" variant="contained">
+        <Button onClick={() => navigate('/achievements',{state:{user}})}
+        variant="contained">
           Achievements
         </Button>
        {/* List of Journeys */}
@@ -158,3 +162,5 @@ type IHeaderProps = {
     </Container>
   )
 }
+
+export default Profile;
