@@ -11,6 +11,9 @@ import CreateJourney from './CreateJourney';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles'; //theme container
 import { themeOptions } from './Theme'; //theme import
+import Box from './ARScence';
+import ARScene from './AR';
+
 
 
 
@@ -37,6 +40,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/ar" element={<ARScene />} />
+
         <Route path="/profile" element={<Profile />} />
         <Route path="/journey" element={<Journey />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />

@@ -8,6 +8,9 @@ import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
 import { User } from '@this/types/User';
+import ARScene from './ARScence';
+
+
 
 
 const Home: React.FC = () => {
@@ -20,6 +23,7 @@ const Home: React.FC = () => {
  const [userLong, setUserLong] = useState<number | null>(null)
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
+
 
  const getLocation = () => {
   navigator.geolocation.getCurrentPosition((position) => {

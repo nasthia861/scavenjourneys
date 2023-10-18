@@ -3,12 +3,15 @@ import { Journey } from "../db/entities/Journey";
 import AppDataSource from '../db';
 import { Between } from 'typeorm';
 import { JourneyProgress } from '../db/entities/JourneyProgress';
+import { User } from '../db/entities/User';
 
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
 const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
+const userRepo = AppDataSource.getRepository(User)
 //const tagRepository = AppDataSource.getRepository(Tag);
+
 
 //get all journeys
 journeyRouter.get('/', async(req, res) => {
@@ -178,25 +181,65 @@ journeyRouter.delete('/:id', async (req, res) => {
 
 // POST journey_progress assigned to user/journey (test: pending )
 journeyRouter.post('/progress/:userId/:journeyId', async (req, res) => {
+  const { userId, journeyId } = req.params;
   const { difficulty, in_progress, started_at, last_progress_at, user, journey }  = req.body;
 
   try {
+    const user = await userRepo.findOneBy({id: +userId});
+    const journey = await journeyRepository.findOneBy({id: +journeyId});
+
+
+    if (!user || !journey) {
+      res.status(404).send('User or Journey not found');
+      return;
+    }
+
+
     const addProgress = journeyProgressRepo.create({
       difficulty,
       in_progress,
       started_at,
        last_progress_at,
-       user,
+       user: user,
         journey,
     });
     await journeyProgressRepo.save(addProgress);
+
+
     res.status(201).send(addProgress);
+
 
   } catch(err) {
     console.error(err);
     res.status(500).send('Internal error');
   }
 
+});
+
+// Assign journey to user
+journeyRouter.post('/assign/:userId/:journeyId', async (req, res) => {
+  const { userId, journeyId } = req.params;
+
+  try {
+
+    const user = await userRepo.findOneBy({id: +userId});
+    const journey = await journeyRepository.findOneBy({id: +journeyId});
+    console.log(user.journey)
+
+
+    if (!user || !journey) {
+      return res.status(404).send('User or Journey not found');
+    }
+
+
+    journey.user = user;
+    await journeyRepository.save(journey);
+
+    res.status(200).send(journey);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal error');
+  }
 });
 
 //GET all journey progress
