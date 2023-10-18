@@ -54,7 +54,7 @@ userDataRouter.get('/byUserId/:userId', async (req, res) => {
 });
 
 // Get user data by ID
-userDataRouter.get('/:id', async (req, res) => {
+userDataRouter.get('/id/:id', async (req, res) => {
   const userDataId = parseInt(req.params.id);
 
   if (isNaN(userDataId)) {
@@ -74,6 +74,51 @@ userDataRouter.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// Get user data with optional sorting
+userDataRouter.get('/userdata', async (req, res) => {
+  const orderBy = req.query.orderBy || 'default';
+
+  // Add logic to handle different sorting criteria
+  try {
+    let userData;
+    if (orderBy === 'journeys') {
+      userData = await AppDataSource.getRepository(UserData).find({
+        relations: {
+          user: true
+        },
+        order: {
+          journeysCreated: 'DESC',
+        },
+      });
+    } else if (orderBy === 'steps') {
+      userData = await AppDataSource.getRepository(UserData).find({
+        relations: {
+          user: true
+        },
+        order: {
+          stepsCreated: 'DESC',
+        },
+      });
+    } else {
+      // Handle the default sorting or invalid values
+      userData = await AppDataSource.getRepository(UserData).find({
+        relations: {
+          user: true
+        },
+      });
+    }
+    if (!userData) {
+      return res.status(404).json({ error: 'User data not found' });
+    }
+
+    res.json(userData);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 // Update user data by ID
 userDataRouter.put('/:id', async (req, res) => {

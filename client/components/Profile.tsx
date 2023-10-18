@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent} from "react";
+import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -13,11 +13,10 @@ import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
 import deepOrange from "@mui/material/colors/deepOrange";
 import axios from "axios";
-//import { myContext } from "./Context";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserType } from "@this/types/User";
 
 type IHeaderProps = {
@@ -27,11 +26,8 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
-    //grabs user data from google oauth
-   // const user = useContext(myContext);
-
   const theme = useTheme();
-  const [user, setUser] = useState<UserType>({})
+  const [user, setUser] = useState<UserType>()
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
@@ -43,7 +39,7 @@ type IHeaderProps = {
   /** User Functionality for User Profile*/
 
   const updateUsername = async (username: string) => {
-    await axios.patch("/user/" + userId, {username: username} )
+    await axios.patch(`/user/${userId}`, {username: username} )
     .then(() => {console.log('username updated')})
     .catch((err) => {
       console.error('Could not Axios patch', err)
@@ -90,6 +86,8 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
   }, []);
+
+
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
@@ -100,6 +98,8 @@ type IHeaderProps = {
       console.error('Error fetching journey details:', error);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -136,7 +136,8 @@ type IHeaderProps = {
         </form>
         </Stack>
         {/* achievements page*/}
-        <Button component={Link} to="/achievements" variant="contained">
+        <Button onClick={() => navigate('/achievements',{state:{user}})}
+        variant="contained">
           Achievements
         </Button>
        {/* List of Journeys */}
@@ -166,4 +167,3 @@ type IHeaderProps = {
 }
 
 export default Profile;
-

@@ -19,6 +19,9 @@ export class Step {
   @Column('json', { nullable: true })
   longitude: number;
 
+  @Column({ nullable: true })
+  journeyId: number
+
   @ManyToOne(() => User, (user: User) => user.id)
   @JoinColumn()
   user: User;
