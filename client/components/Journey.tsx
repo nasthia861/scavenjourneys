@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
+import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { myContext } from "./Context";
 
 // type IHeaderProps = {
@@ -23,14 +24,18 @@ import { myContext } from "./Context";
   const location: {state: {journey: JourneyType, userId: number}} = useLocation();
   const journey = location.state.journey
   const userId = location.state.userId
+  const [alreadyStarted, setAlreadyStarted] = useState([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-  //const [user, setUser] = useState<any>(useContext(myContext));
+  const [buttonName, setButtonName] = useState('Assign Journey');
 
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const assignJourney = async() => {
     // POST to assign journey to user
+    if(alreadyStarted.length > 0){
+      setJourneyProgressId(alreadyStarted[0].id);
+    }
     const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
     axios.post(`/journey/progress`, {
       user: userId,
@@ -46,18 +51,27 @@ import { myContext } from "./Context";
         })
         setJourneyProgressId(response.data.id)
       })
-      // .then(() => {
-      //   navigate(`/profile/${userId}`, {state: {journeyProgressId}})
-      // })
       .catch((error) => {
         console.error('Error assigning journey:', error);
       });
   };
 
+  const grabProgress = async() => {
+    const result = await axios.get(`/journey/progress/${userId}`)
+    let idArray = result.data.filter((progress: JourneyProgressType) => {
+      return progress.journey.id === journey.id
+    })
+    if(idArray.length > 0) {
+      setButtonName('Already Started')
+    }
+    setAlreadyStarted(idArray);
+  }
+
 
 
   useEffect(() => {
     // get steps for the selected journey
+    grabProgress()
       axios.get(`/step/journey/${journey.id}`)
         .then((stepAndJourney: {data: []}) => {
           setSteps(stepAndJourney.data);
@@ -99,9 +113,14 @@ import { myContext } from "./Context";
               </Typography>
             </CardContent>
           </Card>
-          <Button onClick={assignJourney} variant="contained" color="primary">
-            Assign Journey
-          </Button>
+          {/* {!(alreadyStarted.length > 0) ? */}
+            <Button onClick={assignJourney} variant="contained" color="primary">
+            {buttonName}
+            </Button>
+            {/* // : (<Button onClick={assignJourney} variant="contained" color="primary">
+            // Already Started
+            // </Button>) */}
+
         </Item>
       {/* Display selected journey details steps */}
         <h3>Steps:</h3>
