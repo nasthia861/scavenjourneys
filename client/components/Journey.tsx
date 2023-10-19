@@ -16,6 +16,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { myContext } from "./Context";
 // import { myContextType } from "./Context";
 import MarkerEntity from './ARSteps';
+import { Canvas } from '@react-three/fiber';
 
 
 // type IHeaderProps = {
@@ -85,7 +86,7 @@ import MarkerEntity from './ARSteps';
       axios.get(`/step/journey/${journey.id}`)
         .then((stepAndJourney: {data: []}) => {
           setSteps(stepAndJourney.data);
-          setSelectedStep(stepAndJourney.data);
+          // setSelectedStep(stepAndJourney.data);
 
         })
         .catch((error) => {
@@ -103,7 +104,8 @@ import MarkerEntity from './ARSteps';
 
 
  const handleARButtonClick = (step: StepType) => {
-    setSelectedStep(step.name);
+    setSelectedStep(step);
+    setShowARScene(true);
 
     // const position = [0, 8, -5];
     // const text = "";
@@ -111,7 +113,7 @@ import MarkerEntity from './ARSteps';
 
     // return <MarkerEntity position={position} text={text} stepName={stepName} />;
   };
-  //console.log(selectedStep)
+  console.log(selectedStep)
 
   return (
     <Container>
@@ -154,7 +156,7 @@ import MarkerEntity from './ARSteps';
                       <br />
                       <p>{step.hint}</p>
                       <Link to="/ar">
-                      <button onClick={handleARButtonClick}>AR</button>
+                      <button onClick={() => handleARButtonClick(step)}>AR</button>
 
                       </Link>
                     </Typography>
@@ -167,6 +169,8 @@ import MarkerEntity from './ARSteps';
 
         }
       </Stack>
+      {/* <MarkerEntity position={[0, 8, -5]} text={`Journey: ${selectedStep.name}`} stepName={selectedStep.name} /> */}
+
 
     </Container>
   );
