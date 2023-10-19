@@ -109,7 +109,6 @@ import { myContext } from "./Context";
               <Typography variant="h6" component="div">
                 <b>{journey.name}</b>
                 <br/>
-                {/* <i>by: {journey.user.username}</i> */}
                 <br/>
                 {journey.description}
               </Typography>
@@ -119,11 +118,9 @@ import { myContext } from "./Context";
             {buttonName}
             </Button>
         </Item>
-      {/* Display selected journey details steps */}
         <h3>Steps:</h3>
         {
         steps.map((step) => {
-          //const progress = stepProgress[step.id] || { in_progress: false };
           return (
             <Item key={step.id}>
               <Card>

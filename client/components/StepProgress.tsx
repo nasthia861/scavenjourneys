@@ -7,13 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import styled from '@mui/material/styles/styled';
-import Alert from '@mui/material/Alert';
-
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import IconButton from '@mui/material/IconButton';
+import Alert from '@mui/material/Alert';
 
 
 type IHeaderProps = {
@@ -65,13 +63,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
    const synth = window.speechSynthesis
    const voices = synth.getVoices();
    const [text, setText] = useState<string>(step.step.hint);
-   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>();
+   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>(voices[4]);
+
    useEffect(() => {
     setChosenVoice(voices[4]);
-   }, [])
+   }, [chosenVoice])
 
    const speakText = () => {
-     if (synth && chosenVoice) {
+     if (synth) {
        const utterance = new SpeechSynthesisUtterance(text);
        utterance.voice = chosenVoice;
        synth.speak(utterance);

@@ -31,7 +31,6 @@ const Welcome: React.FC = () => {
           </p>
         <GoogleButton
           className='google-button'
-          label='Google Sign In'
           onClick={googleLogin}
         />
       </Grid>
