@@ -14,6 +14,7 @@ import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
+
 import { UserType } from '@this/types/User.ts';
 
 
@@ -26,7 +27,7 @@ const App = () => {
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
-    { path: '/', label: 'Welcome' },
+    // { path: '/', label: 'Welcome' },
     { path: `/home`, label: 'Home' },
     { path:`/profile/${userId}`, label: 'Profile' },
     { path: `/leaderboard`, label: 'Leaderboard' },
@@ -68,8 +69,8 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
-              <Route path="/profile/:userId" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/home" element={<Home userId={userId} userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
