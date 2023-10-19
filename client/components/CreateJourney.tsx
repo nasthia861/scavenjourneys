@@ -12,7 +12,6 @@ import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
-//import { createCompletion, loadModel } from 'gpt4all'
 
 
 type IHeaderProps = {
@@ -32,18 +31,23 @@ type IHeaderProps = {
       id: user.id
     },
     img_url: null,
-    tag: {}
+    tag: null
     //import from home
   });
 
   const [image, setImage] = useState<string | null >()
   const [ready, setReady] = useState<boolean>(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
+  const [tags, setTags] = useState([])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJourneyData({ ...journeyData, [name]: value});
   };
+
+  const choseTag = async() => {
+
+  }
 
 
   const createJourney = async () => {
@@ -60,7 +64,8 @@ type IHeaderProps = {
 
 
   useEffect(() => {
-    if(journeyData.name && journeyData.description && journeyData.img_url) {
+    axios.get('/tags').then((tags) => setTags(tags.data))
+    if(journeyData.name && journeyData.description && journeyData.img_url && journeyData.tag) {
       setReady(true);
     }
   }, [journeyData, sizeWarning])
@@ -103,6 +108,7 @@ type IHeaderProps = {
         onChange={handleInputChange}
         error={!journeyData.description}
       />
+      
       <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
         Journey Photo
         <VisuallyHiddenInput
