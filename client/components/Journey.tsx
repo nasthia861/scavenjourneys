@@ -33,27 +33,29 @@ import { myContext } from "./Context";
 
   const assignJourney = async() => {
     // POST to assign journey to user
-    if(alreadyStarted.length > 0){
+    if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
-    }
-    const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
-    axios.post(`/journey/progress`, {
+    } else {
+
+      const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
+      axios.post(`/journey/progress`, {
       user: userId,
       journey: journey.id,
-    })
-      .then((response) => {
-        steps.data.forEach((step: {id:number}) => {
-          axios.post('/step/progress', {
-            journey_progress: response.data.id,
-            step: step.id
-          })
-          .catch((error) => console.error('Error assigning steps', error))
-        })
-        setJourneyProgressId(response.data.id)
       })
-      .catch((error) => {
-        console.error('Error assigning journey:', error);
-      });
+        .then((response) => {
+          steps.data.forEach((step: {id:number}) => {
+            axios.post('/step/progress', {
+              journey_progress: response.data.id,
+              step: step.id
+            })
+            .catch((error) => console.error('Error assigning steps', error))
+          })
+          setJourneyProgressId(response.data.id)
+        })
+        .catch((error) => {
+          console.error('Error assigning journey:', error);
+        });
+    }
   };
 
   const grabProgress = async() => {
@@ -113,14 +115,9 @@ import { myContext } from "./Context";
               </Typography>
             </CardContent>
           </Card>
-          {/* {!(alreadyStarted.length > 0) ? */}
             <Button onClick={assignJourney} variant="contained" color="primary">
             {buttonName}
             </Button>
-            {/* // : (<Button onClick={assignJourney} variant="contained" color="primary">
-            // Already Started
-            // </Button>) */}
-
         </Item>
       {/* Display selected journey details steps */}
         <h3>Steps:</h3>
