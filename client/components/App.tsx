@@ -55,7 +55,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Welcome/>} />
               <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
-        <Route path="/ar" element={<ARScene />} />
+              <Route path="/ar" element={<ARScene />} />
 
               <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />

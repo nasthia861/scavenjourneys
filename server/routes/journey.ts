@@ -185,36 +185,36 @@ journeyRouter.delete('/:id', async (req, res) => {
 });
 
 // POST journey_progress assigned to user/journey (test: pending )
-journeyRouter.post('/progress', async (req, res) => {
-  const { user, journey }  = req.body;
+// journeyRouter.post('/progress', async (req, res) => {
+//   const { user, journey }  = req.body;
 
-  try {
-    const user = await userRepo.findOneBy({id: +userId});
-    const journey = await journeyRepository.findOneBy({id: +journeyId});
-
-
-    if (!user || !journey) {
-      res.status(404).send('User or Journey not found');
-      return;
-    }
+//   try {
+//     const user = await userRepo.findOneBy({id: +userId});
+//     const journey = await journeyRepository.findOneBy({id: +journeyId});
 
 
-    const addProgress = journeyProgressRepo.create({
-      user,
-      journey,
-    });
-    await journeyProgressRepo.save(addProgress);
+//     if (!user || !journey) {
+//       res.status(404).send('User or Journey not found');
+//       return;
+//     }
 
 
-    res.status(201).send(addProgress);
+//     const addProgress = journeyProgressRepo.create({
+//       user,
+//       journey,
+//     });
+//     await journeyProgressRepo.save(addProgress);
 
 
-  } catch(err) {
-    console.error(err);
-    res.status(500).send('Internal error');
-  }
+//     res.status(201).send(addProgress);
 
-});
+
+//   } catch(err) {
+//     console.error(err);
+//     res.status(500).send('Internal error');
+//   }
+
+// });
 
 // Assign journey to user
 journeyRouter.post('/assign/:userId/:journeyId', async (req, res) => {

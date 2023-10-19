@@ -15,6 +15,8 @@ import { myContext } from "./Context";
 // import { myContextType } from "./Context";
 import ThreeStepDescription from './ARD';
 import MarkerEntity from './ARSteps';
+import { useXR, useCamera } from '@react-three/xr';
+
 
 
   const Journey: React.FC = () => {
@@ -78,30 +80,6 @@ import MarkerEntity from './ARSteps';
   };
   //console.log(selectedStep)
 
-  const assignJourney = () => {
-
-    const difficulty = 1;
-    const in_progress = true;
-    const started_at = new Date().toISOString();
-    const last_progress_at = new Date().toISOString();
-
-    // POST to assign journey to user
-    axios.post(`/journey/progress/${userObj.id}/${journey.id}`, {
-      difficulty,
-      in_progress,
-      started_at,
-      last_progress_at,
-      user: userObj.id,
-      journey: journey.id,
-    })
-      .then((response) => {
-        console.log('Journey assigned!', response.data);
-      })
-      .catch((error) => {
-        console.error('Error assigning journey:', error);
-      });
-  };
-
   return (
     <Container>
 
@@ -146,11 +124,8 @@ import MarkerEntity from './ARSteps';
                       <br />
                       <p>{step.hint}</p>
                       <Link to="/ar">
-                      <button onClick={() => handleARButtonClick(step)} >
-                      AR
-                      </button>
-
-                    </Link>
+  <Button onClick={() => setShowARScene(true)}>AR</Button>
+</Link>
                     </Typography>
                   </CardContent>
 
@@ -160,8 +135,11 @@ import MarkerEntity from './ARSteps';
           })
 
         }
-        {selectedStep && <MarkerEntity stepName={selectedStep.name} />}
-
+{showARScene && (
+          <ARCanvas>
+            <Box />
+          </ARCanvas>
+        )}
       </Stack>
 
     </Container>
