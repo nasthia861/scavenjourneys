@@ -15,6 +15,8 @@ import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
 import { UserType } from '@this/types/User';
+import ARScene from './ARScence';
+
 
 type IHeaderProps = {
   userLat: number;
@@ -30,6 +32,7 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
  //const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
+
 
 
  const getJourney = async () => {
