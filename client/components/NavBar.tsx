@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Link } from 'react-router-dom';
-import { myContext } from './Context';
+import { Link, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -28,8 +26,10 @@ interface NavBarProps {
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
 const NavBar = ( {menuItems}: NavBarProps ) => {
 
-  //Use useContext to set the user state
-  const userObj = useContext(myContext);
+  const location = useLocation();
+  if (location.pathname === '/') {
+    return null
+  }
 
   //authenticate user
   const [auth, setAuth] = React.useState<boolean | null>(true);
@@ -70,15 +70,6 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
           </IconButton>
           {auth && (
             <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}

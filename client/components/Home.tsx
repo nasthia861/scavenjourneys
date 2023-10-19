@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,14 +21,15 @@ import ARScene from './ARScence';
 type IHeaderProps = {
   userLat: number;
   userLong: number;
+  userId: number;
 };
 
-const Home: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
 
   const navigate = useNavigate();
 
  //set user state to User or null
- const [user, setUser] = useState<UserType | null>(null);
+ //const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
  const [alignment, setAlignment] = useState(3);
   const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
@@ -86,7 +87,7 @@ return (
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card onClick={() => navigate('/journey',{state:{journey}})}>
+          <Card onClick={() => navigate('/journey',{state:{journey, userId}})}>
             <CardMedia
               component="img"
               alt={journey.name}

@@ -8,12 +8,13 @@ const authRoutes = Router();
 const successLoginUrl = process.env.HOST + '/home';
 const failedLoginUrl = process.env.HOST + '/welcome';
 
-//Routes to google oauth
+//Route to google oauth
 authRoutes.get('/google', passport.authenticate('google',
 {
   scope: ['email', 'profile']
 }));
 
+//Route for google redirect
 authRoutes.get('/google/redirect', passport.authenticate('google',
 {
   failureMessage: true,
@@ -26,6 +27,16 @@ authRoutes.get('/google/redirect', passport.authenticate('google',
   } else {
     res.redirect(failedLoginUrl);
   }
+});
+
+//Route to logout of session
+authRoutes.post('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
 });
 
 //Route used to request user data for the front-end
