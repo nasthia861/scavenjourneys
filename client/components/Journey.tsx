@@ -113,7 +113,7 @@ import { Canvas } from '@react-three/fiber';
 
     // return <MarkerEntity position={position} text={text} stepName={stepName} />;
   };
-  console.log(selectedStep)
+  //console.log(selectedStep)
 
   return (
     <Container>
