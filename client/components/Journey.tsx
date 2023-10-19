@@ -13,9 +13,8 @@ import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { myContext } from "./Context";
 // import { myContextType } from "./Context";
-import ThreeStepDescription from './ARD';
 import MarkerEntity from './ARSteps';
-import { useXR, useCamera } from '@react-three/xr';
+
 
 
 
@@ -77,6 +76,12 @@ import { useXR, useCamera } from '@react-three/xr';
 
  const handleARButtonClick = (step: StepType) => {
     setSelectedStep(step.name);
+
+    // const position = [0, 8, -5];
+    // const text = "";
+    // const stepName = step.name;
+
+    // return <MarkerEntity position={position} text={text} stepName={stepName} />;
   };
   //console.log(selectedStep)
 
@@ -124,8 +129,9 @@ import { useXR, useCamera } from '@react-three/xr';
                       <br />
                       <p>{step.hint}</p>
                       <Link to="/ar">
-  <Button onClick={() => setShowARScene(true)}>AR</Button>
-</Link>
+                      <button onClick={handleARButtonClick}>AR</button>
+
+                      </Link>
                     </Typography>
                   </CardContent>
 
@@ -135,11 +141,6 @@ import { useXR, useCamera } from '@react-three/xr';
           })
 
         }
-{showARScene && (
-          <ARCanvas>
-            <Box />
-          </ARCanvas>
-        )}
       </Stack>
 
     </Container>

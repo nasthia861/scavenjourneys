@@ -1,6 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import ThreeStepDescription from './ARD';
-// import * as THREE from 'three';
 
 declare global {
   namespace JSX {
@@ -33,10 +31,10 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
   return (
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
     <a-marker preset="hiro">
-      {/* Marker-specific entities */}
+
     </a-marker>
 
-    {/* Your 3D models, animations, and other entities */}
+    {/* Your 3D models,*/}
     <a-entity
       id="marker"
       position={`0 4 -5`}
