@@ -67,8 +67,8 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
-              <Route path="/profile/:userId" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/home" element={<Home userId={userId} userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />

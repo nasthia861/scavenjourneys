@@ -16,7 +16,7 @@ import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 
 type IHeaderProps = {
@@ -26,9 +26,11 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
 
+  const location: {state: {journeyProgressId: number | null}} = useLocation();
+
   const theme = useTheme();
   const [user, setUser] = useState<UserType>()
-  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
   const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
@@ -84,6 +86,10 @@ type IHeaderProps = {
   useEffect(() => {
     getUserNameImg();
     getUserData();
+
+    if(location.state !== null) {
+      handleJourneyClick(location.state.journeyProgressId)
+    }
   }, []);
 
 
