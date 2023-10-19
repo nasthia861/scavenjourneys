@@ -2,10 +2,29 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import styled from '@mui/system/styled'; // Import styled from @mui/system
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
 import { JourneyType } from '@this/types/Journey';
+
+const ShakeButton = styled(Button)(({ theme, isShaking }) => ({
+  animation: isShaking ? 'shake 1s' : 'none',
+  '@keyframes shake': {
+    '10%, 90%': {
+      transform: 'translateX(-5px)', // Adjust the distance and direction of the shake
+    },
+    '20%, 80%': {
+      transform: 'translateX(5px)', // Adjust the distance and direction of the shake
+    },
+    '30%, 50%, 70%': {
+      transform: 'translateX(-5px)', // Adjust the distance and direction of the shake
+    },
+    '40%, 60%': {
+      transform: 'translateX(5px)', // Adjust the distance and direction of the shake
+    },
+  },
+}));
 
 const StepForm: React.FC = () => {
   const { journeyId: routeJourneyId } = useParams();
@@ -33,6 +52,12 @@ const StepForm: React.FC = () => {
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
   const [stepIds, setStepIds] = useState<number[]>([]); // Array to store step IDs
+
+  // State for errors and shake effect
+  const [stepNameError, setStepNameError] = useState(false);
+  const [stepHintError, setStepHintError] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+
   useEffect(() => {
     // Add an event listener for the beforeunload event
     const unloadHandler = async (e: BeforeUnloadEvent) => {
@@ -60,18 +85,33 @@ const StepForm: React.FC = () => {
     const { name, value } = e.target;
     setStepData({ ...stepData, [name]: value });
   };
-  const addStep = async () => {
-    try {
-      const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
-      const response = await axios.post('/step', stepWithJourneyId);
-      const newStepId = response.data.id;
-      setStepIds([...stepIds, newStepId]);
-      setStepData({...stepData,  name: '', hint: ''});
-    } catch (error) {
-      console.error('Error adding step:', error);
-    }
-  };
+  // const addStep = async () => {
+  //   try {
+  //     const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
+  //     const response = await axios.post('/step', stepWithJourneyId);
+  //     const newStepId = response.data.id;
+  //     setStepIds([...stepIds, newStepId]);
+  //     setStepData({...stepData,  name: '', hint: ''});
+  //   } catch (error) {
+  //     console.error('Error adding step:', error);
+  //   }
+  // };
   const submitJourney = async () => {
+     // Validate step data before submission
+     if (!stepData.name || !stepData.hint) {
+      setStepNameError(true);
+      setStepHintError(true);
+      setIsShaking(true);
+
+      // Clear errors and stop the shake effect after a short delay
+      setTimeout(() => {
+        setStepNameError(false);
+        setStepHintError(false);
+        setIsShaking(false);
+      }, 1000); // Adjust the delay as needed
+      return;
+    }
+
     try {
       // Mark the journey as created
       setJourneyCreated(true);
@@ -201,6 +241,8 @@ const StepForm: React.FC = () => {
         console.error('Error submitting journey with steps:', error);
       }
     };
+
+
   return (
     <div>
       <h3>Add Steps</h3>
@@ -210,6 +252,8 @@ const StepForm: React.FC = () => {
         name="name"
         value={stepData.name}
         onChange={handleInputChange}
+        error={stepNameError}
+        helperText={stepNameError ? 'Please enter a name' : ''}
       />
       <TextField
         label="Step Hint"
@@ -217,9 +261,13 @@ const StepForm: React.FC = () => {
         name="hint"
         value={stepData.hint}
         onChange={handleInputChange}
+        error={stepHintError}
+        helperText={stepHintError ? 'Please enter a hint' : ''}
       />
-      <Button onClick={addStep}>Add Step</Button>
-      <Button onClick={submitJourney}>Submit Journey</Button>
+      {/* <Button onClick={addStep}>Add Step</Button> */}
+      <ShakeButton onClick={submitJourney} isShaking={isShaking}>
+        Submit Journey
+      </ShakeButton>
     </div>
   );
 };
