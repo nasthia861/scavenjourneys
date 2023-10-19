@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
@@ -13,26 +14,26 @@ import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { myContext } from "./Context";
 
-// import { UserType } from '@this/types/User';
-
+// type IHeaderProps = {
+//   userId: number;
+// };
 
   const Journey: React.FC = () => {
 
-  //set user state to User or null
-  //const [user, setUser] = useState<User | null>(null);
-  const location: {state: {journey: JourneyType}} = useLocation();
+  const location: {state: {journey: JourneyType, userId: number}} = useLocation();
   const journey = location.state.journey
-  //const [journey, setJourneys] = useState(location.state.journey);
+  const userId = location.state.userId
   const [steps, setSteps] = useState<StepType[]>([]);
-   const [user, setUser] = useState<any>(useContext(myContext));
-  // const [stepProgress, setStepProgress] = useState([]);
-  // const [userStarted, setUserStarted] = useState(false);
+  //const [user, setUser] = useState<any>(useContext(myContext));
+
+  const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const assignJourney = async() => {
     // POST to assign journey to user
     const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
     axios.post(`/journey/progress`, {
-      user: user.id,
+      user: userId,
       journey: journey.id,
     })
       .then((response) => {
@@ -43,7 +44,11 @@ import { myContext } from "./Context";
           })
           .catch((error) => console.error('Error assigning steps', error))
         })
+        setJourneyProgressId(response.data.id)
       })
+      // .then(() => {
+      //   navigate(`/profile/${userId}`, {state: {journeyProgressId}})
+      // })
       .catch((error) => {
         console.error('Error assigning journey:', error);
       });
@@ -62,6 +67,12 @@ import { myContext } from "./Context";
         })
 
   }, []);
+
+  useEffect(() => {
+    if(journeyProgressId) {
+      navigate(`/profile/${userId}`, {state: {journeyProgressId}})
+    }
+  }, [journeyProgressId])
 
 
   return (
