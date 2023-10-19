@@ -13,20 +13,12 @@ import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { myContext } from "./Context";
 
-// import { UserType } from '@this/types/User';
-
-
   const Journey: React.FC = () => {
 
-  //set user state to User or null
-  //const [user, setUser] = useState<User | null>(null);
   const location: {state: {journey: JourneyType}} = useLocation();
   const journey = location.state.journey
-  //const [journey, setJourneys] = useState(location.state.journey);
   const [steps, setSteps] = useState<StepType[]>([]);
-   const [user, setUser] = useState<any>(useContext(myContext));
-  // const [stepProgress, setStepProgress] = useState([]);
-  // const [userStarted, setUserStarted] = useState(false);
+  const [user, setUser] = useState<any>(useContext(myContext));
 
   const assignJourney = async() => {
     // POST to assign journey to user
@@ -82,7 +74,6 @@ import { myContext } from "./Context";
               <Typography variant="h6" component="div">
                 <b>{journey.name}</b>
                 <br/>
-                {/* <i>by: {journey.user.username}</i> */}
                 <br/>
                 {journey.description}
               </Typography>
@@ -92,11 +83,9 @@ import { myContext } from "./Context";
             Assign Journey
           </Button>
         </Item>
-      {/* Display selected journey details steps */}
         <h3>Steps:</h3>
         {
         steps.map((step) => {
-          //const progress = stepProgress[step.id] || { in_progress: false };
           return (
             <Item key={step.id}>
               <Card>

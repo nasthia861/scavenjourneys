@@ -16,7 +16,7 @@ import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserType } from "@this/types/User";
 
 type IHeaderProps = {
@@ -37,7 +37,6 @@ type IHeaderProps = {
 
 
   /** User Functionality for User Profile*/
-
   const updateUsername = async (username: string) => {
     await axios.patch(`/user/${userId}`, {username: username} )
     .then(() => {console.log('username updated')})

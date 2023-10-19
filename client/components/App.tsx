@@ -14,7 +14,7 @@ import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
-import { UserType } from '@this/types/User.ts';
+import Logout from './Logout.tsx';
 
 
 const App = () => {
@@ -26,10 +26,10 @@ const App = () => {
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
-    { path: '/', label: 'Welcome' },
-    { path: `/home`, label: 'Home' },
-    { path:`/profile/${userId}`, label: 'Profile' },
-    { path: `/leaderboard`, label: 'Leaderboard' },
+      { path: `/home`, label: 'Home' },
+      { path:`/profile/${userId}`, label: 'Profile' },
+      { path: `/leaderboard`, label: 'Leaderboard' },
+      { path: '/logout', label: 'Logout' },
   ];
 
   const getLocation = () => {
@@ -60,7 +60,6 @@ const App = () => {
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
     //https://mui.com/system/styles/basics/
     return (
-      // <Context>
       <ThemeProvider theme={themeOptions}>
         <CssBaseline />
         <BrowserRouter>
@@ -75,11 +74,11 @@ const App = () => {
               <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:journeyId" element={<StepForm/>} />
               <Route path="/achievements" element={<Achievements/>} />
+              <Route path="/logout" element={<Logout/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
       </ThemeProvider>
-      // </Context>
     );
   };
 

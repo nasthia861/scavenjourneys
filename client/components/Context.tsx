@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios';
-import { Done } from '@mui/icons-material';
 import { UserType } from '@this/types/User';
 
 //Context used to pass state down as props to children elements
@@ -25,7 +24,7 @@ const [userObj, setUserObj] = useState<UserType>();
     })
   }
 
-  })
+  }, [])
 
   return (
     <myContext.Provider value={userObj}>{props.children}</myContext.Provider>

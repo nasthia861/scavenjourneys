@@ -7,13 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import styled from '@mui/material/styles/styled';
-import Alert from '@mui/material/Alert';
-
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import IconButton from '@mui/material/IconButton';
+import Alert from '@mui/material/Alert';
 
 
 type IHeaderProps = {

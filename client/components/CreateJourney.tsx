@@ -6,11 +6,9 @@ import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/material/styles/styled';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import { useNavigate } from 'react-router-dom';
-import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
 //import { createCompletion, loadModel } from 'gpt4all'
 
