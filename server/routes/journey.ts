@@ -4,12 +4,15 @@ import AppDataSource from '../db';
 import { Between } from 'typeorm';
 import { JourneyProgress } from '../db/entities/JourneyProgress';
 import { StepProgress } from '../db/entities/StepProgress';
+import { JourneyTag } from '../db/entities/JourneyTag';
 
 
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
 const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
 const stepProgressRepo = AppDataSource.getRepository(StepProgress);
+const journeyTagRepo = AppDataSource.getRepository(JourneyTag);
+
 
 
 //get all journeys
@@ -46,21 +49,32 @@ journeyRouter.get('/recent/:latitude/:longitude/:alignment', async (req, res) =>
 });
 
 //get journeys by tag
-journeyRouter.get('/tag/:latitude/:longitude/:alignment/:name', async(req, res) => {
-  const { latitude, longitude, alignment, name } = req.params
-  const latNum = Number(latitude);
-  const longNum = Number(longitude);
-  const distance = Number(alignment);
-  AppDataSource.manager.find(Journey, {
-    relations: ['user', 'tag'],
-    where: {
-      latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
-      longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
-      tag: {
-        name: name
-      }
-    }
-  })
+journeyRouter.get('/tag/:name', async(req, res) => {
+  const { name } = req.params
+  // const latNum = Number(latitude);
+  // const longNum = Number(longitude);
+  // const distance = Number(alignment);
+
+  journeyRepository
+    .createQueryBuilder("journey")
+    .leftJoinAndSelect('user', 'tag')
+    // .where('journey.latitude = :latitude', {latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance))})
+    // .andWhere('journey.longitude = :longitude', {longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance))})
+    .where('tag.name = :tagName', {tagName: name})
+    .getMany()
+  // journeyRepository.find({
+  //   relations: {
+  //     user: true,
+  //     journeyTag: true
+  //   },
+  //   where: {
+  //     latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
+  //     longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
+  //     tag: {
+  //       name: name
+  //     }
+  //   }
+  // })
     .then((journeys: []) => {
       if(journeys) {
         res.status(200).send(journeys)
@@ -102,7 +116,7 @@ journeyRouter.get('/name/:name', async(req, res) => {
 // Create a new journey
 journeyRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const { name, description, img_url, user, latitude, longitude } = req.body;
+    const { name, description, img_url, user, latitude, longitude} = req.body;
 
     const journey = journeyRepository.create({
       name,
@@ -114,6 +128,14 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
     });
 
     const createdJourney = await journeyRepository.save(journey);
+
+    // const journeyTag = journeyTagRepo.createMany({
+    //   journey: createdJourney,
+    //   tag: tag
+    // })
+
+    //journeyTagRepo.save(journeyTag);
+
     res.status(201).json(createdJourney);
   } catch (error) {
     console.error('Error creating journey:', error);
