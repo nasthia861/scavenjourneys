@@ -7,6 +7,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
+import { Typography } from '@mui/material';
+import logo from '../styling/ARBackgorund/scvnjrny_logo_stacked.svg'
+import { themeOptions } from './Theme';
 
 
 //withheld from external types folder to exemplify interface/ assignments being passed to functional component
@@ -53,7 +56,8 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
 
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center'  }}>
+
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -67,7 +71,23 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
           >
             <MenuIcon
            />
+
           </IconButton>
+
+
+        <Typography variant="h6" component="div" style={{ flexGrow: 1}}>
+          ScavenJourney
+        </Typography>
+
+      <img
+          src={logo}
+          alt="logo"
+          style={{
+            height: '40px',
+            backgroundColor: themeOptions.palette.background.default,
+            padding: '5px',
+          }}
+        />
           {auth && (
             <div>
               <Menu
@@ -94,7 +114,9 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
             </div>
           )}
         </Toolbar>
+
       </AppBar>
+
     </Box>
 
   );
