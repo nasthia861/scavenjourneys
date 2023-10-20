@@ -104,17 +104,18 @@ import ARScene from './AR';
   }, [journeyProgressId])
 
 
- const handleARButtonClick = (
+ const grabStepData = (
   _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   step: StepType) => {
-    setSelectedStep(step);
+    setSelectedStep(step.name);
     setShowARScene(true);
     console.log(step)
+    navigate('/ar', {state: { stepData: step }})
     // const position = [0, 8, -5];
     // const text = "";
     // const stepName = step.name;
 
-    // return <MarkerEntity position={position} text={text} stepName={stepName} />;
+    //  return <MarkerEntity position={position} text={text} stepName={stepName} />;
   };
   // console.log(selectedStep)
 
@@ -159,7 +160,7 @@ import ARScene from './AR';
                       <br />
                       <p>{step.hint}</p>
                       <Link to="/ar">
-                      <button onClick={(event) => handleARButtonClick(event, step)}>AR</button>
+                      <button onClick={(event) => grabStepData(event, step)}>AR</button>
 
 
                       </Link>

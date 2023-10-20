@@ -63,9 +63,9 @@ type IHeaderProps = {
 
 
   useEffect(() => {
-    if(journeyData.name && journeyData.description && journeyData.img_url) {
+    //if(journeyData.name && journeyData.description && journeyData.img_url) {
       setReady(true);
-    }
+    //}
   }, [journeyData, sizeWarning])
 
   const navigate = useNavigate();
