@@ -6,7 +6,6 @@ import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/material/styles/styled';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import { Theme, useTheme } from '@mui/material/styles';
@@ -17,7 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
 
@@ -28,14 +27,19 @@ type IHeaderProps = {
 };
   const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   //grabs user data from google oauth
-  const [user, setUser] = useState<any>(useContext(myContext));
+  // const [user, setUser] = useState<any>(useContext(myContext));
+
+  const initialUserId = useParams().UserId
+
+  const [userId, setUserId] = useState<any>(initialUserId);
+
   const [journeyData, setJourneyData] = useState<JourneyType>({
     latitude: userLat,
     longitude: userLong,
     name: null,
     description: null,
     user: {
-      id: user.id
+      id: userId
     },
     img_url: null,
     //import from home
@@ -208,7 +212,9 @@ type IHeaderProps = {
       )}
 
       {ready && (
-        <Button onClick={createJourney}>Add Steps</Button>
+        <Button onClick={createJourney} variant="contained">
+          Add Steps
+        </Button>
       )}
     </Paper>
   );

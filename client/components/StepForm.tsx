@@ -2,23 +2,28 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import styled from '@mui/system/styled'
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
 import { JourneyType } from '@this/types/Journey';
+import { ShakeButton } from '../styling/stepFormStyling';
 
 const StepForm: React.FC = () => {
-  const { journeyId: routeJourneyId } = useParams();
+  const params = useParams();
+  const routeJourneyId = params.journeyId;
+  const routeUserId = parseInt(params.UserId);
   const navigate = useNavigate();
   const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
   const latitude = location.state.userLat
   const longitude = location.state.userLong
   const journeyData = location.state.journeyData
 
+
   const [journeyId, setJourneyId] = useState<number | null>(routeJourneyId ? Number(routeJourneyId) : null);
 
-  //grabs user data from google oauth
-  const [user, setUser] = useState<any>(useContext(myContext));
+  //grabs user data from params
+  const [userId, setUserId] = useState<number | null>(routeUserId);
 
   const [stepData, setStepData] = useState<StepType>({
     name: '',
@@ -26,13 +31,19 @@ const StepForm: React.FC = () => {
     latitude: latitude,
     longitude: longitude,
     user: {
-      id: user.id
+      id: userId
     },
     journey: journeyData
   });
 
   const [journeyCreated, setJourneyCreated] = useState(false); // Flag to track journey creation
   const [stepIds, setStepIds] = useState<number[]>([]); // Array to store step IDs
+
+  // State for errors and shake effect
+  const [stepNameError, setStepNameError] = useState(false);
+  const [stepHintError, setStepHintError] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+
   useEffect(() => {
     // Add an event listener for the beforeunload event
     const unloadHandler = async (e: BeforeUnloadEvent) => {
@@ -47,7 +58,7 @@ const StepForm: React.FC = () => {
           // Delete the journey once steps are deleted
           await axios.delete(`/journey/${journeyId}`);
           // Redirect to the CreateJourney page
-          navigate('/create-journey');
+          // navigate('/home');
         }
       }
     };
@@ -60,18 +71,49 @@ const StepForm: React.FC = () => {
     const { name, value } = e.target;
     setStepData({ ...stepData, [name]: value });
   };
-  const addStep = async () => {
-    try {
-      const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
-      const response = await axios.post('/step', stepWithJourneyId);
-      const newStepId = response.data.id;
-      setStepIds([...stepIds, newStepId]);
-      setStepData({...stepData,  name: '', hint: ''});
-    } catch (error) {
-      console.error('Error adding step:', error);
-    }
-  };
+  // const addStep = async () => {
+  //   try {
+  //     const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
+  //     const response = await axios.post('/step', stepWithJourneyId);
+  //     const newStepId = response.data.id;
+  //     setStepIds([...stepIds, newStepId]);
+  //     setStepData({...stepData,  name: '', hint: ''});
+  //   } catch (error) {
+  //     console.error('Error adding step:', error);
+  //   }
+  // };
   const submitJourney = async () => {
+     // Validate step data before submission
+     // check name
+     if (!stepData.name) {
+      setStepNameError(true);
+      setIsShaking(true);
+
+      // Clear errors and stop the shake effect after a short delay
+      setTimeout(() => {
+        setStepNameError(false);
+        setStepHintError(false);
+      }, 5000);
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+    }
+
+    //check hint
+    if (!stepData.hint) {
+      setStepHintError(true);
+      setIsShaking(true);
+
+      // Clear errors and stop the shake effect after a short delay
+      setTimeout(() => {
+        setStepNameError(false);
+        setStepHintError(false);
+      }, 5000);
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+    }
+
     try {
       // Mark the journey as created
       setJourneyCreated(true);
@@ -84,7 +126,7 @@ const StepForm: React.FC = () => {
       const stepCount = 1 + stepIds.length;
 
       // get the userData for logged in user
-      const userDataResponse = await axios.get(`/userdata/byUserId/${user.id}`);
+      const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
 
         // update said userData
         const existingUserData = userDataResponse.data;
@@ -100,13 +142,13 @@ const StepForm: React.FC = () => {
       const newStepsCreated = existingUserData.stepsCreated + stepCount
 
       // Check for achievements if the user has any
-      const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${user.id}`);
+      const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
       const userAchievements = userAchievementsResponse.data;
 
       // Function to create a new user achievement if it doesn't exist
       const createNewUserAchievement = async (achievementId: number) => {
         await axios.post('/userachievements', {
-          user: { id: user.id },
+          user: { id: userId },
           achievement: { id: achievementId },
         });
       };
@@ -183,7 +225,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 100) {
         if (Array.isArray(userAchievements)) {
-          
+
           // Check if the user has achievement ID 6
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 6
@@ -195,7 +237,7 @@ const StepForm: React.FC = () => {
         }
       }
         // Clear step data and navigate to the home page
-        setStepData({ name: '', hint: '', user: { id: user.id } });
+        setStepData({ name: '', hint: '', user: { id: userId } });
         navigate('/home');
       } catch (error) {
         console.error('Error submitting journey with steps:', error);
@@ -210,6 +252,8 @@ const StepForm: React.FC = () => {
         name="name"
         value={stepData.name}
         onChange={handleInputChange}
+        error={stepNameError}
+        helperText={stepNameError ? 'Please enter a name' : ''}
       />
       <TextField
         label="Step Hint"
@@ -217,9 +261,19 @@ const StepForm: React.FC = () => {
         name="hint"
         value={stepData.hint}
         onChange={handleInputChange}
+        error={stepHintError}
+        helperText={stepHintError ? 'Please enter a hint' : ''}
       />
-      <Button onClick={addStep}>Add Step</Button>
-      <Button onClick={submitJourney}>Submit Journey</Button>
+      {/* <Button onClick={addStep}>Add Step</Button> */}
+      {!isShaking ? (
+        <Button onClick={submitJourney} variant="contained">
+          Submit Journey
+        </Button>
+      ) : (
+        <ShakeButton onClick={submitJourney} variant="contained">
+          Submit Journey
+        </ShakeButton>
+      )}
     </div>
   );
 };

@@ -9,11 +9,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { myContext } from "./Context";
+// import { myContextType } from "./Context";
+import MarkerEntity from './ARSteps';
+import { Canvas } from '@react-three/fiber';
+import ARScene from './AR';
+
 
 // type IHeaderProps = {
 //   userId: number;
@@ -29,6 +34,11 @@ import { myContext } from "./Context";
   const [buttonName, setButtonName] = useState('Assign Journey');
 
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
+  const [showARScene, setShowARScene] = useState(false);
+  const [selectedStep, setSelectedStep] = useState(null);
+
+
+
   const navigate = useNavigate();
 
   const assignJourney = async() => {
@@ -77,9 +87,12 @@ import { myContext } from "./Context";
       axios.get(`/step/journey/${journey.id}`)
         .then((stepAndJourney: {data: []}) => {
           setSteps(stepAndJourney.data);
+          // setSelectedStep(stepAndJourney.data);
+
         })
         .catch((error) => {
           console.error('Error getting steps for journey:', error);
+
         })
 
   }, []);
@@ -90,6 +103,18 @@ import { myContext } from "./Context";
     }
   }, [journeyProgressId])
 
+
+ const handleARButtonClick = (step: StepType) => {
+    setSelectedStep(step);
+    setShowARScene(true);
+
+    // const position = [0, 8, -5];
+    // const text = "";
+    // const stepName = step.name;
+
+    // return <MarkerEntity position={position} text={text} stepName={stepName} />;
+  };
+  //console.log(selectedStep)
 
   return (
     <Container>
@@ -109,21 +134,19 @@ import { myContext } from "./Context";
               <Typography variant="h6" component="div">
                 <b>{journey.name}</b>
                 <br/>
-                {/* <i>by: {journey.user.username}</i> */}
                 <br/>
                 {journey.description}
               </Typography>
+
             </CardContent>
           </Card>
             <Button onClick={assignJourney} variant="contained" color="primary">
             {buttonName}
             </Button>
         </Item>
-      {/* Display selected journey details steps */}
         <h3>Steps:</h3>
         {
         steps.map((step) => {
-          //const progress = stepProgress[step.id] || { in_progress: false };
           return (
             <Item key={step.id}>
               <Card>
@@ -133,6 +156,11 @@ import { myContext } from "./Context";
                       <b>{step.name}</b>
                       <br />
                       <p>{step.hint}</p>
+                      <Link to="/ar">
+                      <button onClick={() => handleARButtonClick(step)}>AR</button>
+
+
+                      </Link>
                     </Typography>
                   </CardContent>
 
@@ -140,8 +168,13 @@ import { myContext } from "./Context";
             </Item>
           );
           })
+
         }
       </Stack>
+      {showARScene && selectedStep && (
+        <ARScene stepName={selectedStep.name} />
+        )}
+
     </Container>
   );
 };

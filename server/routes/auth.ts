@@ -30,7 +30,7 @@ authRoutes.get('/google/redirect', passport.authenticate('google',
 });
 
 //Route to logout of session
-authRoutes.get('/logout', (req, res, next) => {
+authRoutes.post('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);

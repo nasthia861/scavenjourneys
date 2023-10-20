@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, lazy} from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 import { StyledInputBase } from '../styling/searchStyle'
 import { SearchStyle } from "../styling/searchStyle";
@@ -9,7 +9,6 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
-import SpeechToText from "./SpeechToText";
 
 
 import { JourneyType } from '@this/types/Journey';

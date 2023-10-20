@@ -39,7 +39,6 @@ type IHeaderProps = {
 
 
   /** User Functionality for User Profile*/
-
   const updateUsername = async (username: string) => {
     await axios.patch(`/user/${userId}`, {username: username} )
     .then(() => {console.log('username updated')})
