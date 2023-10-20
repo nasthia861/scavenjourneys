@@ -17,6 +17,7 @@ const Logout = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
+        padding='30px'
       >
         <p>
           Thanks for playing. Hope you had a great time and created awesome memories!

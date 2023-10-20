@@ -1,7 +1,6 @@
 import React from 'react';
 import GoogleButton from 'react-google-button'
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
 
@@ -21,6 +20,7 @@ const Welcome: React.FC = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
+        padding='30px'
       >
 
           <Image src={logo} width='200px' />
