@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import styled from '@mui/system/styled'
 
 export const ShakeButton = styled(Button)({
-  animation: 'shake .25s', // Shake for 1 second
+  animation: 'shake .5s', // Shake for 1 second
   '@keyframes shake': {
     '10%, 90%': {
       transform: 'translate(-5px, 0)', // Adjust the distance and direction of the shake

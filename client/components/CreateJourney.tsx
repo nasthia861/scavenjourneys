@@ -125,17 +125,11 @@ type IHeaderProps = {
         />
       )}
 
-        {image && (<img
-          src={image}
-          width="250"
-          height="auto"
-          />
-        )}
-        {ready && (
-          <Button onClick={createJourney} variant="contained">
-            Add Steps
-          </Button>
-        )}
+      {ready && (
+        <Button onClick={createJourney} variant="contained">
+          Add Steps
+        </Button>
+      )}
     </Paper>
   );
 };

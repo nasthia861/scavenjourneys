@@ -93,9 +93,10 @@ const StepForm: React.FC = () => {
       setTimeout(() => {
         setStepNameError(false);
         setStepHintError(false);
-        setIsShaking(false);
       }, 5000);
-      return;
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
     }
 
     //check hint
@@ -107,9 +108,10 @@ const StepForm: React.FC = () => {
       setTimeout(() => {
         setStepNameError(false);
         setStepHintError(false);
-        setIsShaking(false);
       }, 5000);
-      return;
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
     }
 
     try {
