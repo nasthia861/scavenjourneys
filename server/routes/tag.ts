@@ -16,6 +16,21 @@ tagRouter.get('/', async (req, res) => {
   }
 });
 
+// get tags by name
+tagRouter.get('/name/:arrayString', async(req, res) => {
+  const { arrayString } = req.params
+  let array = arrayString.split(',');
+
+  let allTags = array.map((tag) => {
+    return {name: tag}
+  })
+
+  const tagsData = await tagRepository.find({
+    where: allTags
+  })
+  res.status(200).json(tagsData)
+})
+
 
 
 export default tagRouter;

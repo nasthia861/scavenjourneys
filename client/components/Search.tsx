@@ -15,11 +15,12 @@ import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
+  getJourneys: () => Promise<void>
   userLat: number;
   userLong: number;
   alignment: number
 };
-const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment}) => {
+const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment, getJourneys}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
@@ -37,8 +38,9 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
     })
   };
   const getJourneyByTag = async (tagName: string) => {
-    axios.get(`/journey/tag/${userLat}/${userLong}/${alignment}/${tagName}`)
+    axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
+  
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -88,6 +90,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
             scrollButtons={false}
             aria-label="scrollable prevent tabs example"
             >
+            <Tab label="All" onClick={getJourneys}/>
             {tags.map(
               (tag: TagType) => {
                 return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />
