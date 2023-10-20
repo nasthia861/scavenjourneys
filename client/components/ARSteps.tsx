@@ -20,18 +20,24 @@ declare global {
 
 interface MarkerEntityProps {
   stepName: string;
+  latitude: string;
+  longitude: string;
   position?: [number, number, number];
   text?: string;
   rotation?: [number, number, number];
 }
 
 const MarkerEntity: React.FC<MarkerEntityProps> = ({
-  stepName
+  stepName,
+  latitude,
+  longitude
+
 }) => {
   return (
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-  
+    <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+
     <a-entity
+      gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
       id="marker"
       position={`0 4 -5`}
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
@@ -39,7 +45,19 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
       material="color: white; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
     />
-  </a-scene>
+
+
+
+   </a-scene>
+
+  // <a-scene gps-camera="minDistance: 10">
+  //   <a-entity gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
+  //    >
+
+  //   </a-entity>
+
+
+  // </a-scene>
   );
 };
 

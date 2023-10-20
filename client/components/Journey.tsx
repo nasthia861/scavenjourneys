@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CameraAltRounded from '@mui/icons-material/CameraAltRounded';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
@@ -107,7 +108,7 @@ import ARScene from './AR';
  const grabStepData = (
   _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   step: StepType) => {
-    setSelectedStep(step.name);
+    setSelectedStep(step);
     setShowARScene(true);
     console.log(step)
     // Send stepData to AR component for rendering
@@ -156,11 +157,11 @@ import ARScene from './AR';
                       <b>{step.name}</b>
                       <br />
                       <p>{step.hint}</p>
-                      {/* <Link to="/ar"> */}
-                      <button onClick={(event) => grabStepData(event, step)}>AR</button>
-
-
-                      {/* </Link> */}
+                      <Button
+                      onClick={(e) => grabStepData(e, step)}
+                      variant="contained" color="primary"
+                      startIcon={<CameraAltRounded/>}
+                      ></Button>
                     </Typography>
                   </CardContent>
 
