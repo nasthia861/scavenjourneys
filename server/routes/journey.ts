@@ -129,13 +129,6 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
 
     const createdJourney = await journeyRepository.save(journey);
 
-    // const journeyTag = journeyTagRepo.createMany({
-    //   journey: createdJourney,
-    //   tag: tag
-    // })
-
-    //journeyTagRepo.save(journeyTag);
-
     res.status(201).json(createdJourney);
   } catch (error) {
     console.error('Error creating journey:', error);

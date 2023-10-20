@@ -19,16 +19,15 @@ tagRouter.get('/', async (req, res) => {
 // get tags by name
 tagRouter.get('/name/:arrayString', async(req, res) => {
   const { arrayString } = req.params
-  console.log(arrayString);
-  let array = arrayString.split('-');
-  let moth = array.map((tag) => {
+  let array = arrayString.split(',');
+
+  let allTags = array.map((tag) => {
     return {name: tag}
   })
-  // console.log(moth)
+
   const tagsData = await tagRepository.find({
-    where: moth
+    where: allTags
   })
-  //console.log(tagsData);
   res.status(200).json(tagsData)
 })
 

@@ -29,7 +29,6 @@ type IHeaderProps = {
   const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
-
   const [journeyData, setJourneyData] = useState<JourneyType>({
     latitude: userLat,
     longitude: userLong,
@@ -47,7 +46,6 @@ type IHeaderProps = {
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [tags, setTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
-  const [dataTagIds, setDataTagIds] = useState([])
 
   const theme = useTheme();
   const ITEM_HEIGHT = 48;
@@ -80,12 +78,18 @@ type IHeaderProps = {
     );
   };
 
-  const addTags = async(array: any[]) => {
-    let arrayString = array.join('-')
-    console.log(arrayString);
-    axios.get(`/tag/name/${arrayString}`)
-      .then((response) => console.log(response))
-      .catch((error) => console.error(error));
+  const addTags = async(array: any[], journeyId: number) => {
+    let arrayString = array.join(',')
+
+    const response = await axios.get(`/tag/name/${arrayString}`)
+    let tagIds = response.data.map((tag: {id: number}) => {
+      return {journey: journeyId, tag: tag.id}
+    })
+    tagIds.forEach((obj: {}) => {
+      axios.post('/journeytag', obj)
+        .then(() => console.log('journeyTag submitted'))
+        .catch((error) => console.error('could not create journeyTag'))
+    })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,17 +98,18 @@ type IHeaderProps = {
   };
 
   const createJourney = async () => {
-    console.log(selectedTags);
-    let tags = await addTags(selectedTags)
-    console.log(tags.data);
-    try {
-      const journeyResponse = await axios.post('/journey', journeyData);
-      const newJourney = journeyResponse.data;
+      try {
+        console.log(journeyData);
+          axios.post('/journey', journeyData)
+          .then((response) => {
+            let resData = response.data
+              addTags(selectedTags, resData.id);
+              navigate(`/StepForm/${resData.id}`, {state:{userLat, userLong, resData}});
+            })
 
-      navigate(`/StepForm/${newJourney.id}`, {state:{userLat, userLong, newJourney}});
-    } catch (error) {
-      console.error('Error creating journey:', error);
-    }
+        } catch (error) {
+          console.error('Error creating journey:', error);
+        }
   };
 
 
