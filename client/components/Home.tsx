@@ -37,7 +37,7 @@ const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
 
 
-const getJourney = async () => {
+const getJourneys = async () => {
   // Fetch the journeys closest to you
   const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
     response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
