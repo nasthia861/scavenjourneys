@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import styled from '@mui/material/styles/styled';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
 //import { createCompletion, loadModel } from 'gpt4all'
@@ -22,6 +22,10 @@ type IHeaderProps = {
   const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
   //grabs user data from google oauth
   const [user, setUser] = useState<any>(useContext(myContext));
+
+  const initialUserId = useParams()
+
+  const [userId, setUserId] = useState<any>(initialUserId);
 
   const [journeyData, setJourneyData] = useState<JourneyType>({
     latitude: userLat,
@@ -51,7 +55,7 @@ type IHeaderProps = {
       const journeyResponse = await axios.post('/journey', journeyData);
       const newJourney = journeyResponse.data;
 
-      navigate(`/StepForm/${newJourney.id}`, {state:{userLat, userLong, newJourney}});
+      navigate(`/StepForm/${userId}${newJourney.id}`, {state:{userLat, userLong, newJourney}});
     } catch (error) {
       console.error('Error creating journey:', error);
     }
@@ -125,7 +129,9 @@ type IHeaderProps = {
           />
         )}
         {ready && (
-          <Button onClick={createJourney}>Add Steps</Button>
+          <Button onClick={createJourney} variant="contained">
+            Add Steps
+          </Button>
         )}
     </Paper>
   );

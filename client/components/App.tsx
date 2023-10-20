@@ -14,10 +14,12 @@ import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
 import Context, {myContext} from './Context.tsx'
+import axios, { AxiosResponse } from 'axios';
 
 const App = () => {
   const [userLat, setUserLat] = useState<number | null>()
   const [userLong, setUserLong] = useState<number | null>()
+  const [userObj, setUserObj] = useState<any>();
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
@@ -51,12 +53,12 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/home" element={<Home userLat={userLat} userLong={userLong}/>} />
+              <Route path="/home" element={<Home userLat={userLat} userLong={userLong} userObj={userObj}/>} />
               <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
-              <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
-              <Route path="/StepForm/:journeyId" element={<StepForm/>} />
+              <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
+              <Route path="/StepForm/:UserId_:journeyId" element={<StepForm/>} />
               <Route path="/achievements" element={<Achievements/>} />
             </Routes>
           </Suspense>

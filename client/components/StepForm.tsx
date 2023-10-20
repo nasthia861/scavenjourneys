@@ -10,7 +10,9 @@ import { JourneyType } from '@this/types/Journey';
 import { ShakeButton } from '../styling/stepFormStyling';
 
 const StepForm: React.FC = () => {
-  const { journeyId: routeJourneyId } = useParams();
+  const params = useParams();
+  const routeJourneyId = params.journeyId;
+  console.log(routeJourneyId);
   const navigate = useNavigate();
   const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
   const latitude = location.state.userLat
@@ -54,8 +56,11 @@ const StepForm: React.FC = () => {
           }
           // Delete the journey once steps are deleted
           await axios.delete(`/journey/${journeyId}`);
+
+          console.log(journeyId)
+          console.log(user)
           // Redirect to the CreateJourney page
-          navigate('/create-journey');
+          // navigate('/create-journey');
         }
       }
     };
@@ -261,9 +266,11 @@ const StepForm: React.FC = () => {
       />
       {/* <Button onClick={addStep}>Add Step</Button> */}
       {!isShaking ? (
-        <Button onClick={submitJourney}>Submit Journey</Button>
+        <Button onClick={submitJourney} variant="contained">
+          Submit Journey
+        </Button>
       ) : (
-        <ShakeButton onClick={submitJourney}>
+        <ShakeButton onClick={submitJourney} variant="contained">
           Submit Journey
         </ShakeButton>
       )}
