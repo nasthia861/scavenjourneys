@@ -17,6 +17,7 @@ import { myContext } from "./Context";
 // import { myContextType } from "./Context";
 import MarkerEntity from './ARSteps';
 import { Canvas } from '@react-three/fiber';
+import ARScene from './AR';
 
 
 // type IHeaderProps = {
@@ -113,7 +114,7 @@ import { Canvas } from '@react-three/fiber';
 
     // return <MarkerEntity position={position} text={text} stepName={stepName} />;
   };
-  console.log(selectedStep)
+  //console.log(selectedStep)
 
   return (
     <Container>
@@ -158,6 +159,7 @@ import { Canvas } from '@react-three/fiber';
                       <Link to="/ar">
                       <button onClick={() => handleARButtonClick(step)}>AR</button>
 
+
                       </Link>
                     </Typography>
                   </CardContent>
@@ -169,8 +171,9 @@ import { Canvas } from '@react-three/fiber';
 
         }
       </Stack>
-      {/* <MarkerEntity position={[0, 8, -5]} text={`Journey: ${selectedStep.name}`} stepName={selectedStep.name} /> */}
-
+      {showARScene && selectedStep && (
+        <ARScene stepName={selectedStep.name} />
+        )}
 
     </Container>
   );

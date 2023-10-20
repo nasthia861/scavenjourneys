@@ -30,11 +30,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
 }) => {
   return (
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <a-marker preset="hiro">
-
-    </a-marker>
-
-    {/* Your 3D models,*/}
+  
     <a-entity
       id="marker"
       position={`0 4 -5`}
