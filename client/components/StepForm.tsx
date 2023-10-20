@@ -2,29 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/system/styled'; // Import styled from @mui/system
+import styled from '@mui/system/styled'
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
 import { JourneyType } from '@this/types/Journey';
-
-const ShakeButton = styled(Button)(({ theme, isShaking }) => ({
-  animation: isShaking ? 'shake 1s' : 'none',
-  '@keyframes shake': {
-    '10%, 90%': {
-      transform: 'translateX(-5px)', // Adjust the distance and direction of the shake
-    },
-    '20%, 80%': {
-      transform: 'translateX(5px)', // Adjust the distance and direction of the shake
-    },
-    '30%, 50%, 70%': {
-      transform: 'translateX(-5px)', // Adjust the distance and direction of the shake
-    },
-    '40%, 60%': {
-      transform: 'translateX(5px)', // Adjust the distance and direction of the shake
-    },
-  },
-}));
+import { ShakeButton } from '../styling/stepFormStyling';
 
 const StepForm: React.FC = () => {
   const { journeyId: routeJourneyId } = useParams();
@@ -98,8 +81,22 @@ const StepForm: React.FC = () => {
   // };
   const submitJourney = async () => {
      // Validate step data before submission
-     if (!stepData.name || !stepData.hint) {
+     // check name
+     if (!stepData.name) {
       setStepNameError(true);
+      setIsShaking(true);
+
+      // Clear errors and stop the shake effect after a short delay
+      setTimeout(() => {
+        setStepNameError(false);
+        setStepHintError(false);
+        setIsShaking(false);
+      }, 5000);
+      return;
+    }
+
+    //check hint
+    if (!stepData.hint) {
       setStepHintError(true);
       setIsShaking(true);
 
@@ -108,7 +105,7 @@ const StepForm: React.FC = () => {
         setStepNameError(false);
         setStepHintError(false);
         setIsShaking(false);
-      }, 1000); // Adjust the delay as needed
+      }, 5000);
       return;
     }
 
@@ -241,8 +238,6 @@ const StepForm: React.FC = () => {
         console.error('Error submitting journey with steps:', error);
       }
     };
-
-
   return (
     <div>
       <h3>Add Steps</h3>
@@ -265,9 +260,13 @@ const StepForm: React.FC = () => {
         helperText={stepHintError ? 'Please enter a hint' : ''}
       />
       {/* <Button onClick={addStep}>Add Step</Button> */}
-      <ShakeButton onClick={submitJourney} isShaking={isShaking}>
-        Submit Journey
-      </ShakeButton>
+      {!isShaking ? (
+        <Button onClick={submitJourney}>Submit Journey</Button>
+      ) : (
+        <ShakeButton onClick={submitJourney}>
+          Submit Journey
+        </ShakeButton>
+      )}
     </div>
   );
 };
