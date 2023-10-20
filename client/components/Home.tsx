@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
+import { myContext } from "./Context";
+
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -26,25 +28,25 @@ type IHeaderProps = {
 
 const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
- //set user state to User or null
- //const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
- const [alignment, setAlignment] = useState(3);
-  const [journeys, setJourneys] = useState<JourneyType[]>([]);
+//set user state to User or null
+// const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
+const [alignment, setAlignment] = useState(3);
+const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
 
 
- const getJourney = async () => {
-    // Fetch the journeys closest to you
-    const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
-      response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
-        return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
-      })
-      setJourneys(response.data)
- }
+const getJourney = async () => {
+  // Fetch the journeys closest to you
+  const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
+    response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
+      return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
+    })
+    setJourneys(response.data)
+}
 
- const handleToggleChange = (
+const handleToggleChange = (
   event: React.MouseEvent<HTMLElement>,
   newAlignment: number,
 ) => {
@@ -78,9 +80,10 @@ return (
       <ToggleButton value={4}>20 miles</ToggleButton>
     </ToggleButtonGroup>
     <br />
-    <Link to="/create-journey">
-      <StyledCreateJourneyButton variant="contained">Create a New Journey</StyledCreateJourneyButton>
-    </Link>
+    <StyledCreateJourneyButton onClick={() => navigate(`/create-journey/${userId}`,{state:{userId}})}
+        variant="contained">
+          Create a New Journey
+    </StyledCreateJourneyButton>
 
     <h1> Pick your Journey</h1>
     <Grid container spacing={2}>

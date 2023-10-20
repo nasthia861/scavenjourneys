@@ -15,10 +15,7 @@ import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
 import Logout from './Logout.tsx';
-
-import Box from './ARScence';
 import ARScene from './AR';
-
 
 const App = () => {
   // // grabs user data from google oauth
@@ -75,8 +72,8 @@ const App = () => {
               <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
-              <Route path="/create-journey" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
-              <Route path="/StepForm/:journeyId" element={<StepForm/>} />
+              <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
+              <Route path="/StepForm/:UserId/:journeyId" element={<StepForm/>} />
               <Route path="/achievements" element={<Achievements/>} />
               <Route path="/logout" element={<Logout/>} />
             </Routes>

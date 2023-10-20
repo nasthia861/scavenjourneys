@@ -11,12 +11,10 @@ const ARScene: React.FC<ARSceneProps> = () => {
   return (
     <>
     <Canvas>
-
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <Box position={[-1.2, 0, 0]} />
       <Box position={[1.2, 0, 0]} />
-
     </Canvas>
 
     <MarkerEntity position={[0, 8, -5]} text="Journey: Get to Know Nola!" stepName={'Journey: Get to Know Nola!'} />
