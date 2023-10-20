@@ -107,7 +107,7 @@ type IHeaderProps = {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container sx={{padding: '10px'}} >
       <Stack spacing={1}>
       <Typography variant="h5" gutterBottom>
         {username}
@@ -127,11 +127,12 @@ type IHeaderProps = {
             variant="outlined"
             onChange={handleUsernameChange}
             value={ updatedUsername }
-            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />, sx: {borderRadius: '20px'}}}
           />
           <Button
             variant="contained"
             type='submit'
+            sx={{borderRadius: '20px'}}
             onClick={() => {
               updateUsername(updatedUsername);
             }}
@@ -141,8 +142,10 @@ type IHeaderProps = {
         </form>
         </Stack>
         {/* achievements page*/}
-        <Button onClick={() => navigate('/achievements',{state:{user}})}
-        variant="contained">
+        <Button
+          onClick={() => navigate('/achievements',{state:{user}})}
+          sx={{borderRadius: '20px'}}
+          variant='outlined'>
           Achievements
         </Button>
        {/* List of Journeys */}

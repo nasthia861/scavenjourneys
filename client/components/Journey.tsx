@@ -123,7 +123,7 @@ import ARScene from './AR';
         <h1> Journey Begins Here!</h1>
         <Item>
 
-          <Card >
+          <Card>
             <CardMedia
               component="img"
               alt={journey.name}
@@ -140,7 +140,7 @@ import ARScene from './AR';
 
             </CardContent>
           </Card>
-            <Button onClick={assignJourney} variant="contained" color="primary">
+            <Button onClick={assignJourney} variant='outlined' color="primary">
             {buttonName}
             </Button>
         </Item>

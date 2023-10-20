@@ -24,6 +24,7 @@ const Logout = () => {
         </p>
         <Button
           variant='outlined'
+          sx={{borderRadius: '20px'}}
           onClick={() => {logUserOut()}}
           href='/'
         >

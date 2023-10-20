@@ -13,6 +13,8 @@ import Stack from '@mui/material/Stack';
 
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   userLat: number;
@@ -59,46 +61,43 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
     getTags();
   }, []);
   return (
-    <Stack>
-      <Item>
+
+        <Grid>
         <SearchStyle>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            inputProps={{ 'aria-label': 'search' }}
-            type="text"
-            placeholder="Search Journey"
-            onChange={handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                getJourneyByName();
-              }
-            }}
-            value={searchInput}
-            />
-        </SearchStyle>
-      </Item>
-      <Item>
-        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleScrollChange}
-            variant="scrollable"
-            scrollButtons={false}
-            aria-label="scrollable prevent tabs example"
-            >
-            {tags.map(
-              (tag: TagType) => {
-                return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />
-              })}
-          </Tabs>
-        </Box>
-      </Item>
-
-
-
-    </Stack>
+      <TextField
+        inputProps={{ 'aria-label': 'search' }}
+        type="text"
+        fullWidth
+        placeholder="Search Journey"
+        onChange={handleChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            getJourneyByName();
+          }
+        } }
+        value={searchInput}
+        />
+        {/* <SearchIcon /> */}
+    </SearchStyle>
+    <br />
+    <Box
+      sx={{ maxWidth: { xs: 320, sm: 480 },
+      bgcolor: 'background.paper',
+      borderRadius: '10px' }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleScrollChange}
+          variant="scrollable"
+          scrollButtons={false}
+          aria-label="scrollable prevent tabs example"
+        >
+          {tags.map(
+            (tag: TagType) => {
+              return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />;
+            })}
+        </Tabs>
+      </Box>
+      </Grid>
   );
 };
 export default Search;

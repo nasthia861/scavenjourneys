@@ -62,7 +62,14 @@ const handleToggleChange = (
 
 
 return (
-  <Container>
+  <Grid
+    container
+    spacing={0}
+    direction="column"
+    alignItems="center"
+    justifyContent="center"
+    padding='30px'
+  >
     <br/>
     <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
     <br/>
@@ -80,13 +87,17 @@ return (
       <ToggleButton value={4}>20 miles</ToggleButton>
     </ToggleButtonGroup>
     <br />
-    <StyledCreateJourneyButton onClick={() => navigate(`/create-journey/${userId}`,{state:{userId}})}
-        variant="contained">
+    <StyledCreateJourneyButton
+      onClick={() => navigate(`/create-journey/${userId}`,{state:{userId}})}
+      variant="outlined"
+      sx={{borderRadius: '20px'}}
+    >
           Create a New Journey
     </StyledCreateJourneyButton>
 
     <h1> Pick your Journey</h1>
-    <Grid container spacing={2}>
+    <Grid container spacing={2}
+    >
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
@@ -108,7 +119,7 @@ return (
         </Grid>
       ))}
     </Grid>
-  </Container>
+  </Grid>
 );
 ;
 };
