@@ -15,8 +15,6 @@ import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
 import Logout from './Logout.tsx';
-
-import Box from './ARScence';
 import ARScene from './AR';
 
 const App = () => {
