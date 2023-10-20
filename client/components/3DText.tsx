@@ -16,9 +16,9 @@
 
 //   return (
 //     <mesh geometry={geometry}>
-//       <meshStandardMaterial color={0xff0000} />
-//     </mesh>
-//   );
-// };
+// //       <meshStandardMaterial color={0xff0000} />
+// //     </mesh>
+// //   );
+// // };
 
-export default ThreeDText;
+// export default ThreeDText;
