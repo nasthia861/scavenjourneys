@@ -12,17 +12,18 @@ import { ShakeButton } from '../styling/stepFormStyling';
 const StepForm: React.FC = () => {
   const params = useParams();
   const routeJourneyId = params.journeyId;
-  console.log(routeJourneyId);
+  const routeUserId = parseInt(params.UserId);
   const navigate = useNavigate();
   const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
   const latitude = location.state.userLat
   const longitude = location.state.userLong
   const journeyData = location.state.journeyData
 
+
   const [journeyId, setJourneyId] = useState<number | null>(routeJourneyId ? Number(routeJourneyId) : null);
 
-  //grabs user data from google oauth
-  const [user, setUser] = useState<any>(useContext(myContext));
+  //grabs user data from params
+  const [userId, setUserId] = useState<number | null>(routeUserId);
 
   const [stepData, setStepData] = useState<StepType>({
     name: '',
@@ -30,7 +31,7 @@ const StepForm: React.FC = () => {
     latitude: latitude,
     longitude: longitude,
     user: {
-      id: user.id
+      id: userId
     },
     journey: journeyData
   });
@@ -56,11 +57,8 @@ const StepForm: React.FC = () => {
           }
           // Delete the journey once steps are deleted
           await axios.delete(`/journey/${journeyId}`);
-
-          console.log(journeyId)
-          console.log(user)
           // Redirect to the CreateJourney page
-          // navigate('/create-journey');
+          // navigate('/home');
         }
       }
     };
@@ -126,7 +124,7 @@ const StepForm: React.FC = () => {
       const stepCount = 1 + stepIds.length;
 
       // get the userData for logged in user
-      const userDataResponse = await axios.get(`/userdata/byUserId/${user.id}`);
+      const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
 
         // update said userData
         const existingUserData = userDataResponse.data;
@@ -142,13 +140,13 @@ const StepForm: React.FC = () => {
       const newStepsCreated = existingUserData.stepsCreated + stepCount
 
       // Check for achievements if the user has any
-      const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${user.id}`);
+      const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
       const userAchievements = userAchievementsResponse.data;
 
       // Function to create a new user achievement if it doesn't exist
       const createNewUserAchievement = async (achievementId: number) => {
         await axios.post('/userachievements', {
-          user: { id: user.id },
+          user: { id: userId },
           achievement: { id: achievementId },
         });
       };
@@ -225,7 +223,7 @@ const StepForm: React.FC = () => {
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 100) {
         if (Array.isArray(userAchievements)) {
-          
+
           // Check if the user has achievement ID 6
           const hasAchievement = userAchievements.some(
             (achievement) => achievement.achievement.id === 6
@@ -237,7 +235,7 @@ const StepForm: React.FC = () => {
         }
       }
         // Clear step data and navigate to the home page
-        setStepData({ name: '', hint: '', user: { id: user.id } });
+        setStepData({ name: '', hint: '', user: { id: userId } });
         navigate('/home');
       } catch (error) {
         console.error('Error submitting journey with steps:', error);

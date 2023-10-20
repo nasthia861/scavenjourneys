@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 import Card from '@mui/material/Card';
@@ -7,9 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import styled from '@mui/material/styles/styled';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import IconButton from '@mui/material/IconButton';
+import Alert from '@mui/material/Alert';
 
 
 type IHeaderProps = {
@@ -21,9 +23,12 @@ type IHeaderProps = {
 const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>()
   const [closeEnough, setCloseEnough] = useState(false)
+  const [sizeWarning, setSizeWarning] = useState<boolean>(false)
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files[0].size < 1000000) {
+      setSizeWarning(false);
       const reader = await new FileReader()
       reader.addEventListener('load', (event) => {
         axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
@@ -36,6 +41,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
           })
       });
       reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setSizeWarning(true);
+    }
   }
 
 
@@ -55,13 +63,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
    const synth = window.speechSynthesis
    const voices = synth.getVoices();
    const [text, setText] = useState<string>(step.step.hint);
-   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>();
+   const [chosenVoice, setChosenVoice] = useState<SpeechSynthesisVoice>(voices[4]);
+
    useEffect(() => {
     setChosenVoice(voices[4]);
-   })
+   }, [chosenVoice])
 
    const speakText = () => {
-     if (synth && chosenVoice) {
+     if (synth) {
        const utterance = new SpeechSynthesisUtterance(text);
        utterance.voice = chosenVoice;
        synth.speak(utterance);
@@ -84,11 +93,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </Typography>
         <Typography variant="body2" color="text.secondary" >
           {text}
-          <Button
-              variant='outlined'
-              size='small'
-              onClick={() => {speakText()}}
-            >TTS</Button>
+          <IconButton onClick={() => {speakText()}} >
+            <VolumeUpOutlinedIcon fontSize='small' />
+          </IconButton>
         </Typography>
         </CardContent>
         <CardActions>
@@ -102,7 +109,9 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
               onChange={(e) => solveStep(e)}
               />
             </Button>
+
            )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
     </Card>
 

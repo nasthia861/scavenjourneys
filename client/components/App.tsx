@@ -1,6 +1,7 @@
-import React, { useContext, Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
+import axios, { AxiosResponse }from 'axios';
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme container
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,22 +14,24 @@ import NavBar from './NavBar';
 import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
-import Context, {myContext} from './Context.tsx'
-import axios, { AxiosResponse } from 'axios';
+import Logout from './Logout.tsx';
+
+import Box from './ARScence';
+import ARScene from './AR';
 
 const App = () => {
+  // // grabs user data from google oauth
   const [userLat, setUserLat] = useState<number | null>()
   const [userLong, setUserLong] = useState<number | null>()
-  const [userObj, setUserObj] = useState<any>();
+  const [userId, setUserId] = useState<number>(0)
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
       //path: route/url, label: display name in menu
-    { path: '/', label: 'Welcome' },
-    { path: '/home', label: 'Home' },
-    { path:`/profile`, label: 'Profile' },
-    { path: '/journey', label: 'Journey' },
-    { path: '/leaderboard', label: 'Leaderboard' },
+      { path: `/home`, label: 'Home' },
+      { path:`/profile/${userId}`, label: 'Profile' },
+      { path: `/leaderboard`, label: 'Leaderboard' },
+      { path: '/logout', label: 'Logout' },
   ];
 
   const getLocation = () => {
@@ -38,14 +41,27 @@ const App = () => {
     }, () => console.error('Could not get location'))
   }
 
+  const getUserInfo = () => {
+    axios.get('/auth/getuser', { withCredentials: true })
+    .then((res: AxiosResponse)=> {
+      if (res.data){
+        //set user data to state
+        setUserId(res.data.id);
+      }
+    })
+    .catch((err)=> {
+      console.error('Could not create user state', err);
+    })
+  }
+
   useEffect(() => {
     getLocation()
+    getUserInfo()
   }, [])
   //CssBaseLine use mitigate conflicts between React 18 and Material UI/styles
     //without cssBaseLine, we'd need to downgrade react/react-dom-router to v17.2 to use themes
     //https://mui.com/system/styles/basics/
     return (
-      <Context>
       <ThemeProvider theme={themeOptions}>
         <CssBaseline />
         <BrowserRouter>
@@ -53,18 +69,19 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/home" element={<Home userLat={userLat} userLong={userLong} userObj={userObj}/>} />
-              <Route path="/profile" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/ar" element={<ARScene stepName={''} />} />
+              <Route path="/home" element={<Home userId={userId} userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
-              <Route path="/StepForm/:UserId_:journeyId" element={<StepForm/>} />
+              <Route path="/StepForm/:UserId/:journeyId" element={<StepForm/>} />
               <Route path="/achievements" element={<Achievements/>} />
+              <Route path="/logout" element={<Logout/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
       </ThemeProvider>
-      </Context>
     );
   };
 
