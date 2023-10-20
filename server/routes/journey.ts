@@ -48,46 +48,6 @@ journeyRouter.get('/recent/:latitude/:longitude/:alignment', async (req, res) =>
   }
 });
 
-//get journeys by tag
-journeyRouter.get('/tag/:name', async(req, res) => {
-  const { name } = req.params
-  // const latNum = Number(latitude);
-  // const longNum = Number(longitude);
-  // const distance = Number(alignment);
-
-  journeyRepository
-    .createQueryBuilder("journey")
-    .leftJoinAndSelect('user', 'tag')
-    // .where('journey.latitude = :latitude', {latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance))})
-    // .andWhere('journey.longitude = :longitude', {longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance))})
-    .where('tag.name = :tagName', {tagName: name})
-    .getMany()
-  // journeyRepository.find({
-  //   relations: {
-  //     user: true,
-  //     journeyTag: true
-  //   },
-  //   where: {
-  //     latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
-  //     longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
-  //     tag: {
-  //       name: name
-  //     }
-  //   }
-  // })
-    .then((journeys: []) => {
-      if(journeys) {
-        res.status(200).send(journeys)
-      } else {
-        console.error('could not find journey by name');
-        res.status(404)
-      }
-    })
-    .catch((error: null) => {
-      console.error('could not get journeys by name', error);
-      res.status(500);
-  })
-})
 
 //get journey by name
 journeyRouter.get('/name/:name', async(req, res) => {

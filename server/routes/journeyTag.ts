@@ -1,4 +1,5 @@
 import express from 'express';
+import { Between } from 'typeorm';
 import { JourneyTag } from "../db/entities/JourneyTag";
 import AppDataSource from '../db';
 
@@ -30,21 +31,41 @@ journeyTagRouter.post('/', async(req, res) => {
 
 })
 
-// get tags by name
-// tagRouter.get('/name/:arrayString', async(req, res) => {
-//   const { arrayString } = req.params
-//   let array = arrayString.split(',');
+// get journeyTags by tag name
+journeyTagRouter.get('/name/:latitude/:longitude/:alignment/:name', async(req, res) => {
+  const { name, latitude, longitude, alignment } = req.params
+  const latNum = Number(latitude);
+  const longNum = Number(longitude);
+  const distance = Number(alignment);
 
-//   let moth = array.map((tag) => {
-//     return {name: tag}
-//   })
+  try {
+    const journeys = await journeyTagRepository.find({
+      relations: ["journey", "tag"],
+      where: {
+        journey: {
+          latitude: Between(latNum - (0.0725 * distance), latNum + (0.0725 * distance)),
+          longitude: Between(longNum - (0.0725 * distance), longNum + (0.0725 * distance)),
+        },
+        tag: { name: name} },
+    })
+    .then((journeys: []) => {
+      if(journeys) {
+        let justJourneys = journeys.map((journey: {journey: {}}) => {
+          return journey.journey
+        })
+        res.status(200).send(justJourneys)
+      } else {
+        console.error('could not find journey by name');
+        res.status(404)
+      }
+    })
+  }
+  catch(error) {
+    console.error('could not get journeys associated with tag', error);
+    res.status(500);
+  }
 
-//   const tagsData = await tagRepository.find({
-//     where: moth
-//   })
-//   console.log(tagsData);
-//   res.status(200).json(tagsData)
-// })
+})
 
 
 

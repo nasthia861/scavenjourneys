@@ -29,10 +29,10 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
  //set user state to User or null
  //const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
  const [alignment, setAlignment] = useState(3);
-  const [journeys, setJourneys] = useState<JourneyType[]>([]);
+  const [journeys, setJourneys] = useState([]);
 
 
- const getJourney = async () => {
+ const getJourneys = async () => {
     // Fetch the journeys closest to you
     const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
       response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
@@ -50,7 +50,7 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
 
   useEffect(() => {
     if(userLat && userLong) {
-      getJourney()
+      getJourneys()
     }
 
   }, [userLat, userLong, alignment]);
@@ -59,7 +59,7 @@ const Home: React.FC<IHeaderProps> = ({userLat, userLong, userId}) => {
 return (
   <Container>
     <br/>
-    <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
+    <Search setJourneys={setJourneys} getJourneys={getJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
     <br/>
     <h2>set distance:</h2>
     <ToggleButtonGroup
@@ -84,7 +84,9 @@ return (
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card onClick={() => navigate('/journey',{state:{journey, userId}})}>
+          <Card onClick={() => {
+            navigate('/journey',{state:{journey, userId}})
+          }}>
             <CardMedia
               component="img"
               alt={journey.name}
