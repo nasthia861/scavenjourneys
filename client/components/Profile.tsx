@@ -112,8 +112,6 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
-
-
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
@@ -139,17 +137,6 @@ type IHeaderProps = {
           }}
         />
       </ListItem>
-
-      {/* <Typography variant="h5" gutterBottom>
-        {username}
-      </Typography>
-
-      For other variants, adjust the size with `width` and `height`
-      <Avatar
-      sx={{ bgcolor: deepOrange[900],
-      width: 56, height: 56 }}
-      src={userImg}
-      ></Avatar> */}
      <Stack direction="row" spacing={1}  >
         {!updateButton && (
           <Button
@@ -197,12 +184,10 @@ type IHeaderProps = {
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
-                id={journey.id}
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
-
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
             </React.Fragment>
