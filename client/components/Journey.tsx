@@ -107,7 +107,7 @@ import { myContext } from "./Context";
         <h1> Journey Begins Here!</h1>
         <Item>
 
-          <Card >
+          <Card>
             <CardMedia
               component="img"
               alt={journey.name}
@@ -124,7 +124,7 @@ import { myContext } from "./Context";
 
             </CardContent>
           </Card>
-            <Button onClick={assignJourney} variant="contained" color="primary">
+            <Button onClick={assignJourney} variant='outlined' color="primary">
             {buttonName}
             </Button>
         </Item>
