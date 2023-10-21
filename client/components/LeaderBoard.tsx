@@ -33,14 +33,16 @@ const Leaderboard = () => {
       </Typography>
       <Box display="flex" alignItems="center" justifyContent="center" gap={2} marginBottom={2}>
         <Button
-          variant="contained"
+          variant='outlined'
           onClick={() => handleOrderBy('journeys')}
+          sx={{borderRadius: '20px'}}
         >
           Order by Journeys Created
         </Button>
         <Button
-          variant="contained"
+          variant='outlined'
           onClick={() => handleOrderBy('steps')}
+          sx={{borderRadius: '20px'}}
         >
           Order by Steps Created
         </Button>

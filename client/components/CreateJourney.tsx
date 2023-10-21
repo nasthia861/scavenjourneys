@@ -161,8 +161,7 @@ type IHeaderProps = {
         onChange={handleInputChange}
         error={!journeyData.description}
       />
-
-      <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+      <Button component="label" variant="outlined" startIcon={<CameraAltRoundedIcon />}>
         Journey Photo
         <VisuallyHiddenInput
           type="file"
@@ -212,7 +211,7 @@ type IHeaderProps = {
       )}
 
       {ready && (
-        <Button onClick={createJourney} variant="contained">
+        <Button onClick={createJourney} variant="outlined">
           Add Steps
         </Button>
       )}

@@ -13,6 +13,9 @@ import Stack from '@mui/material/Stack';
 
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   getJourneys: () => Promise<void>
@@ -60,29 +63,33 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   useEffect(() => {
     getTags();
   }, []);
+
   return (
     <div>
         <SearchStyle>
-          <StyledInputBase
+          <TextField
             inputProps={{ 'aria-label': 'search' }}
             type="text"
+            fullWidth
             placeholder="Search Journey"
             onChange={handleChange}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 getJourneyByName();
               }
-            }}
+            } }
             value={searchInput}
             />
-          <SearchIcon />
+            {/* <SearchIcon /> */}
         </SearchStyle>
         <br/>
-        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper' }}>
+
+        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper', borderRadius: '10px' }}>
           <Tabs
             value={tabValue}
             onChange={handleScrollChange}
             variant="scrollable"
+
             >
             <Tab label="All" onClick={getJourneys}/>
             {tags.map(
@@ -91,10 +98,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
               })}
           </Tabs>
         </Box>
-
-
-
     </div>
-  );
+  )
 };
 export default Search;
