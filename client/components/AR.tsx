@@ -22,13 +22,11 @@ const ARScene: React.FC<ARSceneProps> = () => {
       <Box position={[1.2, 0, 0]} />
     </Canvas>
 
-
     <Canvas>
       <Suspense fallback={null}>
         <Center>
           <Float floatIntensity={5} speed={2}>
           {stepData &&
-
            <Text3D
            font={helvet}
             bevelEnabled
