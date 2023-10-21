@@ -18,6 +18,7 @@
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
 
   }
 }
