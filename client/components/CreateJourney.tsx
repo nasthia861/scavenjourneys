@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
-import { myContext } from "./Context";
 import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -17,7 +15,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useNavigate, useParams } from 'react-router-dom';
-import { UserType } from '@this/types/User';
 import { JourneyType } from '@this/types/Journey'
 
 
@@ -26,8 +23,6 @@ type IHeaderProps = {
   userLong: number;
 };
   const CreateJourney: React.FC<IHeaderProps> = ({userLat, userLong}) => {
-  //grabs user data from google oauth
-  // const [user, setUser] = useState<any>(useContext(myContext));
 
   const initialUserId = useParams().UserId
 

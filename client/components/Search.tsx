@@ -43,7 +43,6 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   const getJourneyByTag = async (tagName: string) => {
     axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
-
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
