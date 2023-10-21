@@ -18,6 +18,7 @@ declare global {
   }
 }
 
+// Props used for StepData and Scene setup
 interface MarkerEntityProps {
   stepName: string;
   latitude: string;
@@ -26,13 +27,9 @@ interface MarkerEntityProps {
   text?: string;
   rotation?: [number, number, number];
 }
+  // Geolocate Marker type scene taking in stepData name and coordinates
+const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude }) => {
 
-const MarkerEntity: React.FC<MarkerEntityProps> = ({
-  stepName,
-  latitude,
-  longitude
-
-  }) => {
     const markerRef = useRef<any>(null);
 
      useEffect(() => {
@@ -43,8 +40,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
   }, []);
 
   return (
+    // Scene using webcam or default camera to dynamically render stepData to position at specified coords
     <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-
     <a-entity
       ref={markerRef}
       gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
@@ -53,21 +50,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
-      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-    />
-
-
-
+      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}/>
    </a-scene>
-
-  // <a-scene gps-camera="minDistance: 10">
-  //   <a-entity gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
-  //    >
-
-  //   </a-entity>
-
-
-  // </a-scene>
   );
 };
 

@@ -4,7 +4,7 @@ import Box from './ARScence';
 import MarkerEntity from './ARSteps';
 import { useLocation } from 'react-router-dom';
 import { Text3D, Float, Center } from '@react-three/drei';
-import helvet from '../styling/ARBackgorund/helvetiker.typeface.json'
+import helvet from '../styling/ARBackgorund/helvetiker.typeface.json';
 
 interface ARSceneProps {
   StepData: string;
