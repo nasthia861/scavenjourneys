@@ -8,6 +8,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -36,8 +38,9 @@ type IHeaderProps = {
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
+  const [updateButton, setUpdateButton] = useState(false);
   const [userImg, setUserImg] = useState<string>('');
-  // const [selectedStep, setSelectedStep] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const navigate = useNavigate();
 
 
@@ -45,8 +48,11 @@ type IHeaderProps = {
 
   /** User Functionality for User Profile*/
   const updateUsername = async (username: string) => {
+    setUsername(username)
     await axios.patch(`/user/${userId}`, {username: username} )
-    .then(() => {console.log('username updated')})
+    .then(() => {
+      setUpdateButton(false)
+    })
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
@@ -77,6 +83,7 @@ type IHeaderProps = {
   const handleUsernameChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
     setUpdatedUsername(target.value);
+
   }
 
   // GET user's journey progress
@@ -99,8 +106,9 @@ type IHeaderProps = {
 
 
   /** Journey and Step Functionality */
-  const handleJourneyClick = async (journeyId: number) => {
+  const handleJourneyClick = async (journeyId: number ) => {
     try {
+      setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
@@ -111,33 +119,50 @@ type IHeaderProps = {
     }
   };
 
-  // const grabStepData = (
-  //   _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  //   step: StepType) => {
-  //     setSelectedStep(step);
-  //     //setShowARScene(true);
-  //     console.log(step)
-  //     // Send stepData to AR component for rendering
-  //     navigate('/ar', {state: { stepData: step }})
-
-  //   };
-
 
   return (
     <Container sx={{padding: '10px'}} >
       <Stack spacing={1}>
-      <Typography variant="h5" gutterBottom>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar
+            sx={{ bgcolor: deepOrange[900], width: 56, height: 56 }}
+            src={userImg}/>
+        </ListItemAvatar>
+        <ListItemText
+          sx={{ my: 2, mx: 2 }}
+          primary={username}
+          primaryTypographyProps={{
+            fontSize: 25,
+            fontWeight: 'large',
+            letterSpacing: 0,
+          }}
+        />
+      </ListItem>
+
+      {/* <Typography variant="h5" gutterBottom>
         {username}
       </Typography>
 
-      {/* For other variants, adjust the size with `width` and `height` */}
+      For other variants, adjust the size with `width` and `height`
       <Avatar
       sx={{ bgcolor: deepOrange[900],
       width: 56, height: 56 }}
       src={userImg}
-      ></Avatar>
+      ></Avatar> */}
      <Stack direction="row" spacing={1}  >
-      <form onSubmit= { handleSubmit } >
+        {!updateButton && (
+          <Button
+            variant="contained"
+            type='button'
+            sx={{borderRadius: '20px'}}
+            onClick={() => {
+              setUpdateButton(true);
+            }}
+          >Update Username</Button>
+        )}
+      {updateButton && (
+        <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
             label="Username"
@@ -146,17 +171,18 @@ type IHeaderProps = {
             value={ updatedUsername }
             InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />, sx: {borderRadius: '20px'}}}
           />
-          <Button
-            variant="contained"
-            type='submit'
-            sx={{borderRadius: '20px'}}
-            onClick={() => {
-              updateUsername(updatedUsername);
-            }}
+            <Button
+               variant="contained"
+              type='submit'
+              sx={{borderRadius: '20px'}}
+              onClick={() => {
+                updateUsername(updatedUsername);
+              }}
             >
-            Update Username
-          </Button>
+              SET
+            </Button>
         </form>
+        )}
         </Stack>
         {/* achievements page*/}
         <Button
@@ -167,26 +193,29 @@ type IHeaderProps = {
         </Button>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
-      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), overflow: 'auto', maxHeight: 200}}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() =>
-              handleJourneyClick(journey.id)}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+              <ListItemButton
+                id={journey.id}
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
 
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
             </React.Fragment>
           ))}
-          <Typography variant="h5">Steps & Step Progress</Typography>
-          <Grid>
+      </List>
+      <Typography variant="h5">Steps & Step Progress</Typography>
+      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), overflow: 'auto', maxHeight: 200}}>
             {steps.map((step) => (
-                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
+              <React.Fragment key={step.id}>
+                <StepProgress step={step} userLat={userLat} userLong={userLong}/>
+              </React.Fragment>
             ))}
-          </Grid>
-
-        </List>
+      </List>
       </Stack>
     </Container>
   )

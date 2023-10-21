@@ -15,6 +15,7 @@ import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   getJourneys: () => Promise<void>
@@ -42,7 +43,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   const getJourneyByTag = async (tagName: string) => {
     axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
-  
+
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -62,44 +63,42 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   useEffect(() => {
     getTags();
   }, []);
+
   return (
-    
-        <Grid>
+    <div>
         <SearchStyle>
-      <TextField
-        inputProps={{ 'aria-label': 'search' }}
-        type="text"
-        fullWidth
-        placeholder="Search Journey"
-        onChange={handleChange}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            getJourneyByName();
-          }
-        } }
-        value={searchInput}
-        />
-        {/* <SearchIcon /> */}
-    </SearchStyle>
-    <br />
-    <Box
-      sx={{ maxWidth: { xs: 320, sm: 480 },
-      bgcolor: 'background.paper',
-      borderRadius: '10px' }}>
-        <Tabs
-          value={tabValue}
-          onChange={handleScrollChange}
-          variant="scrollable"
-          scrollButtons={false}
-          aria-label="scrollable prevent tabs example"
-        >
-          {tags.map(
-            (tag: TagType) => {
-              return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />;
-            })}
-        </Tabs>
-      </Box>
-      </Grid>
-  );
+          <TextField
+            inputProps={{ 'aria-label': 'search' }}
+            type="text"
+            fullWidth
+            placeholder="Search Journey"
+            onChange={handleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                getJourneyByName();
+              }
+            } }
+            value={searchInput}
+            />
+            {/* <SearchIcon /> */}
+        </SearchStyle>
+        <br/>
+
+        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper', borderRadius: '10px' }}>
+          <Tabs
+            value={tabValue}
+            onChange={handleScrollChange}
+            variant="scrollable"
+
+            >
+            <Tab label="All" onClick={getJourneys}/>
+            {tags.map(
+              (tag: TagType) => {
+                return <Tab label={tag.name} key={tag.id} onClick={() => getJourneyByTag(tag.name)} />
+              })}
+          </Tabs>
+        </Box>
+    </div>
+  )
 };
 export default Search;
