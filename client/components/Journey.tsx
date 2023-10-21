@@ -42,21 +42,23 @@ import { myContext } from "./Context";
     if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
-      console.log(userId, journey.id)
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
       axios.post(`/journey/progress`, {
       userId: userId,
       journeyId: journey.id,
       })
         .then((response) => {
+          let promises:Promise<any>[] = []
           steps.data.forEach((step: {id:number}) => {
+            promises.push(
             axios.post('/step/progress', {
               journey_progress: response.data.id,
               step: step.id
             })
             .catch((error) => console.error('Error assigning steps', error))
+            )
           })
-          setJourneyProgressId(response.data.id)
+          Promise.all(promises).then(() => setJourneyProgressId(response.data.id))
         })
         .catch((error) => {
           console.error('Error assigning journey:', error);
