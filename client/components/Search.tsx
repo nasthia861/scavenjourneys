@@ -17,11 +17,12 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
+  getJourneys: () => Promise<void>
   userLat: number;
   userLong: number;
   alignment: number
 };
-const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment}) => {
+const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignment, getJourneys}) => {
   const [searchInput, setSearchInput] = useState("");
   const [tags, setTags] = useState([]);
   const [tabValue, setTabValue] = useState(0)
@@ -39,7 +40,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
     })
   };
   const getJourneyByTag = async (tagName: string) => {
-    axios.get(`/journey/tag/${userLat}/${userLong}/${alignment}/${tagName}`)
+    axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)

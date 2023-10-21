@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
+import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -16,7 +16,7 @@ import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 
 type IHeaderProps = {
@@ -36,6 +36,9 @@ type IHeaderProps = {
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
+  const navigate = useNavigate();
+
+
 
 
   /** User Functionality for User Profile*/
@@ -99,16 +102,16 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
+
+
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
   };
 
-  const navigate = useNavigate();
-
   return (
     <Container sx={{padding: '10px'}} >
-      <Stack spacing={1}>
+      <Stack spacing={2}>
       <Typography variant="h5" gutterBottom>
         {username}
       </Typography>
@@ -157,6 +160,7 @@ type IHeaderProps = {
               handleJourneyClick(journey.id)}
               sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
+
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
             </React.Fragment>

@@ -1,6 +1,6 @@
 import { Journey } from "./Journey";
 import { Icon } from '@mui/material';
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, ManyToMany, JoinTable} from 'typeorm';
 
 @Entity()
 export class Tag {
@@ -9,9 +9,6 @@ export class Tag {
 
   @Column()
   name: string;
-
-  @OneToMany(() => Journey, (journey: Journey) => journey.id)
-  journey: Journey;
 
   @CreateDateColumn()
   created_at: Date;

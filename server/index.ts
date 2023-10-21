@@ -11,6 +11,7 @@ import userRouter from './routes/users';
 import tagRouter from './routes/tag';
 import userAchievementsRouter from './routes/userAchievement';
 import userDataRouter from './routes/userDataRouter';
+import journeyTagRouter from './routes/journeyTag';
 // import homeRouter from './routes/home';
 import cloudRouter from './routes/cloudinary';
 import passport from 'passport';
@@ -60,6 +61,7 @@ app.use('/tag', tagRouter);
 app.use('/userachievements', userAchievementsRouter);
 app.use('/userdata', userDataRouter);
 app.use('/cloud', cloudRouter);
+app.use('/journeytag', journeyTagRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {
