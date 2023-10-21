@@ -40,7 +40,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   const getJourneyByTag = async (tagName: string) => {
     axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
-  
+
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -61,12 +61,8 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
     getTags();
   }, []);
   return (
-    <Stack>
-      <Item>
+    <div>
         <SearchStyle>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
           <StyledInputBase
             inputProps={{ 'aria-label': 'search' }}
             type="text"
@@ -79,9 +75,9 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
             }}
             value={searchInput}
             />
+          <SearchIcon />
         </SearchStyle>
-      </Item>
-      <Item>
+        <br/>
         <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
           <Tabs
             value={tabValue}
@@ -97,11 +93,10 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
               })}
           </Tabs>
         </Box>
-      </Item>
 
 
 
-    </Stack>
+    </div>
   );
 };
 export default Search;

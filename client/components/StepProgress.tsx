@@ -113,10 +113,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
               onChange={(e) => solveStep(e)}
               />
             </Button>
-            //AR button space in case it does not work with with solveStep
+            //{/* AR button space in case it does not work with with solveStep */}
 
 
-            
+
            )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
