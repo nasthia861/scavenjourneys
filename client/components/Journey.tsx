@@ -42,11 +42,11 @@ import { myContext } from "./Context";
     if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
-
+      console.log(userId, journey.id)
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
       axios.post(`/journey/progress`, {
-      user: userId,
-      journey: journey.id,
+      userId: userId,
+      journeyId: journey.id,
       })
         .then((response) => {
           steps.data.forEach((step: {id:number}) => {

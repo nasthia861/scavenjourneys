@@ -160,61 +160,34 @@ journeyRouter.delete('/:id', async (req, res) => {
 });
 
 // POST journey_progress assigned to user/journey (test: pending )
-// journeyRouter.post('/progress', async (req, res) => {
-//   const { user, journey }  = req.body;
-
-//   try {
-//     const user = await userRepo.findOneBy({id: +userId});
-//     const journey = await journeyRepository.findOneBy({id: +journeyId});
-
-
-//     if (!user || !journey) {
-//       res.status(404).send('User or Journey not found');
-//       return;
-//     }
-
-
-//     const addProgress = journeyProgressRepo.create({
-//       user,
-//       journey,
-//     });
-//     await journeyProgressRepo.save(addProgress);
-
-
-//     res.status(201).send(addProgress);
-
-
-//   } catch(err) {
-//     console.error(err);
-//     res.status(500).send('Internal error');
-//   }
-
-// });
-
-// Assign journey to user
-journeyRouter.post('/assign/:userId/:journeyId', async (req, res) => {
-  const { userId, journeyId } = req.params;
-
+journeyRouter.post('/progress', async (req, res) => {
+  const { userId, journeyId }  = req.body;
   try {
-
     const user = await userRepo.findOneBy({id: +userId});
     const journey = await journeyRepository.findOneBy({id: +journeyId});
-    console.log(user.journey)
 
 
     if (!user || !journey) {
-      return res.status(404).send('User or Journey not found');
+      res.status(404).send('User or Journey not found');
+      return;
     }
 
 
-    journey.user = user;
-    await journeyRepository.save(journey);
+    const addProgress = journeyProgressRepo.create({
+      user,
+      journey,
+    });
+    await journeyProgressRepo.save(addProgress);
 
-    res.status(200).send(journey);
-  } catch (err) {
+
+    res.status(201).send(addProgress);
+
+
+  } catch(err) {
     console.error(err);
     res.status(500).send('Internal error');
   }
+
 });
 
 //GET all journey progress
