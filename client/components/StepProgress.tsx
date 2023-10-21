@@ -27,6 +27,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+
+
+
+
     if(e.target.files[0].size < 1000000) {
       setSizeWarning(false);
       const reader = await new FileReader()
@@ -109,7 +113,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
               onChange={(e) => solveStep(e)}
               />
             </Button>
+            //AR button space in case it does not work with with solveStep
 
+
+            
            )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
