@@ -33,7 +33,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
     const markerRef = useRef<any>(null);
 
      useEffect(() => {
-
       if (markerRef.current) {
       markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false');
     }
