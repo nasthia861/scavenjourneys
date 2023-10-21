@@ -18,6 +18,7 @@ import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
+import { StepType } from "@this/types/Step";
 
 type IHeaderProps = {
   userLat: number;
@@ -36,6 +37,10 @@ type IHeaderProps = {
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
+  // const [selectedStep, setSelectedStep] = useState(null);
+  const navigate = useNavigate();
+
+
 
 
   /** User Functionality for User Profile*/
@@ -99,12 +104,24 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
+
+
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
   };
 
-  const navigate = useNavigate();
+  // const grabStepData = (
+  //   _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  //   step: StepType) => {
+  //     setSelectedStep(step);
+  //     //setShowARScene(true);
+  //     console.log(step)
+  //     // Send stepData to AR component for rendering
+  //     navigate('/ar', {state: { stepData: step }})
+
+  //   };
+
 
   return (
     <Container sx={{padding: '10px'}} >
@@ -157,6 +174,7 @@ type IHeaderProps = {
               handleJourneyClick(journey.id)}
               sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
+
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
             </React.Fragment>

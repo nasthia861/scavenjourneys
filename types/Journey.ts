@@ -9,7 +9,7 @@ export type JourneyType = {
   longitude: number
   img_url: string;
   user: UserType;
-  tag: TagType
+  tags: TagType[];
   created_at: string;
   last_modified_at: string;
 }

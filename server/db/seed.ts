@@ -14,6 +14,7 @@ import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
 import { UserData } from './entities/UserData';
+import { JourneyTag } from './entities/JourneyTag';
 
 // import JourneySeeder from './seeding/seeds/journey.seeder';
 import UserSeeder from './seeding/seeds/user.seeder';
@@ -46,7 +47,8 @@ import AchievementSeeder from './seeding/seeds/achievement.seeder';
     Likes,
     Achievement,
     UserAchievement,
-    UserData
+    UserData,
+    JourneyTag
   ]
 };
 

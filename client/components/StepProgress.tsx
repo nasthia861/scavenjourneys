@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 import Card from '@mui/material/Card';
@@ -22,8 +23,11 @@ type IHeaderProps = {
 
 const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>()
-  const [closeEnough, setCloseEnough] = useState(false)
+  const [closeEnough, setCloseEnough] = useState(true)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
+  const [selectedStep, setSelectedStep] = useState(null);
+
+  const navigate = useNavigate();
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +62,19 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
   useEffect(() => {
     getLocation()
   }, [userLat])
+
+  // Function to grab stepData onClick
+ const grabStepData = (
+  _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    setSelectedStep(step);
+    //setShowARScene(true);
+    console.log(_event)
+    // Send stepData to AR component for rendering
+    navigate('/ar', {state: { stepData: step }})
+
+  };
+
 
    /**Text to Speech Functionality */
    const synth = window.speechSynthesis
@@ -99,18 +116,22 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </Typography>
         </CardContent>
         <CardActions>
-          {closeEnough && step.in_progress && (
+          {/* {closeEnough && step.in_progress && ( */}
             <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
             Solve Step
             <VisuallyHiddenInput
               type="file"
               accept="image/*"
               capture="environment"
-              onChange={(e) => solveStep(e)}
-              />
-            </Button>
+              onChange={(e) => solveStep(e)} />
+          </Button>
 
-           )}
+          <Button
+                      onClick={(e) => grabStepData(e)}
+                      variant="contained" color="primary"
+                      startIcon={<CameraAltRoundedIcon/>}
+                      > See in AR</Button>
+          {/* //  )} */}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
     </Card>
