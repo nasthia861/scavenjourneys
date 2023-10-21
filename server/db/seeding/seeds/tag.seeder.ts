@@ -9,11 +9,13 @@ export default class TagSeeder implements Seeder {
     ): Promise<any> {
         const repository = dataSource.getRepository(Tag);
         await repository.insert([
-            {name: 'family-friendly'},
-            {name: 'drinking'},
-            {name: 'nature'},
-            {name: 'holiday'},
-            {name: 'solo'},
+            {name: 'Family Friendly'},
+            {name: 'Drinking'},
+            {name: 'Nature'},
+            {name: 'Holiday'},
+            {name: 'Solo'},
+            {name: 'Animal Friendly'},
+            {name: 'Tourist'}
         ])
         // const tagFactory = factoryManager.get(Tag);
 

@@ -2,6 +2,7 @@ import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateCol
 import { User } from './User';
 import { Tag } from './Tag';
 import { Step } from './Step';
+import { TagType } from '@this/types/Tag';
 
 @Entity()
 export class Journey {
@@ -27,13 +28,9 @@ export class Journey {
   @JoinColumn()
   user: User;
 
-  // //delete and switch to Manytomany once done with fake data
-  // @Column({ nullable: true })
-  // tagId: number
-
-  @ManyToOne(() => Tag, (tag: Tag) => tag.id)
-  @JoinColumn()
-  tag: Tag;
+  // @ManyToOne(() => Tag, (tag: Tag) => tag.id)
+  // @JoinColumn()
+  // tag: Tag;
 
   @OneToMany(() => Step, (step: Step) => step.id)
   step: Step;

@@ -11,6 +11,7 @@ import { Likes } from './entities/Likes'
 import { Achievement } from './entities/Achievement'
 import { UserAchievement } from './entities/UserAchievement'
 import { UserData } from './entities/UserData';
+import { JourneyTag } from './entities/JourneyTag';
   const options: DataSourceOptions = {
   type: 'mysql',
   host: '127.0.0.1',
@@ -30,7 +31,8 @@ import { UserData } from './entities/UserData';
     Likes,
     Achievement,
     UserAchievement,
-    UserData
+    UserData,
+    JourneyTag,
   ]};
   const AppDataSource = new DataSource(options);
   AppDataSource.initialize()

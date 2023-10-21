@@ -37,7 +37,7 @@ const [journeys, setJourneys] = useState<JourneyType[]>([]);
 
 
 
-const getJourney = async () => {
+const getJourneys = async () => {
   // Fetch the journeys closest to you
   const response = await axios.get(`/journey/recent/${userLat}/${userLong}/${alignment}`)
     response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
@@ -55,7 +55,7 @@ const handleToggleChange = (
 
   useEffect(() => {
     if(userLat && userLong) {
-      getJourney()
+      getJourneys()
     }
 
   }, [userLat, userLong, alignment]);
@@ -64,7 +64,7 @@ const handleToggleChange = (
 return (
   <Container>
     <br/>
-    <Search setJourneys={setJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
+    <Search setJourneys={setJourneys} getJourneys={getJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
     <br/>
     <h2>set distance:</h2>
     <ToggleButtonGroup
@@ -90,7 +90,9 @@ return (
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card onClick={() => navigate('/journey',{state:{journey, userId}})}>
+          <Card onClick={() => {
+            navigate('/journey',{state:{journey, userId}})
+          }}>
             <CardMedia
               component="img"
               alt={journey.name}
