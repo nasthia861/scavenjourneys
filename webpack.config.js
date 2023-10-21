@@ -27,6 +27,7 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'client/index.html',
+            favicon: 'client/favicon.svg'
         }),
 
         //new MiniCssExtractPlugin(),
@@ -69,7 +70,7 @@ const config = {
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
+        extensions: ['.tsx', '.ts', '.jsx', '.js', '.svg', '...'],
         alias: {
             'client/addons/TextGeometry': path.resolve(__dirname, 'client/addons/TextGeometry'),
             'client/addons/FontLoader': path.resolve(__dirname, 'client/addons/FontLoader'),
