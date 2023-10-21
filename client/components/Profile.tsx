@@ -36,6 +36,7 @@ type IHeaderProps = {
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<number>();
 
 
   /** User Functionality for User Profile*/
@@ -96,6 +97,7 @@ type IHeaderProps = {
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
+      setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
@@ -147,25 +149,27 @@ type IHeaderProps = {
         </Button>
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
-      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), overflow: 'auto', maxHeight: 200}}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() =>
-              handleJourneyClick(journey.id)}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+              <ListItemButton
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
             </React.Fragment>
           ))}
-          <Typography variant="h5">Steps & Step Progress</Typography>
-          <Grid>
+      </List>
+      <Typography variant="h5">Steps & Step Progress</Typography>
+      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), overflow: 'auto', maxHeight: 200}}>
             {steps.map((step) => (
-                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
+              <React.Fragment key={step.id}>
+                <StepProgress step={step} userLat={userLat} userLong={userLong}/>
+              </React.Fragment>
             ))}
-          </Grid>
-
-        </List>
+      </List>
       </Stack>
     </Container>
   )

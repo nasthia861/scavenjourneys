@@ -65,9 +65,8 @@ return (
   <Container>
     <br/>
     <Search setJourneys={setJourneys} getJourneys={getJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
-    <br/>
-    <h2>set distance:</h2>
     <ToggleButtonGroup
+      sx={{ width: { xs: 342, sm: 480 } }}
       color="primary"
       value={alignment}
       exclusive
@@ -85,12 +84,13 @@ return (
           Create a New Journey
     </StyledCreateJourneyButton>
 
-    <h1> Pick your Journey</h1>
-    <Grid container spacing={2}>
+    <h3> Pick your Journey</h3>
+    <Grid container spacing={2} sx={{ overflow: 'auto', maxHeight: 350 }}>
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card onClick={() => {
+          <Card sx={{maxHeight: 200}}
+            onClick={() => {
             navigate('/journey',{state:{journey, userId}})
           }}>
             <CardMedia
@@ -100,10 +100,8 @@ return (
               image={journey.img_url}
             />
             <CardContent>
-              <Typography variant="h6" component="div">
+              <Typography variant="h5" component="div" align="center">
                 {journey.name}
-                <br/>
-                {journey.description}
               </Typography>
             </CardContent>
           </Card>

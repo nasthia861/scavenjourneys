@@ -78,13 +78,11 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
           <SearchIcon />
         </SearchStyle>
         <br/>
-        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper' }}>
           <Tabs
             value={tabValue}
             onChange={handleScrollChange}
             variant="scrollable"
-            scrollButtons={false}
-            aria-label="scrollable prevent tabs example"
             >
             <Tab label="All" onClick={getJourneys}/>
             {tags.map(
