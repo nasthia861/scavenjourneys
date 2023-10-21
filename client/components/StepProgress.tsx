@@ -31,7 +31,11 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.files[0].size < 1000000) {
+
+
+
+
+    if(e.target.files[0].size < 5000000) {
       setSizeWarning(false);
       const reader = await new FileReader()
       reader.addEventListener('load', (event) => {
@@ -116,22 +120,25 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong}) => {
         </Typography>
         </CardContent>
         <CardActions>
-          {/* {closeEnough && step.in_progress && ( */}
-            <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-            Solve Step
-            <VisuallyHiddenInput
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={(e) => solveStep(e)} />
-          </Button>
+          {closeEnough && step.in_progress && (
+            <div>
+              <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                Solve Step
+                <VisuallyHiddenInput
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={(e) => solveStep(e)} />
+              </Button>
 
-          <Button
-                      onClick={(e) => grabStepData(e)}
-                      variant="contained" color="primary"
-                      startIcon={<CameraAltRoundedIcon/>}
-                      > See in AR</Button>
-          {/* //  )} */}
+              <Button
+                onClick={(e) => grabStepData(e)}
+                variant="contained" color="primary"
+                startIcon={<CameraAltRoundedIcon/>}
+                > See in AR
+              </Button>
+            </div>
+          )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </CardActions>
     </Card>

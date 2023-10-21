@@ -42,11 +42,11 @@ import { myContext } from "./Context";
     if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
-
+      console.log(userId, journey.id)
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
       axios.post(`/journey/progress`, {
-      user: userId,
-      journey: journey.id,
+      userId: userId,
+      journeyId: journey.id,
       })
         .then((response) => {
           steps.data.forEach((step: {id:number}) => {
@@ -107,7 +107,7 @@ import { myContext } from "./Context";
         <h1> Journey Begins Here!</h1>
         <Item>
 
-          <Card >
+          <Card>
             <CardMedia
               component="img"
               alt={journey.name}
@@ -124,7 +124,7 @@ import { myContext } from "./Context";
 
             </CardContent>
           </Card>
-            <Button onClick={assignJourney} variant="contained" color="primary">
+            <Button onClick={assignJourney} variant='outlined' color="primary">
             {buttonName}
             </Button>
         </Item>
