@@ -13,7 +13,6 @@ import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
-import { StepType } from '@this/types/Step';
 
 
 type IHeaderProps = {

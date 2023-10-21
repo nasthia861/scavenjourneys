@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import CameraAltRounded from '@mui/icons-material/CameraAltRounded';
 import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
@@ -16,9 +15,7 @@ import { StepType } from "@this/types/Step"
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { myContext } from "./Context";
 // import { myContextType } from "./Context";
-import MarkerEntity from './ARSteps';
-import { Canvas } from '@react-three/fiber';
-import ARScene from './AR';
+
 
 
 // type IHeaderProps = {
@@ -35,8 +32,6 @@ import ARScene from './AR';
   const [buttonName, setButtonName] = useState('Assign Journey');
 
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
-  const [showARScene, setShowARScene] = useState(false);
-  const [selectedStep, setSelectedStep] = useState(null);
 
 
 
@@ -104,18 +99,6 @@ import ARScene from './AR';
     }
   }, [journeyProgressId])
 
-// Function to grab stepData onClick
- const grabStepData = (
-  _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  step: StepType) => {
-    setSelectedStep(step);
-    setShowARScene(true);
-    console.log(step)
-    // Send stepData to AR component for rendering
-    navigate('/ar', {state: { stepData: step }})
-
-  };
-  // console.log(selectedStep)
 
   return (
     <Container>
@@ -157,11 +140,6 @@ import ARScene from './AR';
                       <b>{step.name}</b>
                       <br />
                       <p>{step.hint}</p>
-                      <Button
-                      onClick={(e) => grabStepData(e, step)}
-                      variant="contained" color="primary"
-                      startIcon={<CameraAltRounded/>}
-                      ></Button>
                     </Typography>
                   </CardContent>
 
