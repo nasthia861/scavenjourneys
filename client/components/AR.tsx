@@ -28,11 +28,12 @@ const ARScene: React.FC<ARSceneProps> = () => {
         <Center>
           <Float floatIntensity={5} speed={2}>
           {stepData &&
+
            <Text3D
            font={helvet}
             bevelEnabled
             bevelSize={0.05}
-            scale={[2, 3, 1]}
+            scale={[2, 2, 1]}
             >
           {stepData.step.name}
           </Text3D>}
