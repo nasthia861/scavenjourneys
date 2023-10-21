@@ -29,7 +29,7 @@ const ARScene: React.FC<ARSceneProps> = () => {
           <Float floatIntensity={5} speed={2}>
           {stepData &&
            <Text3D font={helvet} bevelEnabled bevelSize={0.05}>
-          {stepData.name}
+          {stepData.step.name}
           </Text3D>}
           </Float>
         </Center>
@@ -41,7 +41,11 @@ const ARScene: React.FC<ARSceneProps> = () => {
       <MarkerEntity position={[-5, 2, -5]} text="Step 2: Say Hay to the animal at the center of Jackson Square" rotation={[0, 45, 0]} stepName={''} />
       <MarkerEntity position={[5, 2, -3]} text="Step 3: Visit the Riverfront to hear some steamboat tunes!" rotation={[0, -45, 0]} stepName={''} /> */}
 
-      <MarkerEntity position={[0, 8, -5]} text={`Journey: ${stepData.name}`} stepName={stepData.name} latitude={stepData.latitude} longitude={stepData.longitude} />
+      <MarkerEntity
+      stepName={stepData.step.name}
+      latitude={stepData.step.latitude}
+      longitude={stepData.step.longitude}
+      />
 
 
 

@@ -32,17 +32,27 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({
   latitude,
   longitude
 
-}) => {
+  }) => {
+    const markerRef = useRef<any>(null);
+
+     useEffect(() => {
+
+      if (markerRef.current) {
+      markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false');
+    }
+  }, []);
+
   return (
     <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
     <a-entity
+      ref={markerRef}
       gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
       id="marker"
       position={`0 4 -5`}
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
-      material="color: white; transparent: true; opacity: 0.9"
+      material="color: yellow; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
     />
 
