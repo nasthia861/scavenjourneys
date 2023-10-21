@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
+import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -16,9 +16,8 @@ import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
-import { StepType } from "@this/types/Step";
 
 type IHeaderProps = {
   userLat: number;
@@ -110,18 +109,6 @@ type IHeaderProps = {
       console.error('Error fetching journey details:', error);
     }
   };
-
-  // const grabStepData = (
-  //   _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  //   step: StepType) => {
-  //     setSelectedStep(step);
-  //     //setShowARScene(true);
-  //     console.log(step)
-  //     // Send stepData to AR component for rendering
-  //     navigate('/ar', {state: { stepData: step }})
-
-  //   };
-
 
   return (
     <Container>

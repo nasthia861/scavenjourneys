@@ -8,7 +8,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import { Typography } from '@mui/material';
-import logo from '../styling/ARBackgorund/scvnjrny_logo_stacked.svg'
+import logo from '../styling/ARBackgorund/scvnjrny_logo_stacked.svg';
+
 import { themeOptions } from './Theme';
 
 
