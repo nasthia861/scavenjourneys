@@ -196,7 +196,6 @@ type IHeaderProps = {
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
-                id={journey.id}
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
