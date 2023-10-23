@@ -209,7 +209,7 @@ type IHeaderProps = {
         </form>
         </Stack>
         {/* achievements page*/}
-        <Button onClick={() => navigate('/achievements',{state:{user}})}
+        <Button onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
         variant="contained">
           Achievements
         </Button>
@@ -237,7 +237,7 @@ type IHeaderProps = {
           <Typography variant="h5">Steps & Step Progress</Typography>
           <Grid>
             {steps.map((step) => (
-                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong}/>
+                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
             ))}
           </Grid>
 

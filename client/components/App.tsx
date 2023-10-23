@@ -74,7 +74,7 @@ const App = () => {
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:UserId/:journeyId" element={<StepForm/>} />
-              <Route path="/achievements" element={<Achievements/>} />
+              <Route path="/achievements/:UserId" element={<Achievements/>} />
               <Route path="/logout" element={<Logout/>} />
             </Routes>
           </Suspense>
