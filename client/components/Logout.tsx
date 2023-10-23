@@ -9,15 +9,7 @@ import { Hidden } from '@mui/material';
 const Logout = () => {
   const [pictures, setPictures] = useState([])
 
-  // let items = [
-  //   {photo: 'This is photo 1'},
-  //   {photo: 'This is photo 2'},
-  //   {photo: 'This is photo 3'},
-  //   {photo: 'This is photo 4'},
-  //   {photo: 'This is photo 5'},
-  //   {photo: 'This is photo 6'},
 
-  // ]
 
   const logUserOut = () => {
     axios.post('/auth/logout');
