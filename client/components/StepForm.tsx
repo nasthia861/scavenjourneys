@@ -270,4 +270,5 @@ const StepForm: React.FC = () => {
     </div>
   );
 };
+
 export default StepForm;

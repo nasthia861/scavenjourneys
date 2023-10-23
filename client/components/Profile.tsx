@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
+import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 
 import Avatar from "@mui/material/Avatar";
@@ -9,6 +9,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -26,7 +28,7 @@ import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 import { JourneyType } from "@this/types/Journey";
 
@@ -46,18 +48,25 @@ type IHeaderProps = {
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
+  const [updateButton, setUpdateButton] = useState(false);
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number>();
+
+
 
 
   /** User Functionality for User Profile*/
   const updateUsername = async (username: string) => {
+    setUsername(username)
     await axios.patch(`/user/${userId}`, {username: username} )
-    .then(() => {console.log('username updated')})
+    .then(() => {
+      setUpdateButton(false)
+    })
     .catch((err) => {
       console.error('Could not Axios patch', err)
     });
@@ -88,6 +97,7 @@ type IHeaderProps = {
   const handleUsernameChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
     setUpdatedUsername(target.value);
+
   }
 
   // GET user's journey progress
@@ -112,8 +122,9 @@ type IHeaderProps = {
 
 
   /** Journey and Step Functionality */
-  const handleJourneyClick = async (journeyId: number) => {
+  const handleJourneyClick = async (journeyId: number ) => {
     try {
+      setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
@@ -298,5 +309,5 @@ type IHeaderProps = {
     </Container>
   )
 }
-
 export default Profile;
+

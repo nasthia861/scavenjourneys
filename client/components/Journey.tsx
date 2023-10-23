@@ -15,9 +15,7 @@ import { StepType } from "@this/types/Step"
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { myContext } from "./Context";
 // import { myContextType } from "./Context";
-import MarkerEntity from './ARSteps';
-import { Canvas } from '@react-three/fiber';
-import ARScene from './AR';
+
 
 
 // type IHeaderProps = {
@@ -34,8 +32,6 @@ import ARScene from './AR';
   const [buttonName, setButtonName] = useState('Assign Journey');
 
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
-  const [showARScene, setShowARScene] = useState(false);
-  const [selectedStep, setSelectedStep] = useState(null);
 
 
 
@@ -46,21 +42,23 @@ import ARScene from './AR';
     if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
-
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
       axios.post(`/journey/progress`, {
-      user: userId,
-      journey: journey.id,
+      userId: userId,
+      journeyId: journey.id,
       })
         .then((response) => {
+          let promises:Promise<any>[] = []
           steps.data.forEach((step: {id:number}) => {
+            promises.push(
             axios.post('/step/progress', {
               journey_progress: response.data.id,
               step: step.id
             })
             .catch((error) => console.error('Error assigning steps', error))
+            )
           })
-          setJourneyProgressId(response.data.id)
+          Promise.all(promises).then(() => setJourneyProgressId(response.data.id))
         })
         .catch((error) => {
           console.error('Error assigning journey:', error);
@@ -104,18 +102,6 @@ import ARScene from './AR';
   }, [journeyProgressId])
 
 
- const handleARButtonClick = (step: StepType) => {
-    setSelectedStep(step);
-    setShowARScene(true);
-
-    // const position = [0, 8, -5];
-    // const text = "";
-    // const stepName = step.name;
-
-    // return <MarkerEntity position={position} text={text} stepName={stepName} />;
-  };
-  //console.log(selectedStep)
-
   return (
     <Container>
 
@@ -123,7 +109,7 @@ import ARScene from './AR';
         <h1> Journey Begins Here!</h1>
         <Item>
 
-          <Card >
+          <Card>
             <CardMedia
               component="img"
               alt={journey.name}
@@ -140,7 +126,7 @@ import ARScene from './AR';
 
             </CardContent>
           </Card>
-            <Button onClick={assignJourney} variant="contained" color="primary">
+            <Button onClick={assignJourney} variant='outlined' color="primary">
             {buttonName}
             </Button>
         </Item>
@@ -156,11 +142,6 @@ import ARScene from './AR';
                       <b>{step.name}</b>
                       <br />
                       <p>{step.hint}</p>
-                      <Link to="/ar">
-                      <button onClick={() => handleARButtonClick(step)}>AR</button>
-
-
-                      </Link>
                     </Typography>
                   </CardContent>
 
@@ -168,13 +149,8 @@ import ARScene from './AR';
             </Item>
           );
           })
-
         }
       </Stack>
-      {showARScene && selectedStep && (
-        <ARScene stepName={selectedStep.name} />
-        )}
-
     </Container>
   );
 };

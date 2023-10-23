@@ -1,16 +1,16 @@
-import React from 'react';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useLocation } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import { Typography } from '@mui/material';
-import logo from '../styling/ARBackgorund/scvnjrny_logo_stacked.svg'
-import { themeOptions } from './Theme';
+import React from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Link, useLocation } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import { Typography } from "@mui/material";
+import logo from "../styling/ARBackgorund/scvnjrny_logo_stacked.svg";
 
+import { themeOptions } from "./Theme";
 
 //withheld from external types folder to exemplify interface/ assignments being passed to functional component
 //we have to assign types/interface to ensure proper typescript syntax
@@ -27,11 +27,10 @@ interface NavBarProps {
 }
 
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-const NavBar = ( {menuItems}: NavBarProps ) => {
-
+const NavBar = ({ menuItems }: NavBarProps) => {
   const location = useLocation();
-  if (location.pathname === '/') {
-    return null
+  if (location.pathname === "/") {
+    return null;
   }
 
   //authenticate user
@@ -54,59 +53,59 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
     setAnchorEl(null);
   };
 
-
   return (
-    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center'  }}>
-
+    <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
-           onClick={handleMenu}
-           style={{ cursor: 'pointer' }}
+            onClick={handleMenu}
+            style={{ cursor: "pointer" }}
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon
-           />
-
+            <MenuIcon />
           </IconButton>
 
+          <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+            ScavenJourney
+          </Typography>
 
-        <Typography variant="h6" component="div" style={{ flexGrow: 1}}>
-          ScavenJourney
-        </Typography>
-
-      <img
-          src={logo}
-          alt="logo"
-          style={{
-            height: '40px',
-            backgroundColor: themeOptions.palette.background.default,
-            padding: '5px',
-          }}
-        />
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              height: "40px",
+              backgroundColor: themeOptions.palette.background.default,
+              padding: "5px",
+            }}
+          />
           {auth && (
             <div>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-            {menuItems.map((item) => (
-                  <MenuItem key={item.path} component={Link} to={item.path} onClick={handleClose}>
+                {menuItems.map((item) => (
+                  <MenuItem
+                    key={item.path}
+                    component={Link}
+                    to={item.path}
+                    onClick={handleClose}
+                  >
                     {item.label}
                   </MenuItem>
                 ))}
@@ -114,12 +113,9 @@ const NavBar = ( {menuItems}: NavBarProps ) => {
             </div>
           )}
         </Toolbar>
-
       </AppBar>
-
     </Box>
-
   );
-}
+};
 
-export default NavBar
+export default NavBar;

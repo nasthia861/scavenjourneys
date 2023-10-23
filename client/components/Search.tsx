@@ -13,6 +13,9 @@ import Stack from '@mui/material/Stack';
 
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
   getJourneys: () => Promise<void>
@@ -40,7 +43,6 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   const getJourneyByTag = async (tagName: string) => {
     axios.get(`/journeytag/name/${userLat}/${userLong}/${alignment}/${tagName}`)
       .then((response) => {
-  
         response.data.sort((journeyA: {latitude: number}, journeyB: {latitude: number}) => {
           return (userLat - journeyA.latitude) - (userLat - journeyB.latitude)
       })
@@ -60,35 +62,33 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
   useEffect(() => {
     getTags();
   }, []);
+
   return (
-    <Stack>
-      <Item>
+    <div>
         <SearchStyle>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
+          <TextField
             inputProps={{ 'aria-label': 'search' }}
             type="text"
+            fullWidth
             placeholder="Search Journey"
             onChange={handleChange}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 getJourneyByName();
               }
-            }}
+            } }
             value={searchInput}
             />
+            {/* <SearchIcon /> */}
         </SearchStyle>
-      </Item>
-      <Item>
-        <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+        <br/>
+
+        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper', borderRadius: '10px' }}>
           <Tabs
             value={tabValue}
             onChange={handleScrollChange}
             variant="scrollable"
-            scrollButtons={false}
-            aria-label="scrollable prevent tabs example"
+
             >
             <Tab label="All" onClick={getJourneys}/>
             {tags.map(
@@ -97,11 +97,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
               })}
           </Tabs>
         </Box>
-      </Item>
-
-
-
-    </Stack>
-  );
+    </div>
+  )
 };
 export default Search;
