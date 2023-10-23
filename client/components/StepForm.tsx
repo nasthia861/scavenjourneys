@@ -58,7 +58,7 @@ const StepForm: React.FC = () => {
           // Delete the journey once steps are deleted
           await axios.delete(`/journey/${journeyId}`);
           // Redirect to the CreateJourney page
-          // navigate('/home');
+          navigate('/home');
         }
       }
     };
@@ -71,48 +71,41 @@ const StepForm: React.FC = () => {
     const { name, value } = e.target;
     setStepData({ ...stepData, [name]: value });
   };
-  // const addStep = async () => {
-  //   try {
-  //     const stepWithJourneyId = { ...stepData, journey: { id: journeyId } };
-  //     const response = await axios.post('/step', stepWithJourneyId);
-  //     const newStepId = response.data.id;
-  //     setStepIds([...stepIds, newStepId]);
-  //     setStepData({...stepData,  name: '', hint: ''});
-  //   } catch (error) {
-  //     console.error('Error adding step:', error);
-  //   }
-  // };
+
   const submitJourney = async () => {
      // Validate step data before submission
-     // check name
-     if (!stepData.name) {
-      setStepNameError(true);
-      setIsShaking(true);
+     if (!stepData.name || !stepData.hint) {
+       // check name
+       if (!stepData.name) {
+         setStepNameError(true);
+         setIsShaking(true);
 
-      // Clear errors and stop the shake effect after a short delay
-      setTimeout(() => {
-        setStepNameError(false);
-        setStepHintError(false);
-      }, 5000);
-      setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
-    }
+         // Clear errors and stop the shake effect after a short delay
+         setTimeout(() => {
+           setStepNameError(false);
+           setStepHintError(false);
+         }, 5000);
+         setTimeout(() => {
+           setIsShaking(false);
+         }, 500);
+       }
 
-    //check hint
-    if (!stepData.hint) {
-      setStepHintError(true);
-      setIsShaking(true);
+       //check hint
+       if (!stepData.hint) {
+         setStepHintError(true);
+         setIsShaking(true);
 
-      // Clear errors and stop the shake effect after a short delay
-      setTimeout(() => {
-        setStepNameError(false);
-        setStepHintError(false);
-      }, 5000);
-      setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
-    }
+         // Clear errors and stop the shake effect after a short delay
+         setTimeout(() => {
+           setStepNameError(false);
+           setStepHintError(false);
+         }, 5000);
+         setTimeout(() => {
+           setIsShaking(false);
+         }, 500);
+       }
+       return;
+     }
 
     try {
       // Mark the journey as created

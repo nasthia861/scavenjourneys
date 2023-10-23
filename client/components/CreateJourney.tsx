@@ -107,7 +107,7 @@ type IHeaderProps = {
           .then((response) => {
             let resData = response.data
               addTags(selectedTags, resData.id);
-              navigate(`/StepForm/${resData.id}`, {state:{userLat, userLong, resData}});
+              navigate(`/StepForm/${userId}/${resData.id}`, {state:{userLat, userLong, resData}});
             })
 
         } catch (error) {

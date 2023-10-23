@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
+
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -12,12 +13,22 @@ import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
 import ListItemButton from "@mui/material/ListItemButton";
 import deepOrange from "@mui/material/colors/deepOrange";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import AddIcon from "@mui/icons-material/Add";
+
 import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
 import { StepProgressType } from "@this/types/StepProgress"
 import SpeechToText from "./SpeechToText";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
+import { JourneyType } from "@this/types/Journey";
 
 type IHeaderProps = {
   userLat: number;
@@ -36,6 +47,11 @@ type IHeaderProps = {
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
   const [userImg, setUserImg] = useState<string>('');
+  const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  // State to hold user's journeys
+  const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
 
 
   /** User Functionality for User Profile*/
@@ -83,9 +99,11 @@ type IHeaderProps = {
       console.error('Error fetching user data:', error);
     }
   };
+
   useEffect(() => {
     getUserNameImg();
     getUserData();
+    getUserJourneys();
 
     if(location.state !== null) {
       handleJourneyClick(location.state.journeyProgressId)
@@ -101,6 +119,45 @@ type IHeaderProps = {
       setSteps(stepAndJourney.data);
     } catch (error) {
       console.error('Error fetching journey details:', error);
+    }
+  };
+
+   // Function to fetch and display user's journeys
+   const getUserJourneys = async () => {
+     try {
+       const userJourneysResponse = await axios.get(`/journey/user/${userId}`);
+       setUserJourneys(userJourneysResponse.data);
+     } catch (error) {
+       console.error("Error fetching user's journeys:", error);
+     }
+   };
+
+   const handleConfirmDialogOpen = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmDialogClose = () => {
+    setConfirmDialogOpen(false);
+  };
+
+   const handleDeleteJourney = (journeyId: React.SetStateAction<number>) => {
+    setJourneyIdToDelete(journeyId);
+    handleConfirmDialogOpen(); // Open the confirmation dialog
+    console.log('handleDeleteJourney: ', journeyiDToDelete)
+  };
+
+  const deleteJourney = async () => {
+    handleConfirmDialogClose(); // Close the confirmation dialog
+    if (journeyiDToDelete) {
+      try {
+        // Delete the journey and its steps
+        await axios.delete(`/journey/${journeyiDToDelete}`);
+        setJourneyIdToDelete(null);
+        // Refresh the user's journeys
+        getUserJourneys();
+      } catch (error) {
+        console.error("Error deleting journey:", error);
+      }
     }
   };
 
@@ -145,6 +202,14 @@ type IHeaderProps = {
         variant="contained">
           Achievements
         </Button>
+         {/* Button to fetch and render user's journeys */}
+      {/* <Button
+        variant="contained"
+        onClick={getUserJourneys}
+      >
+        Show My Journeys
+      </Button> */}
+
        {/* List of Journeys */}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
@@ -166,6 +231,69 @@ type IHeaderProps = {
           </Grid>
 
         </List>
+      {/* List of user's journeys */}
+      <Typography variant="h5">My Journeys</Typography>
+      <List sx={{ padding: theme.spacing(2) }}>
+        {userJourneys.map((journey) => (
+          <React.Fragment key={journey.id}>
+            <ListItemButton
+              onClick={() => navigate('/journey', { state: { journey, userId } })}
+              sx={{
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderRadius: theme.shape.borderRadius,
+                margin: `${theme.spacing(1)} 0`,
+                padding: theme.spacing(2),
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <ListItemText
+                primary={journey.name}
+                secondary={journey.description}
+              />
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/StepForm/${userId}/${journey.id}`, {state:{userLat, userLong}});
+                }}
+                color="primary"
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteJourney(journey.id);
+                }}
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemButton>
+          </React.Fragment>
+        ))}
+      </List>
+      {/* Confirmation dialog */}
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={handleConfirmDialogClose}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this journey?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={deleteJourney} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Stack>
     </Container>
   )
