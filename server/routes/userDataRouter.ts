@@ -100,6 +100,24 @@ userDataRouter.get('/userdata', async (req, res) => {
           stepsCreated: 'DESC',
         },
       });
+    } else if (orderBy === 'journeysTaken') {
+      userData = await AppDataSource.getRepository(UserData).find({
+        relations: {
+          user: true
+        },
+        order: {
+          journeysTaken: 'DESC',
+        },
+      });
+    } else if (orderBy === 'stepsTaken') {
+      userData = await AppDataSource.getRepository(UserData).find({
+        relations: {
+          user: true
+        },
+        order: {
+          stepsTaken: 'DESC',
+        },
+      });
     } else {
       // Handle the default sorting or invalid values
       userData = await AppDataSource.getRepository(UserData).find({

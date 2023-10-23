@@ -187,29 +187,42 @@ type IHeaderProps = {
       width: 56, height: 56 }}
       src={userImg}
       ></Avatar>
-     <Stack direction="row" spacing={1}  >
-      <form onSubmit= { handleSubmit } >
+     {!updateButton && (
+          <Button
+            variant="outlined"
+            type='button'
+            sx={{borderRadius: '20px'}}
+            onClick={() => {
+              setUpdateButton(true);
+            }}
+          >Update Username</Button>
+        )}
+      {updateButton && (
+        <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
             label="Username"
             variant="outlined"
             onChange={handleUsernameChange}
             value={ updatedUsername }
-            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />, sx: {borderRadius: '20px'}}}
           />
-          <Button
-            variant="contained"
-            type='submit'
-            onClick={() => {
-              updateUsername(updatedUsername);
-            }}
+            <Button
+               variant="outlined"
+              type='submit'
+              sx={{borderRadius: '20px'}}
+              onClick={() => {
+                updateUsername(updatedUsername);
+              }}
             >
-            Update Username
-          </Button>
+              SET
+            </Button>
         </form>
-        </Stack>
+        )}
         {/* achievements page*/}
-        <Button onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
+        <Button
+        sx={{borderRadius: '20px'}}
+        onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
         variant="contained">
           Achievements
         </Button>
@@ -294,6 +307,7 @@ type IHeaderProps = {
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete this journey?
+            This action will permanently delete this journey, all of its steps, and any associated data such as the progress anyone has made going on this journey.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
