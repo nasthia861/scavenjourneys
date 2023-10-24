@@ -172,9 +172,6 @@ journeyRouter.delete('/:id', async (req, res) => {
     // Delete associated step progress records
     try {
       await AppDataSource.manager.delete(StepProgress, {
-        relations: {
-          journey_progress: true
-        },
         journey_progress: {
           journey: {
             id: journeyId,
@@ -184,7 +181,17 @@ journeyRouter.delete('/:id', async (req, res) => {
     } catch (stepProgressError) {
       console.error('Error deleting associated step progress records:', stepProgressError);
     }
-
+    // Delete associated journey progress records
+    try {
+      await AppDataSource.manager.delete(JourneyProgress, {
+        journey: {
+          id: journeyId,
+        },
+      });
+      console.log("journey progress hit")
+    } catch (journeyProgressError) {
+      console.error('Error deleting associated journey progress records:', journeyProgressError);
+    }
     // Delete associated steps
     try {
       await AppDataSource.manager.delete(Step, {
@@ -195,7 +202,6 @@ journeyRouter.delete('/:id', async (req, res) => {
     } catch (stepError) {
       console.error('Error deleting associated steps:', stepError);
     }
-
     // Delete associated journey tags
     try {
       await AppDataSource.manager.delete(JourneyTag, {
@@ -207,16 +213,6 @@ journeyRouter.delete('/:id', async (req, res) => {
       console.error('Error deleting associated journey tags:', journeyTagError);
     }
 
-    // Delete associated journey progress records
-    try {
-      await AppDataSource.manager.delete(JourneyProgress, {
-        journey: {
-          id: journeyId,
-        },
-      });
-    } catch (journeyProgressError) {
-      console.error('Error deleting associated journey progress records:', journeyProgressError);
-    }
 
     // Delete the journey itself
     const result = await AppDataSource.manager.delete(Journey, {

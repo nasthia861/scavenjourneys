@@ -79,7 +79,7 @@ const Achievements = () => {
                 <Typography variant="h6">{achievement.name}</Typography>
                 <Typography variant="subtitle1">
                   {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                    ? `Achieved on: ${earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt}`
+                    ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
                     : 'Not yet achieved'}
                 </Typography>
               </Paper>

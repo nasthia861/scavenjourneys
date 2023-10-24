@@ -194,41 +194,64 @@ type IHeaderProps = {
               letterSpacing: 0,
             }}/>
         </ListItem>
+      </Stack>
+
+      {/* Change Username button */}
      <Stack direction="row" spacing={1}  >
-      <form onSubmit= { handleSubmit } >
+        {updateButton ? (
+        <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
             label="Username"
             variant="outlined"
             onChange={handleUsernameChange}
             value={ updatedUsername }
-            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />}}
+            InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />, sx: {borderRadius: '20px'}}}
           />
+            <Button
+               variant="outlined"
+              type='submit'
+              sx={{borderRadius: '20px'}}
+              onClick={() => {
+                updateUsername(updatedUsername);
+              }}
+            >
+              SET
+            </Button>
+        </form>
+        ) : (
           <Button
             variant="contained"
-            type='submit'
+            type='button'
+            sx={{borderRadius: '20px'}}
             onClick={() => {
-              updateUsername(updatedUsername);
+              setUpdateButton(true);
             }}
-            >
-            Update Username
-          </Button>
-        </form>
-        </Stack>
+          >Update Username</Button>
+        )}
+      </Stack>
+
+
+
         {/* achievements page*/}
-        <Button onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
+        <Button
+        sx={{borderRadius: '20px'}}
+        onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
         variant="contained">
           Achievements
         </Button>
+
+
 
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() =>
-              handleJourneyClick(journey.id)}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+              <ListItemButton
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
@@ -294,6 +317,7 @@ type IHeaderProps = {
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete this journey?
+            This action will permanently delete this journey, all of its steps, and any associated data such as the progress anyone has made going on this journey.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -305,7 +329,6 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-      </Stack>
     </Container>
   )
 }
