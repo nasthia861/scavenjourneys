@@ -177,16 +177,23 @@ type IHeaderProps = {
   return (
     <Container>
       <Stack spacing={1}>
-      <Typography variant="h5" gutterBottom>
-        {username}
-      </Typography>
-
-      {/* For other variants, adjust the size with `width` and `height` */}
-      <Avatar
-      sx={{ bgcolor: deepOrange[900],
-      width: 56, height: 56 }}
-      src={userImg}
-      ></Avatar>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar
+            sx={{ bgcolor: deepOrange[900],
+              width: 56, height: 56 }}
+            src={userImg}
+            />
+          </ListItemAvatar>
+          <ListItemText
+            sx={{ my: 2, mx: 2 }}
+            primary={username}
+            primaryTypographyProps={{
+              fontSize: 25,
+              fontWeight: 'large',
+              letterSpacing: 0,
+            }}/>
+        </ListItem>
      <Stack direction="row" spacing={1}  >
       <form onSubmit= { handleSubmit } >
           <TextField
@@ -213,15 +220,8 @@ type IHeaderProps = {
         variant="contained">
           Achievements
         </Button>
-         {/* Button to fetch and render user's journeys */}
-      {/* <Button
-        variant="contained"
-        onClick={getUserJourneys}
-      >
-        Show My Journeys
-      </Button> */}
 
-       {/* List of Journeys */}
+       {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
@@ -242,7 +242,7 @@ type IHeaderProps = {
           </Grid>
 
         </List>
-      {/* List of user's journeys */}
+      {/* List of user's created journeys */}
       <Typography variant="h5">My Journeys</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
@@ -310,4 +310,3 @@ type IHeaderProps = {
   )
 }
 export default Profile;
-
