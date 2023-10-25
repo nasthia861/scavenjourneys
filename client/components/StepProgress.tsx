@@ -24,7 +24,7 @@ type IHeaderProps = {
 
 const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>()
-  const [closeEnough, setCloseEnough] = useState(true)
+  const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [selectedStep, setSelectedStep] = useState(null);
 
@@ -124,15 +124,25 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
 
   const getLocation = () => {
-    //0.00005 20ft
-    if(Math.abs(+step.step.latitude - userLat) <  0.00005 || Math.abs(+step.step.longitude - userLong) <  0.00005) {
-      setCloseEnough(true)
+    const feetPerDegree = 364000;
+
+    const latDiff = Math.abs(Number(step.step.latitude) - userLat);
+    const lonDiff = Math.abs(Number(step.step.longitude) - userLong);
+
+    const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
+
+    console.log('distance in feet:', distanceInFeet)
+    if(distanceInFeet < 20) {
+      setCloseEnough(true);
+    } else {
+      setCloseEnough(false);
     }
+
  }
 
   useEffect(() => {
     getLocation()
-  }, [userLat])
+  }, [userLat, userLong])
 
   // Function to grab stepData onClick
  const grabStepData = (
