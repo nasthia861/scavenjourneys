@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -14,6 +15,7 @@ declare global {
       'a-mixin': any
       'a-circle': any
       'a-sky': any
+      'a-nft': any
     }
   }
 }
@@ -39,8 +41,15 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
   }, []);
 
   return (
-    // Scene using webcam or default camera to dynamically render stepData to position at specified coords
+    <>
+     {/* <Helmet>
+        <script src="https://aframe.io/releases/1.2.0/aframe.min.js" async />
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js" async />
+      </Helmet> */}
+
+    {/* // Scene using webcam or default camera to dynamically render stepData to position at specified coords */}
     <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+
     <a-entity
       ref={markerRef}
       gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
@@ -50,7 +59,10 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}/>
+
    </a-scene>
+
+   </>
   );
 };
 
