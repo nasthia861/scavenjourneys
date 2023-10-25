@@ -177,27 +177,28 @@ type IHeaderProps = {
   return (
     <Container>
       <Stack spacing={1}>
-      <Typography variant="h5" gutterBottom>
-        {username}
-      </Typography>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar
+            sx={{ bgcolor: deepOrange[900],
+              width: 56, height: 56 }}
+            src={userImg}
+            />
+          </ListItemAvatar>
+          <ListItemText
+            sx={{ my: 2, mx: 2 }}
+            primary={username}
+            primaryTypographyProps={{
+              fontSize: 25,
+              fontWeight: 'large',
+              letterSpacing: 0,
+            }}/>
+        </ListItem>
+      </Stack>
 
-      {/* For other variants, adjust the size with `width` and `height` */}
-      <Avatar
-      sx={{ bgcolor: deepOrange[900],
-      width: 56, height: 56 }}
-      src={userImg}
-      ></Avatar>
-     {!updateButton && (
-          <Button
-            variant="outlined"
-            type='button'
-            sx={{borderRadius: '20px'}}
-            onClick={() => {
-              setUpdateButton(true);
-            }}
-          >Update Username</Button>
-        )}
-      {updateButton && (
+      {/* Change Username button */}
+     <Stack direction="row" spacing={1}  >
+        {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
@@ -218,7 +219,20 @@ type IHeaderProps = {
               SET
             </Button>
         </form>
+        ) : (
+          <Button
+            variant="contained"
+            type='button'
+            sx={{borderRadius: '20px'}}
+            onClick={() => {
+              setUpdateButton(true);
+            }}
+          >Update Username</Button>
         )}
+      </Stack>
+
+
+
         {/* achievements page*/}
         <Button
         sx={{borderRadius: '20px'}}
@@ -226,22 +240,18 @@ type IHeaderProps = {
         variant="contained">
           Achievements
         </Button>
-         {/* Button to fetch and render user's journeys */}
-      {/* <Button
-        variant="contained"
-        onClick={getUserJourneys}
-      >
-        Show My Journeys
-      </Button> */}
 
-       {/* List of Journeys */}
+
+
+       {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() =>
-              handleJourneyClick(journey.id)}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+              <ListItemButton
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
@@ -255,7 +265,7 @@ type IHeaderProps = {
           </Grid>
 
         </List>
-      {/* List of user's journeys */}
+      {/* List of user's created journeys */}
       <Typography variant="h5">My Journeys</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
@@ -319,9 +329,7 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-      </Stack>
     </Container>
   )
 }
 export default Profile;
-

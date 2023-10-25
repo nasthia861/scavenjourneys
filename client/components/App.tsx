@@ -29,7 +29,7 @@ const App = () => {
       { path: `/home`, label: 'Home' },
       { path:`/profile/${userId}`, label: 'Profile' },
       { path: `/leaderboard`, label: 'Leaderboard' },
-      { path: '/logout', label: 'Logout' },
+      { path: `/logout/${userId}`, label: 'Logout' },
   ];
 
   const getLocation = () => {
@@ -75,7 +75,7 @@ const App = () => {
               <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:UserId/:journeyId" element={<StepForm/>} />
               <Route path="/achievements/:UserId" element={<Achievements/>} />
-              <Route path="/logout" element={<Logout/>} />
+              <Route path="/logout/:UserId" element={<Logout/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>

@@ -125,7 +125,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
   const getLocation = () => {
     //0.00005 20ft
-    if(Math.abs(+step.step.latitude - userLat) <  0.5) {
+    if(Math.abs(+step.step.latitude - userLat) <  0.00005 || Math.abs(+step.step.longitude - userLong) <  0.00005) {
       setCloseEnough(true)
     }
  }

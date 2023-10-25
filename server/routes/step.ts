@@ -69,31 +69,36 @@ stepRouter.delete('/:id', async (req, res) => {
 });
 
 
-// // GET all steps assigned to a user
-// stepRouter.get('/user/:userId', async (req, res) => {
-//   const { userId } = req.params;
+// // GET all step progresses assigned to a user
+stepRouter.get('/progress/user/:userId', async (req, res) => {
+  const { userId } = req.params;
 
-//   try {
-//     const steps = await AppDataSource.manager.find(Step, {
-//       relations: ['user'],
-//       where: {
-//         user :  {
-//           id: +userId,
-//         }
-//       }
-//     });
+  try {
 
-//     if (steps) {
-//       res.status(200).json(steps);
-//     } else {
-//       res.status(404).send('Steps not found');
-//     }
-//   } catch (error) {
+    const steps = await stepProgressRepo.find({
+      //relations: ['journey_progress', 'user'],
+      where: {
+        journey_progress :  {
+          user: {
+            id: +userId,
+          }
+        }
+      },
+      take: 5,
+      order: { started_at: 'DESC'}
+    });
 
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
+    if (steps) {
+      res.status(200).json(steps);
+    } else {
+      res.status(404).send('Steps not found');
+    }
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // // get Steps by journeyId
 stepRouter.get('/journey/:journeyId', async (req, res) => {
