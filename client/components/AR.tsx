@@ -37,7 +37,6 @@ const ARScene: React.FC<ARSceneProps> = () => {
   //     AR_Script && AR_Script.remove();
   //   };
   // }, []);
-
   return (
     <>
         {/* <HelmetProvider>
