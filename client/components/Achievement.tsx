@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { myContext } from "./Context";
 import Container from '@mui/material/Container';
@@ -11,10 +12,10 @@ import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 
 const Achievements = () => {
-  const [user, setUser] = useState<any>(useContext(myContext));
+  //grabs user data from params
+  const [userId, setUserId] = useState<number | null>(parseInt(useParams().UserId));
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
-  const userId = user?.id;
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, achievement: any) => {
@@ -78,7 +79,7 @@ const Achievements = () => {
                 <Typography variant="h6">{achievement.name}</Typography>
                 <Typography variant="subtitle1">
                   {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                    ? `Achieved on: ${earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt}`
+                    ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
                     : 'Not yet achieved'}
                 </Typography>
               </Paper>

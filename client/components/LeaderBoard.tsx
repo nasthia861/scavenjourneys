@@ -10,7 +10,7 @@ const Leaderboard = () => {
   const [orderBy, setOrderBy] = useState('journeys'); // Default order by journeys
 
   useEffect(() => {
-    // Fetch user data ordered by the selected criterion (journeys or steps)
+    // Fetch user data ordered by the selected criterion (journeys, steps, journeysTaken, or stepsTaken)
     axios
       .get(`/userdata/userdata?orderBy=${orderBy}`)
       .then((response) => {
@@ -46,6 +46,20 @@ const Leaderboard = () => {
         >
           Order by Steps Created
         </Button>
+        <Button
+          variant='outlined'
+          onClick={() => handleOrderBy('journeysTaken')}
+          sx={{borderRadius: '20px'}}
+        >
+          Order by Journeys Taken
+        </Button>
+        <Button
+          variant='outlined'
+          onClick={() => handleOrderBy('stepsTaken')}
+          sx={{borderRadius: '20px'}}
+        >
+          Order by Steps Taken
+        </Button>
       </Box>
       {userData.map((user, index) => (
         <Box
@@ -73,8 +87,9 @@ const Leaderboard = () => {
               <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                 {orderBy === 'journeys' ? `Journeys Created: ${user.journeysCreated}` : null}
                 {orderBy === 'steps' ? `Steps Created: ${user.stepsCreated}` : null}
+                {orderBy === 'journeysTaken' ? `Journeys Taken: ${user.journeysTaken}` : null}
+                {orderBy === 'stepsTaken' ? `Steps Taken: ${user.stepsTaken}` : null}
               </Typography>
-
             </Box>
           </Box>
         </Box>

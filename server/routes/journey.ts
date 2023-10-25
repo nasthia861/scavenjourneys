@@ -6,6 +6,7 @@ import { JourneyProgress } from '../db/entities/JourneyProgress';
 import { User } from '../db/entities/User';
 import { StepProgress } from '../db/entities/StepProgress';
 import { JourneyTag } from '../db/entities/JourneyTag';
+import { Step } from '../db/entities/Step';
 
 
 const journeyRouter = express.Router();
@@ -14,6 +15,7 @@ const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
 const userRepo = AppDataSource.getRepository(User)
 const stepProgressRepo = AppDataSource.getRepository(StepProgress);
 const journeyTagRepo = AppDataSource.getRepository(JourneyTag);
+const stepRepository = AppDataSource.getRepository(Step);
 
 
 
@@ -47,6 +49,27 @@ journeyRouter.get('/recent/:latitude/:longitude/:alignment', async (req, res) =>
     res.status(200).json(recentJourneys);
   } catch (error) {
     console.error('Error fetching recent journeys:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// get journeys by user id
+journeyRouter.get('/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userJourneys = await journeyRepository.find({
+      relations: {
+          user: true
+        },
+      where: {
+        user: { id: parseInt(userId, 10) }
+      },
+    });
+
+    res.status(200).json(userJourneys);
+  } catch (error) {
+    console.error('Error fetching user-specific journeys:', error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -142,21 +165,70 @@ journeyRouter.put('/:id', async (req, res) => {
     });
 });
 
-// delete a journey by id
+// Delete a journey by id
 journeyRouter.delete('/:id', async (req, res) => {
   const journeyId = req.params.id;
-  await AppDataSource.manager.delete(Journey, {id: journeyId})
-    .then((result) => {
-      if (result.affected > 0) {
-        res.status(200).json({ message: 'Journey deleted successfully' });
-      } else {
-        res.status(404).json({ message: 'Journey not found' });
-      }
-    })
-    .catch((error: null) => {
-      console.error('could not delete journey', error);
-      res.status(500);
+  try {
+    // Delete associated step progress records
+    try {
+      await AppDataSource.manager.delete(StepProgress, {
+        journey_progress: {
+          journey: {
+            id: journeyId,
+          },
+        },
+      });
+    } catch (stepProgressError) {
+      console.error('Error deleting associated step progress records:', stepProgressError);
+    }
+    // Delete associated journey progress records
+    try {
+      await AppDataSource.manager.delete(JourneyProgress, {
+        journey: {
+          id: journeyId,
+        },
+      });
+      console.log("journey progress hit")
+    } catch (journeyProgressError) {
+      console.error('Error deleting associated journey progress records:', journeyProgressError);
+    }
+    // Delete associated steps
+    try {
+      await AppDataSource.manager.delete(Step, {
+        journey: {
+          id: journeyId,
+        },
+      });
+    } catch (stepError) {
+      console.error('Error deleting associated steps:', stepError);
+    }
+    // Delete associated journey tags
+    try {
+      await AppDataSource.manager.delete(JourneyTag, {
+        journey: {
+          id: journeyId,
+        },
+      });
+    } catch (journeyTagError) {
+      console.error('Error deleting associated journey tags:', journeyTagError);
+    }
+
+
+    // Delete the journey itself
+    const result = await AppDataSource.manager.delete(Journey, {
+      id: journeyId,
     });
+
+    if (result.affected > 0) {
+      res.status(200).json({ message: 'Journey and associated data deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Journey not found' });
+    }
+  } catch (error) {
+    console.log('this is the journey id ---->', journeyId);
+    console.error('Could not delete journey and associated data', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // POST journey_progress assigned to user/journey (test: pending )

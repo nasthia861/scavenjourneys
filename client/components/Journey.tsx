@@ -42,21 +42,92 @@ import { myContext } from "./Context";
     if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
-      console.log(userId, journey.id)
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
       axios.post(`/journey/progress`, {
       userId: userId,
       journeyId: journey.id,
       })
-        .then((response) => {
+        .then(async (response) => {
+          let promises:Promise<any>[] = []
           steps.data.forEach((step: {id:number}) => {
+            promises.push(
             axios.post('/step/progress', {
               journey_progress: response.data.id,
               step: step.id
             })
             .catch((error) => console.error('Error assigning steps', error))
+            )
           })
-          setJourneyProgressId(response.data.id)
+
+ // Fetch the user's data to calculate "Journeys Taken"
+ axios.get(`/userdata/byUserId/${userId}`).then(async (userDataResponse) => {
+  const existingUserData = userDataResponse.data;
+  const journeysTaken = existingUserData.journeysTaken + 1; // Increment "Journeys Taken"
+
+  // Increment "Journeys Taken" in user data
+  const updatedUserData = {
+    ...existingUserData,
+    journeysTaken,
+  };
+  axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
+
+  // Check for achievements if the user has any
+  const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
+  const userAchievements = userAchievementsResponse.data;
+
+  // Function to create a new user achievement if it doesn't exist
+  const createNewUserAchievement = async (achievementId: number) => {
+    await axios.post('/userachievements', {
+      user: { id: userId },
+      achievement: { id: achievementId },
+    });
+  };
+
+  // Check if the user needs an achievement based on "Journeys Taken"
+  if (journeysTaken >= 2) {
+    if (Array.isArray(userAchievements)) {
+      // Check if the user has achievement ID for "Journeys Taken"
+      const achievementId = 7;
+      const hasAchievement = userAchievements.some(
+        (achievement) => achievement.achievement.id === achievementId
+      );
+      // If they don't have it, create a new user achievement
+      if (!hasAchievement) {
+        createNewUserAchievement(achievementId);
+      }
+    }
+  }
+
+  if (journeysTaken >= 10) {
+    if (Array.isArray(userAchievements)) {
+      // Check if the user has achievement ID for "Journeys Taken"
+      const achievementId = 8;
+      const hasAchievement = userAchievements.some(
+        (achievement) => achievement.achievement.id === achievementId
+      );
+      // If they don't have it, create a new user achievement
+      if (!hasAchievement) {
+        createNewUserAchievement(achievementId);
+      }
+    }
+  }
+
+  if (journeysTaken >= 20) {
+    if (Array.isArray(userAchievements)) {
+      // Check if the user has achievement ID for "Journeys Taken"
+      const achievementId = 9;
+      const hasAchievement = userAchievements.some(
+        (achievement) => achievement.achievement.id === achievementId
+      );
+      // If they don't have it, create a new user achievement
+      if (!hasAchievement) {
+        createNewUserAchievement(achievementId);
+      }
+    }
+  }
+});
+
+          Promise.all(promises).then(() => setJourneyProgressId(response.data.id))
         })
         .catch((error) => {
           console.error('Error assigning journey:', error);
