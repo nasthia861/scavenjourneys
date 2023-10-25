@@ -255,14 +255,14 @@ type IHeaderProps = {
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
+              <Grid>
+                {(selectedIndex === journey.id) && (steps.map((step) => (
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
+                )))}
+              </Grid>
             </React.Fragment>
           ))}
-          <Typography variant="h5">Steps & Step Progress</Typography>
-          <Grid>
-            {steps.map((step) => (
-                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
-            ))}
-          </Grid>
+          {/* <Typography variant="h5">Steps & Step Progress</Typography> */}
 
         </List>
       {/* List of user's created journeys */}
