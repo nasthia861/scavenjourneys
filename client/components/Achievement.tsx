@@ -19,17 +19,18 @@ type IHeaderProps = {
 const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
+  const [clickedAchievement, setClickedAchievement] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, achievement: any) => {
+  const handleAchievementClick = (achievement: any, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setClickedAchievement(achievement);
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePopoverClose = () => {
+  const closeAchievementClick = () => {
+    setClickedAchievement(null);
     setAnchorEl(null);
   };
-
-  const open = Boolean(anchorEl);
 
   useEffect(() => {
     axios.get('/achievement')
@@ -58,17 +59,17 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
       </Typography>
       <Grid container spacing={3}>
         {achievements.map((achievement) => (
-          <Grid item key={achievement.id} xs={12} sm={6} md={4} lg={3}>
+          <Grid item key={achievement.id} xs={12} sm={6} md={4} lg={3} >
             <Tooltip title={achievement.conditionText}>
               <Paper
                 elevation={3}
+                sx={{padding: '10px', background:'#f8e5c8'}}
                 className={`achievement-box ${
                   earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                     ? 'earned'
                     : 'unearned'
-                }`}
-                onMouseEnter={(e) => handlePopoverOpen(e, achievement)}
-                onMouseLeave={handlePopoverClose}
+                }
+                `}
               >
                 <Avatar
                   alt={achievement.name}
@@ -78,6 +79,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
                   }
                   sx={{ width: 100, height: 100 }}
+                  onClick={(event) => handleAchievementClick(achievement, event)}
                 />
                 <Typography variant="h6">{achievement.name}</Typography>
                 <Typography variant="subtitle1">
@@ -90,6 +92,21 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
           </Grid>
         ))}
       </Grid>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={closeAchievementClick}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        {clickedAchievement && clickedAchievement.conditionText}
+      </Popover>
     </Container>
   );
 };
