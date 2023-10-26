@@ -8,12 +8,13 @@ import GoogleButton from 'react-google-button';
 import Box from '@mui/material/Box/Box';
 
 const Logout = () => {
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
   const [pictures, setPictures] = useState([])
 
 
   //change axios request to grab user photos instead
   const getPictures = () => {
-    axios.get('/journey')
+    axios.get(`/step/progress/user/${userId}`)
       .then((response) => setPictures(response.data))
       .catch((error) => console.error('could not get pictures'))
   }
@@ -29,20 +30,19 @@ const Logout = () => {
   return (
     <div>
       <Box
-
-        alignItems="center"
-        justifyContent="center"
-        padding='30px'
-        width='100%'
+        container
+        direction="column"
+        // alignItems="center"
       >
         <p>
           Thanks for playing. Hope you had a great time and created awesome memories!
         </p>
         <Carousel
-          indicatorContainerProps={{style: {marginTop: '20px'}}}
         >
             {
-                pictures.map( (item: any, i) => <Item key={i} item={item} /> )
+              pictures.map((photoData) => {
+                return <img src={photoData.image_url} key={photoData.id}/>
+              })
             }
         </Carousel>
       </Box>

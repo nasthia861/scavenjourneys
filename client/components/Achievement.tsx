@@ -10,10 +10,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
+import { UserType } from '@this/types/User';
 
-const Achievements = () => {
-  //grabs user data from params
-  const [userId, setUserId] = useState<number | null>(parseInt(useParams().UserId));
+type IHeaderProps = {
+  userId: number
+};
+
+const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,7 +54,7 @@ const Achievements = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Achievements
+        Badges
       </Typography>
       <Grid container spacing={3}>
         {achievements.map((achievement) => (
@@ -79,7 +82,7 @@ const Achievements = () => {
                 <Typography variant="h6">{achievement.name}</Typography>
                 <Typography variant="subtitle1">
                   {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                    ? `Achieved on: ${earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt}`
+                    ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
                     : 'Not yet achieved'}
                 </Typography>
               </Paper>
