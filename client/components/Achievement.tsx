@@ -10,10 +10,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
+import { UserType } from '@this/types/User';
 
-const Achievements = () => {
-  //grabs user data from params
-  const [userId, setUserId] = useState<number | null>(parseInt(useParams().UserId));
+type IHeaderProps = {
+  userId: number
+};
+
+const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
   const [clickedAchievement, setClickedAchievement] = useState(null);
@@ -52,7 +55,7 @@ const Achievements = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Achievements
+        Badges
       </Typography>
       <Grid container spacing={3}>
         {achievements.map((achievement) => (
