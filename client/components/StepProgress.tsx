@@ -195,15 +195,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
                   type="file"
                   accept="image/*"
                   capture="environment"
-                  onChange={(e) => solveStep(e)}
-                  onClick={(e) => grabStepData(e)} />
+                  onChange={(e) => solveStep(e)}/>
               </Button>
-              {/* <Button
+              <Button
                 onClick={(e) => grabStepData(e)}
                 variant="contained" color="primary"
                 startIcon={<CameraAltRoundedIcon/>}
                 > See in AR
-              </Button> */}
+              </Button>
             </div>
           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
