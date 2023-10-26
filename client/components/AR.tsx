@@ -47,7 +47,6 @@ const ARScene: React.FC<ARSceneProps> = () => {
     //   };
     // }, []);
 
-
   return (
     <>
 
