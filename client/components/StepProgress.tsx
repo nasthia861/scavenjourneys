@@ -33,10 +33,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
-
-
-
-
     if(e.target.files[0].size < 5000000) {
       setSizeWarning(false);
       const reader = await new FileReader()
