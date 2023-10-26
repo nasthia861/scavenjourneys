@@ -50,6 +50,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
     {/* // Scene using webcam or default camera to dynamically render stepData to position at specified coords */}
     <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
+
     <a-entity
       ref={markerRef}
       gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
@@ -59,7 +60,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}/>
-
    </a-scene>
 
    </>
