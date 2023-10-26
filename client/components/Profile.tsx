@@ -1,5 +1,6 @@
 import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
+import Achievements from "./Achievement";
 
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -23,6 +24,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
 import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
@@ -52,6 +58,7 @@ type IHeaderProps = {
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [tabValue, setTabValue] = useState("Started");
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -143,7 +150,12 @@ type IHeaderProps = {
      }
    };
 
-   const handleConfirmDialogOpen = () => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTabValue(newValue);
+  };
+
+
+  const handleConfirmDialogOpen = () => {
     setConfirmDialogOpen(true);
   };
 
@@ -231,20 +243,22 @@ type IHeaderProps = {
         )}
       </Stack>
 
+      <TabContext value={tabValue}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+          <Tab label="Badges" value="Badges" />
+          <Tab label="Started" value="Started" />
+          <Tab label="Created" value="Created" />
+        </TabList>
+      </Box>
+        <TabPanel value="Badges">
+          <Achievements userId={userId}/>
+        </TabPanel>
 
 
-        {/* achievements page*/}
-        <Button
-        sx={{borderRadius: '20px'}}
-        onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
-        variant="contained">
-          Achievements
-        </Button>
-
-
-
+        <TabPanel value="Started">
        {/* List of Journey Progress*/}
-      <Typography variant="h5">Journeys</Typography>
+      <Typography variant="h5">Journeys In Progress</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
@@ -265,8 +279,12 @@ type IHeaderProps = {
           {/* <Typography variant="h5">Steps & Step Progress</Typography> */}
 
         </List>
+      </TabPanel>
+
+
+      <TabPanel value="Created">
       {/* List of user's created journeys */}
-      <Typography variant="h5">My Journeys</Typography>
+      <Typography variant="h5">Journeys Created</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
@@ -308,6 +326,8 @@ type IHeaderProps = {
           </React.Fragment>
         ))}
       </List>
+      </TabPanel>
+    </TabContext>
       {/* Confirmation dialog */}
       <Dialog
         open={confirmDialogOpen}
