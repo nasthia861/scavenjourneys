@@ -4,17 +4,13 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import Item from './Item';
-import { Hidden } from '@mui/material';
+import GoogleButton from 'react-google-button';
+import Box from '@mui/material/Box/Box';
 
 const Logout = () => {
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
   const [pictures, setPictures] = useState([])
 
-
-
-  const logUserOut = () => {
-    axios.post('/auth/logout');
-  }
 
   //change axios request to grab user photos instead
   const getPictures = () => {
@@ -23,13 +19,17 @@ const Logout = () => {
       .catch((error) => console.error('could not get pictures'))
   }
 
+  const googleLogin = () => {
+    window.open('/auth/google', '_self');
+  }
+
   useEffect(() => {
     getPictures();
   }, [])
 
   return (
     <div>
-      <Grid
+      <Box
         container
         direction="column"
         // alignItems="center"
@@ -45,14 +45,23 @@ const Logout = () => {
               })
             }
         </Carousel>
-        <Button
-          variant='outlined'
-          sx={{borderRadius: '20px'}}
-          onClick={() => {logUserOut()}}
-          href='/'
-        >
-          Logout
-        </Button>
+      </Box>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        padding='30px'
+        width='100%'
+      >
+        <p>
+          Still have some exploring to do?
+        </p>
+        <GoogleButton
+          className='google-button'
+          onClick={googleLogin}
+          />
       </Grid>
     </div>
   )

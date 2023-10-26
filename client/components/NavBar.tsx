@@ -11,6 +11,7 @@ import { Typography } from "@mui/material";
 import logo from "../styling/ARBackgorund/scvnjrny_logo_stacked.svg";
 
 import { themeOptions } from "./Theme";
+import axios from "axios";
 
 //withheld from external types folder to exemplify interface/ assignments being passed to functional component
 //we have to assign types/interface to ensure proper typescript syntax
@@ -30,6 +31,9 @@ interface NavBarProps {
 const NavBar = ({ menuItems }: NavBarProps) => {
   const location = useLocation();
   if (location.pathname === "/") {
+    return null;
+  }
+  if (location.pathname === "/logout") {
     return null;
   }
 
@@ -52,6 +56,13 @@ const NavBar = ({ menuItems }: NavBarProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logUserOut = () => {
+    axios.post('/auth/logout')
+    .then(() => {console.log('logging out')})
+    .catch((err) => {console.error('failed to logout', err)})
+  }
+
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
@@ -100,14 +111,15 @@ const NavBar = ({ menuItems }: NavBarProps) => {
                 onClose={handleClose}
               >
                 {menuItems.map((item) => (
-                  <MenuItem
-                    key={item.path}
-                    component={Link}
-                    to={item.path}
-                    onClick={handleClose}
-                  >
+                item.path === '/logout' ? (
+                <MenuItem key={item.path} component={Link} to={item.path} onClick={logUserOut}>
+                  {item.label}
+                </MenuItem>
+                ) : (
+                  (<MenuItem key={item.path} component={Link} to={item.path} onClick={handleClose}>
                     {item.label}
-                  </MenuItem>
+                  </MenuItem>)
+                )
                 ))}
               </Menu>
             </div>
