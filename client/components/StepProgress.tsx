@@ -31,8 +31,77 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
   const navigate = useNavigate();
 
+  // Increment steps taken in user data
+  const giveStepsTakenAchievement = async () => {
+
+    const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
+    const existingUserData = userDataResponse.data;
+    const updatedUserData = {
+      ...existingUserData,
+      stepsTaken: existingUserData.stepsTaken + 1, // Increment stepsTaken by 1
+    };
+    await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
+  
+    // Check for achievements if the user has any
+    const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
+    const userAchievements = userAchievementsResponse.data;
+  
+    // Function to create a new user achievement if it doesn't exist
+    const createNewUserAchievement = async (achievementId: number) => {
+      await axios.post('/userachievements', {
+        user: { id: userId },
+        achievement: { id: achievementId },
+      });
+    };
+    console.log(existingUserData)
+    // Check if the user needs an achievement based on steps taken
+    if (updatedUserData.stepsTaken >= 5) {
+      if (Array.isArray(userAchievements)) {
+        console.log('these are your achievements---->',userAchievements)
+        // Check if the user has achievement ID for steps taken
+        const achievementId = 10;
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === achievementId
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(achievementId);
+        }
+      }
+    }
+  
+    if (updatedUserData.stepsTaken >= 25) {
+      if (Array.isArray(userAchievements)) {
+        // Check if the user has achievement ID for steps taken
+        const achievementId = 11;
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === achievementId
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(achievementId);
+        }
+      }
+    }
+  
+    if (updatedUserData.stepsTaken >= 50) {
+      if (Array.isArray(userAchievements)) {
+        // Check if the user has achievement ID for steps taken
+        const achievementId = 12;
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === achievementId
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(achievementId);
+        }
+      }
+    }
+  };
+
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+
     if(e.target.files[0].size < 5000000) {
       setSizeWarning(false);
       const reader = await new FileReader()
@@ -46,71 +115,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
             setImage(response.data.secure_url)
           })
       });
-
-      // Increment steps taken in user data
-      const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
-      const existingUserData = userDataResponse.data;
-      const updatedUserData = {
-        ...existingUserData,
-        stepsTaken: existingUserData.stepsTaken + 1, // Increment stepsTaken by 1
-      };
-      await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
-
-      // Check for achievements if the user has any
-      const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
-      const userAchievements = userAchievementsResponse.data;
-
-      // Function to create a new user achievement if it doesn't exist
-      const createNewUserAchievement = async (achievementId: number) => {
-        await axios.post('/userachievements', {
-          user: { id: userId },
-          achievement: { id: achievementId },
-        });
-      };
-
-      // Check if the user needs an achievement based on steps taken
-      if (updatedUserData.stepsTaken >= 5) {
-        if (Array.isArray(userAchievements)) {
-          console.log('these are your achievements---->',userAchievements)
-          // Check if the user has achievement ID for steps taken
-          const achievementId = 10;
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === achievementId
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(achievementId);
-          }
-        }
-      }
-
-      if (updatedUserData.stepsTaken >= 25) {
-        if (Array.isArray(userAchievements)) {
-          // Check if the user has achievement ID for steps taken
-          const achievementId = 11;
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === achievementId
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(achievementId);
-          }
-        }
-      }
-
-      if (updatedUserData.stepsTaken >= 50) {
-        if (Array.isArray(userAchievements)) {
-          // Check if the user has achievement ID for steps taken
-          const achievementId = 12;
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === achievementId
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(achievementId);
-          }
-        }
-      }
+      giveStepsTakenAchievement()
       reader.readAsDataURL(e.target.files[0]);
     } else {
       setSizeWarning(true);
