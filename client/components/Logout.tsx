@@ -7,6 +7,7 @@ import Item from './Item';
 import { Hidden } from '@mui/material';
 
 const Logout = () => {
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
   const [pictures, setPictures] = useState([])
 
 
@@ -17,7 +18,7 @@ const Logout = () => {
 
   //change axios request to grab user photos instead
   const getPictures = () => {
-    axios.get('/journey')
+    axios.get(`/step/progress/user/${userId}`)
       .then((response) => setPictures(response.data))
       .catch((error) => console.error('could not get pictures'))
   }
@@ -30,20 +31,18 @@ const Logout = () => {
     <div>
       <Grid
         container
-        spacing={0}
         direction="column"
-        alignItems="center"
-        justifyContent="center"
-        padding='30px'
+        // alignItems="center"
       >
         <p>
           Thanks for playing. Hope you had a great time and created awesome memories!
         </p>
         <Carousel
-          indicatorContainerProps={{style: {marginTop: '20px'}}}
         >
             {
-                pictures.map( (item: any, i) => <Item key={i} item={item} /> )
+              pictures.map((photoData) => {
+                return <img src={photoData.image_url} key={photoData.id}/>
+              })
             }
         </Carousel>
         <Button
