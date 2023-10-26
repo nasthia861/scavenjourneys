@@ -16,17 +16,18 @@ const Achievements = () => {
   const [userId, setUserId] = useState<number | null>(parseInt(useParams().UserId));
   const [achievements, setAchievements] = useState([]);
   const [earnedAchievements, setEarnedAchievements] = useState([]);
+  const [clickedAchievement, setClickedAchievement] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, achievement: any) => {
+  const handleAchievementClick = (achievement: any, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setClickedAchievement(achievement);
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePopoverClose = () => {
+  const closeAchievementClick = () => {
+    setClickedAchievement(null);
     setAnchorEl(null);
   };
-
-  const open = Boolean(anchorEl);
 
   useEffect(() => {
     axios.get('/achievement')
@@ -63,9 +64,8 @@ const Achievements = () => {
                   earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                     ? 'earned'
                     : 'unearned'
-                }`}
-                onMouseEnter={(e) => handlePopoverOpen(e, achievement)}
-                onMouseLeave={handlePopoverClose}
+                }
+                `}
               >
                 <Avatar
                   alt={achievement.name}
@@ -75,6 +75,7 @@ const Achievements = () => {
                       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
                   }
                   sx={{ width: 100, height: 100 }}
+                  onClick={(event) => handleAchievementClick(achievement, event)}
                 />
                 <Typography variant="h6">{achievement.name}</Typography>
                 <Typography variant="subtitle1">
@@ -87,6 +88,21 @@ const Achievements = () => {
           </Grid>
         ))}
       </Grid>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={closeAchievementClick}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        {clickedAchievement && clickedAchievement.conditionText}
+      </Popover>
     </Container>
   );
 };
