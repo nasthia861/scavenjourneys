@@ -1,5 +1,6 @@
 import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
+import Achievements from "./Achievement";
 
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -23,6 +24,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
 import axios from "axios";
 import { JourneyProgressType } from '@this/types/JourneyProgress';
@@ -52,6 +58,7 @@ type IHeaderProps = {
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [tabValue, setTabValue] = useState("Started");
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -143,7 +150,12 @@ type IHeaderProps = {
      }
    };
 
-   const handleConfirmDialogOpen = () => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTabValue(newValue);
+  };
+
+
+  const handleConfirmDialogOpen = () => {
     setConfirmDialogOpen(true);
   };
 
@@ -177,27 +189,28 @@ type IHeaderProps = {
   return (
     <Container>
       <Stack spacing={1}>
-      <Typography variant="h5" gutterBottom>
-        {username}
-      </Typography>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar
+            sx={{ bgcolor: deepOrange[900],
+              width: 56, height: 56 }}
+            src={userImg}
+            />
+          </ListItemAvatar>
+          <ListItemText
+            sx={{ my: 2, mx: 2 }}
+            primary={username}
+            primaryTypographyProps={{
+              fontSize: 25,
+              fontWeight: 'large',
+              letterSpacing: 0,
+            }}/>
+        </ListItem>
+      </Stack>
 
-      {/* For other variants, adjust the size with `width` and `height` */}
-      <Avatar
-      sx={{ bgcolor: deepOrange[900],
-      width: 56, height: 56 }}
-      src={userImg}
-      ></Avatar>
-     {!updateButton && (
-          <Button
-            variant="outlined"
-            type='button'
-            sx={{borderRadius: '20px'}}
-            onClick={() => {
-              setUpdateButton(true);
-            }}
-          >Update Username</Button>
-        )}
-      {updateButton && (
+      {/* Change Username button */}
+     <Stack direction="row" spacing={1}  >
+        {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
             id="outlined-basic"
@@ -218,45 +231,60 @@ type IHeaderProps = {
               SET
             </Button>
         </form>
+        ) : (
+          <Button
+            variant="contained"
+            type='button'
+            sx={{borderRadius: '20px'}}
+            onClick={() => {
+              setUpdateButton(true);
+            }}
+          >Update Username</Button>
         )}
-        {/* achievements page*/}
-        <Button
-        sx={{borderRadius: '20px'}}
-        onClick={() => navigate(`/achievements/${userId}`,{state:{user}})}
-        variant="contained">
-          Achievements
-        </Button>
-         {/* Button to fetch and render user's journeys */}
-      {/* <Button
-        variant="contained"
-        onClick={getUserJourneys}
-      >
-        Show My Journeys
-      </Button> */}
+      </Stack>
 
-       {/* List of Journeys */}
-      <Typography variant="h5">Journeys</Typography>
+      <TabContext value={tabValue}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+          <Tab label="Badges" value="Badges" />
+          <Tab label="Started" value="Started" />
+          <Tab label="Created" value="Created" />
+        </TabList>
+      </Box>
+        <TabPanel value="Badges">
+          <Achievements userId={userId}/>
+        </TabPanel>
+
+
+        <TabPanel value="Started">
+       {/* List of Journey Progress*/}
+      <Typography variant="h5">Journeys In Progress</Typography>
       <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
-              <ListItemButton onClick={() =>
-              handleJourneyClick(journey.id)}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+              <ListItemButton
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
+              <Grid>
+                {(selectedIndex === journey.id) && (steps.map((step) => (
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
+                )))}
+              </Grid>
             </React.Fragment>
           ))}
-          <Typography variant="h5">Steps & Step Progress</Typography>
-          <Grid>
-            {steps.map((step) => (
-                <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
-            ))}
-          </Grid>
+          {/* <Typography variant="h5">Steps & Step Progress</Typography> */}
 
         </List>
-      {/* List of user's journeys */}
-      <Typography variant="h5">My Journeys</Typography>
+      </TabPanel>
+
+
+      <TabPanel value="Created">
+      {/* List of user's created journeys */}
+      <Typography variant="h5">Journeys Created</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
@@ -298,6 +326,8 @@ type IHeaderProps = {
           </React.Fragment>
         ))}
       </List>
+      </TabPanel>
+    </TabContext>
       {/* Confirmation dialog */}
       <Dialog
         open={confirmDialogOpen}
@@ -319,9 +349,7 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-      </Stack>
     </Container>
   )
 }
 export default Profile;
-
