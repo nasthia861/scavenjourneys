@@ -40,7 +40,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
           .then((response) => {
             axios.put(`/step/progress/${step.id}`, {
-              in_progress: false,
+              //in_progress: false,
               image_url: response.data.secure_url
             })
             setImage(response.data.secure_url)
