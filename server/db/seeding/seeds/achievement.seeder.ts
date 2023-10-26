@@ -11,18 +11,29 @@ const AchievementSeeder = async (dataSource: DataSource): Promise<void> => {
       .into(Achievement)
       .values([
         // 1
-        { name: 'Amateur Journey Maker', conditionText: 'Create 5 Journeys', icon_url: 'https://cdn-icons-png.flaticon.com/512/2471/2471722.png' },
+        { name: 'Amateur Journey Maker', conditionText: 'Create 5 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_karate-banan.webp' },
         // 2
-        { name: 'Expert Journey Maker', conditionText: 'Create 20 Journeys', icon_url: 'https://cdn-icons-png.flaticon.com/512/2471/2471722.png' },
+        { name: 'Expert Journey Maker', conditionText: 'Create 20 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_indibanana-jones-boulder.webp' },
         // 3
-        { name: 'Master Journey Maker', conditionText: 'Create 50 Journeys', icon_url: 'https://cdn-icons-png.flaticon.com/512/2471/2471722.png' },
+        { name: 'Master Journey Maker', conditionText: 'Create 50 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_happy-fuzzy-banana-corn.webp' },
         // 4
-        { name: 'Amateur Step Maker', conditionText: 'Create 15 Steps', icon_url: 'https://cdn-icons-png.flaticon.com/512/1378/1378582.png' },
+        { name: 'Amateur Step Maker', conditionText: 'Create 15 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
         // 5
-        { name: 'Expert Step Maker', conditionText: 'Create 50 Steps', icon_url: 'https://cdn-icons-png.flaticon.com/512/1378/1378582.png' },
+        { name: 'Expert Step Maker', conditionText: 'Create 50 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
         // 6
-        { name: 'Master Step Maker', conditionText: 'Create 100 Steps', icon_url: 'https://cdn-icons-png.flaticon.com/512/1378/1378582.png' },
-        
+        { name: 'Master Step Maker', conditionText: 'Create 100 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 7
+        { name: 'Amateur Journeys Taken', conditionText: 'Take 2 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 8
+        { name: 'Expert Journeys Taken', conditionText: 'Take 10 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 9
+        { name: 'Master Journeys Taken', conditionText: 'Take 20 Journeys', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 10
+        { name: 'Amateur Steps Taken', conditionText: 'Take 5 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 11
+        { name: 'Expert Steps Taken', conditionText: 'Take 25 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
+        // 12
+        { name: 'Master Steps Taken', conditionText: 'Take 50 Steps', icon_url: 'https://dev.bananamojis.com/bananas/400x400_banana-pirate.webp' },
       ])
       .execute();
   } catch (error) {
