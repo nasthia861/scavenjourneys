@@ -75,6 +75,7 @@ const ARScene: React.FC<ARSceneProps> = () => {
       stepName={stepData.step.name}
       latitude={stepData.step.latitude}
       longitude={stepData.step.longitude}
+      stepData={stepData}
       />
       </>
   );
