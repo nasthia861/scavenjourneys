@@ -284,7 +284,7 @@ type IHeaderProps = {
 
       <TabPanel value="Created">
       {/* List of user's created journeys */}
-      <Typography variant="h5">Journeys Created</Typography>
+      <Typography variant="h5">Journeys Createde</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
