@@ -15,7 +15,7 @@ import CreateJourney from './CreateJourney';
 import StepForm from './StepForm.tsx';
 import Achievements from './Achievement.tsx';
 import Logout from './Logout.tsx';
-import ARScene from './AR';
+import AR from './AR';
 
 const App = () => {
   // // grabs user data from google oauth
@@ -68,7 +68,7 @@ const App = () => {
             <NavBar menuItems={menuItems} />
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/ar" Component={ARScene } />
+              <Route path="/ar" Component={AR} />
               <Route path="/home" element={<Home userId={userId} userLat={userLat} userLong={userLong}/>} />
               <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
               <Route path="/journey" element={<Journey/>} />

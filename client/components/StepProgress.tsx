@@ -13,6 +13,7 @@ import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
+import MarkerEntity from './ARSteps';
 
 
 type IHeaderProps = {
@@ -26,7 +27,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
   const [image, setImage] = useState<string | null | ArrayBuffer>()
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
-  const [selectedStep, setSelectedStep] = useState(null);
+  const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
+  // const [selectedStep, setSelectedStep] = useState(null);
 
 
   const navigate = useNavigate();
@@ -41,11 +43,11 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
       stepsTaken: existingUserData.stepsTaken + 1, // Increment stepsTaken by 1
     };
     await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
-  
+
     // Check for achievements if the user has any
     const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
     const userAchievements = userAchievementsResponse.data;
-  
+
     // Function to create a new user achievement if it doesn't exist
     const createNewUserAchievement = async (achievementId: number) => {
       await axios.post('/userachievements', {
@@ -69,7 +71,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         }
       }
     }
-  
+
     if (updatedUserData.stepsTaken >= 25) {
       if (Array.isArray(userAchievements)) {
         // Check if the user has achievement ID for steps taken
@@ -83,7 +85,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         }
       }
     }
-  
+
     if (updatedUserData.stepsTaken >= 50) {
       if (Array.isArray(userAchievements)) {
         // Check if the user has achievement ID for steps taken
@@ -100,29 +102,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
   };
 
 
-  const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
-
-    if(e.target.files[0].size < 5000000) {
-      setSizeWarning(false);
-      const reader = await new FileReader()
-      reader.addEventListener('load', (event) => {
-        axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
-          .then((response) => {
-            axios.put(`/step/progress/${step.id}`, {
-              in_progress: false,
-              image_url: response.data.secure_url
-            })
-            setImage(response.data.secure_url)
-          })
-      });
-      giveStepsTakenAchievement()
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setSizeWarning(true);
-    }
-  }
-
-
 
   const getLocation = () => {
     const feetPerDegree = 364000;
@@ -131,8 +110,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
     const lonDiff = Math.abs(Number(step.step.longitude) - userLong);
 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
-
-    console.log('distance in feet:', distanceInFeet)
     if(distanceInFeet < 20) {
       setCloseEnough(true);
     } else {
@@ -144,18 +121,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
   useEffect(() => {
     getLocation()
   }, [userLat, userLong])
-
-  // Function to grab stepData onClick
- const grabStepData = (
-  _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    setSelectedStep(step);
-    //setShowARScene(true);
-    //console.log(_event)
-    // Send stepData to AR component for rendering
-    navigate('/ar', {state: { stepData: step }})
-
-  };
 
 
    /**Text to Speech Functionality */
@@ -189,6 +154,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
+          {inProgress && closeEnough && (
+              <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
+          )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Typography>
         <Typography variant="body2" color="text.secondary" >
           {text}
@@ -197,27 +166,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
           </IconButton>
         </Typography>
         </CardContent>
-        <CardActions>
-          {closeEnough && step.in_progress && (
-            <div>
-              <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-                Solve Step
-                <VisuallyHiddenInput
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  onChange={(e) => solveStep(e)}/>
-              </Button>
-              <Button
-                onClick={(e) => grabStepData(e)}
-                variant="contained" color="primary"
-                startIcon={<CameraAltRoundedIcon/>}
-                > See in AR
-              </Button>
-            </div>
-          )}
-          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
-        </CardActions>
     </Card>
 
   );

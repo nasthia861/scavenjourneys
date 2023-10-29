@@ -17,7 +17,7 @@ import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
 import { UserType } from '@this/types/User';
-import ARScene from './ARScence';
+
 
 
 type IHeaderProps = {
