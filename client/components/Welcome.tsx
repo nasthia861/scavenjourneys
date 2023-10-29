@@ -3,8 +3,6 @@ import GoogleButton from 'react-google-button'
 import Grid from '@mui/material/Grid';
 import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
-import world from '../styling/altWorld.png';
-import world2 from '../styling/altWorld2.png';
 import map from '../styling/scvMap.png'
 
 
@@ -41,10 +39,11 @@ const Welcome: React.FC = () => {
             style={{
               fontFamily: 'Secular One',
               fontSize: '20px',
-              // color: '#9e5528'
+              color: '#9e5528',
+              textAlign: 'center'
             }}
           >
-             <b style={{color: '#9e5528'}}>Get ready to put your problem-solving skills to the test as you follow the clues to explore your neighborhood, your city, or locations abroad.</b>
+             <b>Get ready to put your problem-solving skills to the test as you follow the clues to explore your neighborhood, your city, or locations abroad.</b>
           </p>
         <GoogleButton
           className='google-button'
