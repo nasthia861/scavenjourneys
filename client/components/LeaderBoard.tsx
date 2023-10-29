@@ -69,6 +69,7 @@ const Leaderboard = () => {
             Steps Solved
           </ToggleButton>
         </ToggleButtonGroup>
+      </Grid>
       {userData.map((user, index) => (
         <Box
           key={user.id}
