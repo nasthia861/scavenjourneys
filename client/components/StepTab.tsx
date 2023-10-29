@@ -1,30 +1,35 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/system/styled'
+import ListItem from '@mui/material/ListItem';
+import useTheme from "@mui/material/styles/useTheme";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List'
+
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
 import { JourneyType } from '@this/types/Journey';
 import { ShakeButton } from '../styling/stepFormStyling';
-import Box from '@mui/material/Box';
 
-const StepForm: React.FC = () => {
-  const params = useParams();
-  const routeJourneyId = params.journeyId;
-  const routeUserId = parseInt(params.UserId);
+interface StepTabProps {
+  userId: number;
+  journeyId: number;
+  userLat: number;
+  userLong: number;
+  journey: object;
+  onClose: () => void; // Callback to close the tab
+}
+
+const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong, journey, onClose }) => {
+  const theme = useTheme();
   const navigate = useNavigate();
-  const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
-  const latitude = location.state.userLat
-  const longitude = location.state.userLong
-  const journeyData = location.state.journeyData
-
-
-  const [journeyId, setJourneyId] = useState<number | null>(routeJourneyId ? Number(routeJourneyId) : null);
-
-  //grabs user data from params
-  const [userId, setUserId] = useState<number | null>(routeUserId);
+  const latitude = userLat
+  const longitude = userLong
+  const journeyData = journey
 
   const [stepData, setStepData] = useState<StepType>({
     name: '',
@@ -44,30 +49,11 @@ const StepForm: React.FC = () => {
   const [stepNameError, setStepNameError] = useState(false);
   const [stepHintError, setStepHintError] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [submittedSteps, setSubmittedStep] = useState<any>([]); // Track submitted steps
 
   useEffect(() => {
-    // Add an event listener for the beforeunload event
-    const unloadHandler = async (e: BeforeUnloadEvent) => {
-      if (!journeyCreated) {
-        // Display a confirmation message when the user tries to leave
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-        if (journeyId) {
-          // Delete steps first
-          for (const stepId of stepIds) {
-            await axios.delete(`/step/${stepId}`);
-          }
-          // Delete the journey once steps are deleted
-          await axios.delete(`/journey/${journeyId}`);
-          // Redirect to the CreateJourney page
-          navigate('/home');
-        }
-      }
-    };
-    window.addEventListener('beforeunload', unloadHandler);
-    return () => {
-      window.removeEventListener('beforeunload', unloadHandler);
-    };
   }, [journeyCreated, journeyId, stepIds]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStepData({ ...stepData, [name]: value });
@@ -115,6 +101,13 @@ const StepForm: React.FC = () => {
       // Post the step to the database
       const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
       await axios.post('/step', stepWithJourneyId);
+      
+      const submittedStepNameHint: any = {
+        name: stepData.name,
+        hint: stepData.hint
+      }
+      // add step to submitted steps array
+      setSubmittedStep([...submittedSteps, submittedStepNameHint])
 
       // Calculate the number of steps created
       const stepCount = 1 + stepIds.length;
@@ -126,13 +119,11 @@ const StepForm: React.FC = () => {
         const existingUserData = userDataResponse.data;
         const updatedUserData = {
           ...existingUserData,
-          journeysCreated: existingUserData.journeysCreated + 1,
           stepsCreated: existingUserData.stepsCreated + stepCount,
         };
         await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
 
       // remember the new userData
-      const newJourneysCreated = existingUserData.journeysCreated + 1
       const newStepsCreated = existingUserData.stepsCreated + stepCount
 
       // Check for achievements if the user has any
@@ -146,48 +137,6 @@ const StepForm: React.FC = () => {
           achievement: { id: achievementId },
         });
       };
-      // Check if the user needs an amateur journey maker achievement
-      if (newJourneysCreated >= 5) {
-        if (Array.isArray(userAchievements)) {
-
-          // Check if the user has achievement ID 1
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === 1
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(1);
-          }
-        }
-      }
-      // Check if the user needs an expert journey maker achievement
-      if (newJourneysCreated >= 20) {
-        if (Array.isArray(userAchievements)) {
-
-          // Check if the user has achievement ID 2
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === 2
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(2);
-          }
-        }
-      }
-      // Check if the user needs an master journey maker achievement
-      if (newJourneysCreated >= 50) {
-        if (Array.isArray(userAchievements)) {
-
-          // Check if the user has achievement ID 3
-          const hasAchievement = userAchievements.some(
-            (achievement) => achievement.achievement.id === 3
-          );
-          // If they don't have it, create a new user achievement
-          if (!hasAchievement) {
-            createNewUserAchievement(3);
-          }
-        }
-      }
       // Check if the user needs an amateur step maker achievement
       if (newStepsCreated >= 15) {
         if (Array.isArray(userAchievements)) {
@@ -232,52 +181,96 @@ const StepForm: React.FC = () => {
       }
         // Clear step data and navigate to the home page
         setStepData({ name: '', hint: '', user: { id: userId } });
-        navigate('/home');
+        // navigate('/home');
       } catch (error) {
         console.error('Error submitting journey with steps:', error);
       }
     };
-    
+
     return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        paddingTop="32px" // Adjust as needed to move it to the top of the page
-      >
-        <h3>Add Steps</h3>
-        <TextField
-          label="Step Name"
-          type="text"
-          name="name"
-          value={stepData.name}
-          onChange={handleInputChange}
-          error={stepNameError}
-          helperText={stepNameError ? 'Please enter a name' : ''}
-          style={{ marginBottom: '16px' }}
-        />
-        <TextField
-          label="Step Hint"
-          type="text"
-          name="hint"
-          value={stepData.hint}
-          onChange={handleInputChange}
-          error={stepHintError}
-          helperText={stepHintError ? 'Please enter a hint' : ''}
-          style={{ marginBottom: '16px' }}
-        />
-        {!isShaking ? (
-          <Button onClick={submitJourney} variant="contained">
-            Submit Journey
-          </Button>
-        ) : (
-          <ShakeButton onClick={submitJourney} variant="contained">
-            Submit Journey
-          </ShakeButton>
+      <div>
+        {submittedSteps.length > 0 && (
+          <List 
+          sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), marginBottom: theme.spacing(2) }}>
+            <Typography 
+              variant="h6">
+              New Steps:
+            </Typography>
+            {submittedSteps.map((step, index) => (
+              <ListItem
+                key={index}
+                sx={{
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  borderRadius: theme.shape.borderRadius,
+                  padding: theme.spacing(2),
+                  marginBottom: theme.spacing(2),
+                }}
+              >
+                <Box sx={{ padding: theme.spacing(2) }}>
+                  <Typography
+                  variant="body1">
+                  Name: {step.name}
+                  </Typography>
+                  <Typography
+                  variant="body2"
+                  color="textSecondary">
+                  Hint: {step.hint}
+                  </Typography>
+              </Box>
+              </ListItem>
+            ))}
+          </List>
         )}
-      </Box>
+        <List
+        sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+          <h3>Add Steps</h3>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+          Your current location will be used as the destination for this step
+          </Typography>
+          <TextField
+            label="Step Name"
+            type="text"
+            name="name"
+            value={stepData.name}
+            onChange={handleInputChange}
+            error={stepNameError}
+            helperText={stepNameError ? 'Please enter a name' : ''}
+            style={{ marginBottom: '16px' }}
+          />
+          <TextField
+            label="Step Hint"
+            type="text"
+            name="hint"
+            value={stepData.hint}
+            onChange={handleInputChange}
+            error={stepHintError}
+            helperText={stepHintError ? 'Please enter a hint' : ''}
+            style={{ marginBottom: '16px' }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              {!isShaking ? (
+                <Button
+                onClick={submitJourney}
+                variant="contained"
+                color="primary"
+                >
+                  Add Step
+                </Button>
+              ) : (
+                <Button
+                onClick={submitJourney}
+                variant="contained"
+                color="secondary"
+                >
+                  Add Step
+                </Button>
+              )}
+            </div>
+          </div>
+        </List>
+      </div>
     );
   };
-  
 
-export default StepForm;
+export default StepTab;

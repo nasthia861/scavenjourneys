@@ -1,6 +1,7 @@
 import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Achievements from "./Achievement";
+import StepTab from "./StepTab";
 
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -37,13 +38,16 @@ import SpeechToText from "./SpeechToText";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 import { JourneyType } from "@this/types/Journey";
+import { toast } from 'react-toastify';
+import logo from '../styling/scvnjrny_logo_stacked.svg';
 
 type IHeaderProps = {
   userLat: number;
   userLong: number;
+  accuracy: number;
 };
 
-  const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+  const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
   const location: {state: {journeyProgressId: number | null}} = useLocation();
 
@@ -59,6 +63,10 @@ type IHeaderProps = {
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [tabValue, setTabValue] = useState("Started");
+  const [isStepTabOpen, setIsStepTabOpen] = useState(false);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
+  const [currJourney, setCurrJourney] = useState<object | null>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -128,12 +136,38 @@ type IHeaderProps = {
 
 
   /** Journey and Step Functionality */
-  const handleJourneyClick = async (journeyId: number ) => {
+  const handleJourneyClick = async (journeyId: number) => {
     try {
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
+      const steps = stepAndJourney.data;
+      const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
+      if (allStepsCompleted) {
+        // Trigger a toast when all steps are completed
+        toast.success(`Congratulations! All steps are completed for this Journey.`, {
+          position: "top-right",
+          hideProgressBar: false,
+          theme: "light",
+          style: {
+            background: '#FDF3E0',
+            border: '2px solid #9a4119',
+            borderRadius: '7px',
+            padding: '5px',
+          },
+          icon: (
+            <img
+              src={logo}
+              style={{
+                width: '32px',
+                height: '32px',
+                marginRight: '5px',
+              }}
+            />
+          ),
+        });
+      }
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
@@ -181,6 +215,14 @@ type IHeaderProps = {
         console.error("Error deleting journey:", error);
       }
     }
+  };
+
+  const handleOpenStepTab = () => {
+    setIsStepTabOpen(true);
+  };
+
+  const handleCloseStepTab = () => {
+    setIsStepTabOpen(false);
   };
 
   const navigate = useNavigate();
@@ -258,19 +300,27 @@ type IHeaderProps = {
         <TabPanel value="Started">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
-      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+      <List sx={{ padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
-                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+                sx={{
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  borderRadius: theme.shape.borderRadius,
+                  margin: `${theme.spacing(1)} 0`,
+                  padding: theme.spacing(2),
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
                 {(selectedIndex === journey.id) && (steps.map((step) => (
-                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy}/>
                 )))}
               </Grid>
             </React.Fragment>
@@ -283,7 +333,7 @@ type IHeaderProps = {
 
       <TabPanel value="Created">
       {/* List of user's created journeys */}
-      <Typography variant="h5">Journeys Createde</Typography>
+      <Typography variant="h5">Journeys Created</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
@@ -306,7 +356,9 @@ type IHeaderProps = {
               <IconButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/StepForm/${userId}/${journey.id}`, {state:{userLat, userLong}});
+                  handleOpenStepTab();
+                  setCurrentJourneyId(journey.id)
+                  setCurrJourney(journey);
                 }}
                 color="primary"
               >
@@ -318,15 +370,28 @@ type IHeaderProps = {
                   handleDeleteJourney(journey.id);
                 }}
                 color="error"
-              >
+                >
                 <DeleteIcon />
               </IconButton>
             </ListItemButton>
+            {/* StepTab component as a tab within the profile page */}
+            {isStepTabOpen && (journey.id === currentJourneyId) && (
+            <StepTab
+              userId={userId}
+              journeyId={currentJourneyId}
+              userLat={userLat}
+              userLong={userLong}
+              journey={currJourney}
+              onClose={handleCloseStepTab}
+            />
+            )}
           </React.Fragment>
         ))}
       </List>
       </TabPanel>
     </TabContext>
+
+
       {/* Confirmation dialog */}
       <Dialog
         open={confirmDialogOpen}

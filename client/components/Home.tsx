@@ -17,6 +17,8 @@ import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
 import { UserType } from '@this/types/User';
+import useTheme from "@mui/material/styles/useTheme";
+
 
 
 
@@ -34,6 +36,7 @@ const navigate = useNavigate();
 // const [userId, setUserId] = useState<number>(+window.location.pathname.split('/').pop())
 const [alignment, setAlignment] = useState(3);
 const [journeys, setJourneys] = useState<JourneyType[]>([]);
+const theme = useTheme();
 
 
 
@@ -95,11 +98,17 @@ return (
     </StyledCreateJourneyButton>
 
     <h3> Pick your Journey</h3>
-    <Grid container spacing={2} sx={{ overflow: 'auto', maxHeight: 350 }}>
+    <Grid container spacing={2}>
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card sx={{maxHeight: 200}}
+          <Card sx={{
+            border: `1px solid ${theme.palette.primary.main}`,
+            maxHeight: 345,
+            backgroundColor: 'transparent',
+            margin: `${theme.spacing(1)} 0`,
+            padding: theme.spacing(2),
+          }}
             onClick={() => {
             navigate('/journey',{state:{journey, userId}})
           }}>
@@ -109,7 +118,16 @@ return (
               height="140"
               image={journey.img_url}
             />
-            <CardContent>
+            <CardContent
+            sx={{
+              backgroundColor: "#fff",
+              border: `1px solid ${theme.palette.primary.main}`,
+              borderRadius: theme.shape.borderRadius,
+              margin: `${theme.spacing(1)} 0`,
+              padding: theme.spacing(2),
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}>
               <Typography variant="h5" component="div" align="center">
                 {journey.name}
               </Typography>
