@@ -69,38 +69,6 @@ const Leaderboard = () => {
             Steps Solved
           </ToggleButton>
         </ToggleButtonGroup>
-      </Grid>
-
-      {/* <Box display="flex" alignItems="center" justifyContent="center" gap={2} marginBottom={2}>
-        <Button
-          variant='outlined'
-          onClick={() => handleOrderBy('journeys')}
-          sx={{borderRadius: '20px'}}
-        >
-          Order by Journeys Created
-        </Button>
-        <Button
-          variant='outlined'
-          onClick={() => handleOrderBy('steps')}
-          sx={{borderRadius: '20px'}}
-        >
-          Order by Steps Created
-        </Button>
-        <Button
-          variant='outlined'
-          onClick={() => handleOrderBy('journeysTaken')}
-          sx={{borderRadius: '20px'}}
-        >
-          Order by Journeys Taken
-        </Button>
-        <Button
-          variant='outlined'
-          onClick={() => handleOrderBy('stepsTaken')}
-          sx={{borderRadius: '20px'}}
-        >
-          Order by Steps Taken
-        </Button>
-      </Box> */}
       {userData.map((user, index) => (
         <Box
           key={user.id}
