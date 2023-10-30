@@ -32,40 +32,61 @@ interface MarkerEntityProps {
   // Geolocate Marker type scene taking in stepData name and coordinates
 const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, stepData }) => {
 
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
+  //const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
   const markerRef = useRef<any>(null);
 
   const loadAr = async() => {
-    console.log(stepData)
-    const canvas = await document.querySelector('a-scene').components.screenshot.getCanvas('perspective')
-    canvas.toBlob((b) => {
-      const reader = new FileReader()
-      reader.addEventListener('load', (event) => {
-        axios.post(`/cloud/stepProgress/${stepData.id}`, {data: event.target.result})
-          .then((response) => {
-            axios.put(`/step/progress/${stepData.id}`, {
-              in_progress: false,
-              image_url: response.data.secure_url
-            })
-          })
-      });
-      reader.readAsDataURL(b);
-    })
+    // const video = document.querySelector("video");
+    // const canvas = document.createElement("canvas");
+    // video.pause();
+
+    // let v_width = video.clientWidth*2;
+    // let v_height = video.clientHeight*2;
+
+    // canvas.width = v_width;
+    // canvas.height = v_height;
+
+    // canvas.getContext('2d').drawImage(video, 0, 0, v_width, v_height)
+
+    const imgData = await document.querySelector('a-scene').components.screenshot.getCanvas('perspective')
+
+    // canvas.getContext('2d').drawImage(imgData, 0, 0, v_width, v_height)
+
+
+
+
+
+    // use this once you have an image
+    // imgData.toBlob((b) => {
+    //   const reader = new FileReader()
+    //   reader.addEventListener('load', (event) => {
+    //     axios.post(`/cloud/stepProgress/${stepData.id}`, {data: event.target.result})
+    //       .then((response) => {
+    //         axios.put(`/step/progress/${stepData.id}`, {
+    //           in_progress: false,
+    //           image_url: response.data.secure_url
+    //         })
+    //       })
+    //   });
+    //   reader.readAsDataURL(b);
+    // })
   }
 
 
   useEffect(() => {
     if (markerRef.current) {
       markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false')
+      //loadAr()
     }
   }, []);
 
   return (
     <div>
     <a-scene
-      gps-camera
+      camera
+      isMobile
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
+      // arjs="sourceType: webcam; debugUIEnabled: false;"
       //vr-mode-ui="enabled: false"
       >
 
@@ -89,7 +110,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
       onClick={loadAr}/>
    </a-scene>
-
+    <video id="video"></video>
    </div>
   );
 };
