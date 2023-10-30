@@ -21,7 +21,7 @@ const ARScene: React.FC = () => {
 
   const canvas = useRef(null);
   const video = useRef(null);
-  const image = document.getElementById("picture")
+  // const image = document.getElementById("picture")
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
@@ -100,12 +100,11 @@ const ARScene: React.FC = () => {
     // }, []);
   return (
     <div>
-      <button onClick={letsDraw}>Click</button>
       <video
         ref={video}
         autoPlay={true}
-        width="400"
-        height="300"
+        width="0"
+        height="0"
         ></video>
       <canvas ref={canvas} width="400" height="300" />
       <image id="picture" src={imageSrc}></image>

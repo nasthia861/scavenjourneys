@@ -121,8 +121,6 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-    console.log(location.state.journeyProgressId);
-
     if(location.state !== null) {
       handleJourneyClick(location.state.journeyProgressId)
     }

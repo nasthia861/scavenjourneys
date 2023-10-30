@@ -24,11 +24,11 @@ declare global {
 interface MarkerEntityProps {
   letsDraw: () => void;
   stepName: string;
-  latitude: string;
-  longitude: string;
-  position?: [number, number, number];
-  text?: string;
-  rotation?: [number, number, number];
+  latitude: number;
+  longitude: number;
+  // position?: [number, number, number];
+  // text?: string;
+  // rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
 const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, letsDraw }) => {
