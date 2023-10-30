@@ -22,6 +22,7 @@ declare global {
 
 // Props used for StepData and Scene setup
 interface MarkerEntityProps {
+  letsDraw: () => void;
   stepName: string;
   latitude: string;
   longitude: string;
@@ -30,53 +31,14 @@ interface MarkerEntityProps {
   rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
-const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, stepData }) => {
+const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, letsDraw }) => {
 
-  //const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
   const markerRef = useRef<any>(null);
-
-  const loadAr = async() => {
-    // const video = document.querySelector("video");
-    // const canvas = document.createElement("canvas");
-    // video.pause();
-
-    // let v_width = video.clientWidth*2;
-    // let v_height = video.clientHeight*2;
-
-    // canvas.width = v_width;
-    // canvas.height = v_height;
-
-    // canvas.getContext('2d').drawImage(video, 0, 0, v_width, v_height)
-
-    const imgData = await document.querySelector('a-scene').components.screenshot.getCanvas('perspective')
-
-    // canvas.getContext('2d').drawImage(imgData, 0, 0, v_width, v_height)
-
-
-
-
-
-    // use this once you have an image
-    // imgData.toBlob((b) => {
-    //   const reader = new FileReader()
-    //   reader.addEventListener('load', (event) => {
-    //     axios.post(`/cloud/stepProgress/${stepData.id}`, {data: event.target.result})
-    //       .then((response) => {
-    //         axios.put(`/step/progress/${stepData.id}`, {
-    //           in_progress: false,
-    //           image_url: response.data.secure_url
-    //         })
-    //       })
-    //   });
-    //   reader.readAsDataURL(b);
-    // })
-  }
 
 
   useEffect(() => {
     if (markerRef.current) {
       markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false')
-      //loadAr()
     }
   }, []);
 
@@ -108,7 +70,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-      onClick={loadAr}/>
+      onClick={letsDraw}/>
    </a-scene>
     <video id="video"></video>
    </div>
