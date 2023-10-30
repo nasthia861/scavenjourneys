@@ -22,36 +22,18 @@ declare global {
 
 // Props used for StepData and Scene setup
 interface MarkerEntityProps {
+  letsDraw: () => void;
   stepName: string;
-  latitude: string;
-  longitude: string;
-  position?: [number, number, number];
-  text?: string;
-  rotation?: [number, number, number];
+  latitude: number;
+  longitude: number;
+  // position?: [number, number, number];
+  // text?: string;
+  // rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
-const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, stepData }) => {
+const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, letsDraw }) => {
 
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
   const markerRef = useRef<any>(null);
-
-  const loadAr = async() => {
-    console.log(stepData)
-    const canvas = await document.querySelector('a-scene').components.screenshot.getCanvas('perspective')
-    canvas.toBlob((b) => {
-      const reader = new FileReader()
-      reader.addEventListener('load', (event) => {
-        axios.post(`/cloud/stepProgress/${stepData.id}`, {data: event.target.result})
-          .then((response) => {
-            axios.put(`/step/progress/${stepData.id}`, {
-              in_progress: false,
-              image_url: response.data.secure_url
-            })
-          })
-      });
-      reader.readAsDataURL(b);
-    })
-  }
 
 
   useEffect(() => {
@@ -63,9 +45,10 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
   return (
     <div>
     <a-scene
-      gps-camera
+      camera
+      isMobile
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
+      // arjs="sourceType: webcam; debugUIEnabled: false;"
       //vr-mode-ui="enabled: false"
       >
 
@@ -87,9 +70,9 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-      onClick={loadAr}/>
+      onClick={letsDraw}/>
    </a-scene>
-
+    <video id="video"></video>
    </div>
   );
 };

@@ -121,7 +121,6 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-
     if(location.state !== null) {
       handleJourneyClick(location.state.journeyProgressId)
     }
