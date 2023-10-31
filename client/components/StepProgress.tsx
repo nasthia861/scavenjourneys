@@ -13,6 +13,7 @@ import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
+import MarkerEntity from './ARSteps';
 
 
 type IHeaderProps = {
@@ -26,6 +27,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
   const [image, setImage] = useState<string | null | ArrayBuffer>()
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
+  const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
   // const [selectedStep, setSelectedStep] = useState(null);
 
 
@@ -152,6 +154,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
+          {inProgress && closeEnough && (
+              <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
+          )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Typography>
         <Typography variant="body2" color="text.secondary" >
           {text}
@@ -160,19 +166,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
           </IconButton>
         </Typography>
         </CardContent>
-        <CardActions>
-          {closeEnough  && step.in_progress && (
-            <div>
-              <Button
-                onClick={(e) => navigate('/ar', {state: { step: step, userId: userId}})}
-                variant="contained" color="primary"
-                startIcon={<CameraAltRoundedIcon/>}
-                > Solve Step
-              </Button>
-            </div>
-          )}
-          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
-        </CardActions>
     </Card>
 
   );
