@@ -1,7 +1,6 @@
-import React, { Suspense, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import MarkerEntity from './ARSteps';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { StepProgressType } from '@this/types/StepProgress';
 
 type IHeaderProps = {
@@ -11,21 +10,11 @@ type IHeaderProps = {
 
 const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
-  // const [isMounted, setIsMounted] = useState(true);
-
-  // const location: {state: {step: StepProgressType, userId: number }} = useLocation();
-  // const stepData = location.state.step;
-  //const userId = location.state.userId;
-
   const canvas = useRef(null);
   const video = useRef(null);
-  let videoStream: MediaStream = null;
-
-  // const image = document.getElementById("picture")
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
-
 
   const letsDraw = () => {
 
@@ -48,25 +37,15 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
       .then((stream) => {
         video.current.srcObject = stream;
-        videoStream = stream;
       })
       .catch((error) => {
         console.log("Something went wrong!", error);
       });
     }
   }
-  const stopStream = () => {
-    if (videoStream) {
-      videoStream.getTracks().forEach(track => track.stop());
-    }
-  };
-
 
   useEffect(() => {
     letsStream()
-    return () => {
-      stopStream();
-    };
   }, [])
 
   useEffect(() => {
@@ -88,13 +67,6 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
   return (
     <div>
-      <video
-        hidden
-        ref={video}
-        autoPlay={true}
-        width={videoWidth}
-        height={videoHeight}
-        ></video>
       <canvas
         hidden
         ref={canvas}
