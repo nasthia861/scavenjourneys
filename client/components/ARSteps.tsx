@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-
-import { HelmetProvider, Helmet } from 'react-helmet-async';
+import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -16,40 +15,51 @@ declare global {
       'a-circle': any
       'a-sky': any
       'a-nft': any
+      'a-cursor': any
     }
   }
 }
 
 // Props used for StepData and Scene setup
 interface MarkerEntityProps {
+  letsDraw: () => void;
   stepName: string;
-  latitude: string;
-  longitude: string;
-  position?: [number, number, number];
-  text?: string;
-  rotation?: [number, number, number];
+  latitude: number;
+  longitude: number;
+  // position?: [number, number, number];
+  // text?: string;
+  // rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
-const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude }) => {
+const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, letsDraw }) => {
 
-    const markerRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
 
-     useEffect(() => {
-      if (markerRef.current) {
-      markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false');
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.setAttribute('animation', 'property: scale; to: 1.8 2 1.9; dir: alternate; loop: false')
     }
   }, []);
 
   return (
-    <>
-     {/* <Helmet>
-        <script src="https://aframe.io/releases/1.2.0/aframe.min.js" async />
-        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js" async />
-      </Helmet> */}
+    <div>
+    <a-scene
+      camera
+      isMobile
+      embedded
+      // arjs="sourceType: webcam; debugUIEnabled: false;"
+      //vr-mode-ui="enabled: false"
+      >
 
-    {/* // Scene using webcam or default camera to dynamically render stepData to position at specified coords */}
-    <a-scene gps-camera embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-
+  <a-camera>
+    <a-cursor
+      cursor="fuse: true; fuseTimeout: 5000"
+      position="0 0 -1"
+      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+      material="color: red; shader: flat">
+    </a-cursor>
+  </a-camera>
 
     <a-entity
       ref={markerRef}
@@ -59,10 +69,11 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
-      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}/>
+      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
+      onClick={letsDraw}/>
    </a-scene>
-
-   </>
+    <video id="video"></video>
+   </div>
   );
 };
 

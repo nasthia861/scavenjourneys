@@ -8,5 +8,4 @@ export type StepProgressType = {
   image_url: string;
   journey_progress: JourneyProgressType
   step: StepType
-  user_id: number;
 }

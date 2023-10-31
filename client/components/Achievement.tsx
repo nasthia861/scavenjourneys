@@ -59,10 +59,11 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
       </Typography>
       <Grid container spacing={3}>
         {achievements.map((achievement) => (
-          <Grid item key={achievement.id} xs={12} sm={6} md={4} lg={3}>
+          <Grid item key={achievement.id} xs={12} sm={6} md={4} lg={3} >
             <Tooltip title={achievement.conditionText}>
               <Paper
                 elevation={3}
+                sx={{padding: '10px', background:'#f8e5c8'}}
                 className={`achievement-box ${
                   earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                     ? 'earned'
