@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import axios from 'axios';
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -18,6 +18,10 @@ declare global {
       'a-cursor': any
       'a-gui-flex-container': any
       'a-gui-cursor': any
+      'a-gui-icon-label-button': any
+      'a-gui-radio': any
+      'a-gui-button': any
+
     }
   }
 }
@@ -28,9 +32,6 @@ interface MarkerEntityProps {
   stepName: string;
   latitude: number;
   longitude: number;
-  // position?: [number, number, number];
-  // text?: string;
-  // rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
 const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longitude, letsDraw }) => {
@@ -66,8 +67,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
 						  // raycaster="objects: [gui-interactable]"
 						  fuse="true"
                fuse-timeout="5000"
-						  color="#ECEFF1"
-						  hover-color="#CFD8DC"
+						  color="red"
+						  hover-color="white"
 						  active-color="red"
 						  design="reticle"
      >
@@ -78,7 +79,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       ref={markerRef}
       gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
       id="marker"
-      position={`0 4 -5`}
+      position={`0 2 -5`}
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: yellow; transparent: true; opacity: 0.9"
