@@ -16,6 +16,8 @@ declare global {
       'a-sky': any
       'a-nft': any
       'a-cursor': any
+      'a-gui-flex-container': any
+      'a-gui-cursor': any
     }
   }
 }
@@ -53,12 +55,23 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       >
 
   <a-camera>
-    <a-cursor
+  {/* <a-cursor
       cursor="fuse: true; fuseTimeout: 5000"
       position="0 0 -1"
       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
       material="color: red; shader: flat">
-    </a-cursor>
+    </a-cursor> */}
+    <a-gui-cursor
+              id="cursor"
+						  // raycaster="objects: [gui-interactable]"
+						  fuse="true"
+               fuse-timeout="5000"
+						  color="#ECEFF1"
+						  hover-color="#CFD8DC"
+						  active-color="red"
+						  design="reticle"
+     >
+    </a-gui-cursor>
   </a-camera>
 
     <a-entity

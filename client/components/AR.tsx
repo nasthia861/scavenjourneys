@@ -74,30 +74,6 @@ const ARScene: React.FC = () => {
     }
   }, [imageSrc])
 
-
-    // useEffect(() => {
-
-    //   const aframeScript = document.createElement('script');
-    //   aframeScript.src = 'https://aframe.io/releases/1.4.2/aframe.min.js';
-    //   document.head.appendChild(aframeScript);
-    //   //aframeScript.async = true
-
-
-    //   const AR_Script = document.createElement('script');
-    //   AR_Script.src = "https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js";
-    //   document.head.appendChild(AR_Script);
-
-    //   aframeScript.onload = () => {
-    //     AR_Script.onload = () => {
-    //       // Initialize your AR components here
-    //     };
-    //   };
-
-    //   return () => {
-    //     aframeScript && aframeScript.remove();
-    //     AR_Script && AR_Script.remove();
-    //   };
-    // }, []);
   return (
     <div>
       <video
