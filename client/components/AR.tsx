@@ -21,6 +21,8 @@ const ARScene: React.FC = () => {
 
   const canvas = useRef(null);
   const video = useRef(null);
+  let videoStream: MediaStream = null;
+
   // const image = document.getElementById("picture")
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -45,17 +47,28 @@ const ARScene: React.FC = () => {
       navigator.mediaDevices.getUserMedia({ video: {
         facingMode: "environment",
       }, audio: false })
+
       .then((stream) => {
         video.current.srcObject = stream;
+        videoStream = stream;
       })
       .catch((error) => {
         console.log("Something went wrong!", error);
       });
     }
   }
+  const stopStream = () => {
+    if (videoStream) {
+      videoStream.getTracks().forEach(track => track.stop());
+    }
+  };
+
 
   useEffect(() => {
     letsStream()
+    return () => {
+      stopStream();
+    };
   }, [])
 
   useEffect(() => {
