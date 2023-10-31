@@ -118,32 +118,20 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   return (
     <div>
-    <video
-        hidden
-        ref={video}
-        autoPlay={true}
-        ></video>
-      <canvas
-        hidden
-        ref={canvas}
-              />
     <a-scene
       camera
       isMobile
       embedded
-      //vr-mode-ui="enabled: false"
       >
-
   <a-camera>
     <a-gui-cursor
-              id='cursor'
-						  // raycaster="objects: [gui-interactable]"
-						  fuse="true"
-              fuse-timeout="5000"
-						  color="red"
-						  hover-color="red"
-						  active-color="red"
-						  design="reticle">
+	id='cursor'
+	fuse="true"
+        fuse-timeout="5000"
+	color="red"
+	  hover-color="red"
+	  active-color="red"
+	  design="reticle">
     </a-gui-cursor>
   </a-camera>
      <a-entity
@@ -163,19 +151,16 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       src={logo}
       width="0.3"
       height="0.3"
-      position="0 1.7 -5"
-      >
-
+      position="0 1.7 -5" >
       </a-image>
 
       <a-plane
-    width="4.0"
-    height="1.6"
-    color="#835500"
-    position="0 2 -5" ></a-plane>
-
+    	width="4.0"
+   	height="1.6"
+    	color="#835500"
+    	position="0 2 -5" >
+      </a-plane>
    </a-scene>
-    <video id="video"></video>
    </div>
   );
 };
