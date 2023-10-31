@@ -67,6 +67,13 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
   return (
     <div>
+      <video
+        hidden
+        ref={video}
+        autoPlay={true}
+        width={videoWidth}
+        height={videoHeight}
+        ></video>
       <canvas
         hidden
         ref={canvas}
