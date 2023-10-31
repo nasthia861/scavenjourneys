@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-
+import axios from 'axios';
+import logo from '../favicon.svg';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -13,8 +14,8 @@ declare global {
       'a-asset-item': any
       'a-mixin': any
       'a-circle': any
-      'a-sky': any
-      'a-nft': any
+      'a-plane': any
+      'a-image': any
       'a-cursor': any
       'a-gui-flex-container': any
       'a-gui-cursor': any
@@ -56,35 +57,44 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       >
 
   <a-camera>
-  {/* <a-cursor
-      cursor="fuse: true; fuseTimeout: 5000"
-      position="0 0 -1"
-      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-      material="color: red; shader: flat">
-    </a-cursor> */}
     <a-gui-cursor
-              id="cursor"
+              id='cursor'
 						  // raycaster="objects: [gui-interactable]"
 						  fuse="true"
-               fuse-timeout="5000"
+              fuse-timeout="5000"
 						  color="red"
-						  hover-color="white"
+						  hover-color="red"
 						  active-color="red"
-						  design="reticle"
-     >
+						  design="reticle">
     </a-gui-cursor>
   </a-camera>
-
-    <a-entity
+     <a-entity
       ref={markerRef}
-      gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
+      gps-entity-place={
+        `latitude: ${latitude};
+         longitude: ${longitude};`}
       id="marker"
       position={`0 2 -5`}
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
-      material="color: yellow; transparent: true; opacity: 0.9"
+      material="color: '#9a4119'; transparent: false; opacity: 0.9"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
       onClick={letsDraw}/>
+      <a-image
+      src={logo}
+      width="0.3"
+      height="0.3"
+      position="0 1.7 -5"
+      >
+
+      </a-image>
+
+      <a-plane
+    width="4.0"
+    height="1.6"
+    color="#835500"
+    position="0 2 -5" ></a-plane>
+
    </a-scene>
     <video id="video"></video>
    </div>
