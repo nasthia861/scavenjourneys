@@ -98,7 +98,6 @@ type IHeaderProps = {
 
   const createJourney = async () => {
       try {
-        console.log(journeyData)
           axios.post('/journey', journeyData)
           .then((response) => {
             let resData = response.data
