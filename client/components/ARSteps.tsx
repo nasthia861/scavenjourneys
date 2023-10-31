@@ -52,6 +52,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       camera
       isMobile
       embedded
+      renderer="antialias: true"
+
       // arjs="sourceType: webcam; debugUIEnabled: false;"
       //vr-mode-ui="enabled: false"
       >
@@ -77,9 +79,10 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({  stepName, latitude, longit
       position={`0 2 -5`}
       animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
       geometry="primitive: plane; width: 2; height: 0.7"
-      material="color: '#9a4119'; transparent: false; opacity: 0.9"
+      material="color: '#2F0A00'; emissive: '#FFD700'; metalness: 0.5; roughness: 0.3; shader: flat; transparent: true; opacity: 0.7"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
       onClick={letsDraw}/>
+
       <a-image
       src={logo}
       width="0.3"
