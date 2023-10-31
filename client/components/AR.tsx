@@ -4,20 +4,18 @@ import MarkerEntity from './ARSteps';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StepProgressType } from '@this/types/StepProgress';
 
+type IHeaderProps = {
+  userId: number
+  step: StepProgressType
+};
 
-
-
-
-// interface ARSceneProps { stepData: StepProgressType; }
-
-const ARScene: React.FC = () => {
-  const navigate = useNavigate();
+const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
   // const [isMounted, setIsMounted] = useState(true);
 
-  const location: {state: {step: StepProgressType, userId: number }} = useLocation();
-  const stepData = location.state.step;
-  const userId = location.state.userId;
+  // const location: {state: {step: StepProgressType, userId: number }} = useLocation();
+  // const stepData = location.state.step;
+  //const userId = location.state.userId;
 
   const canvas = useRef(null);
   const video = useRef(null);
@@ -33,7 +31,7 @@ const ARScene: React.FC = () => {
 
     if(canvas.current && video.current) {
       const ctx = canvas.current.getContext('2d');
-      ctx.drawImage(video.current, 0, 0, 400, 300);
+      ctx.drawImage(video.current, 0, 0, video.current.naturalWidth, video.current.naturalHeight);
 
       const data = canvas.current.toDataURL("image/png");
       setImageSrc(data);
@@ -41,7 +39,7 @@ const ARScene: React.FC = () => {
   }
 
   const letsStream = () => {
-    setJourneyProgressId(stepData.journey_progress.id)
+    setJourneyProgressId(step.journey_progress.id)
 
     if (navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: {
@@ -74,15 +72,16 @@ const ARScene: React.FC = () => {
   useEffect(() => {
     if(imageSrc !== null) {
           // use this once you have an image
-      axios.post(`/cloud/stepProgress/${stepData.id}`, {data: imageSrc})
+      axios.post(`/cloud/stepProgress/${step.id}`, {data: imageSrc})
         .then((response) => {
-          axios.put(`/step/progress/${stepData.id}`, {
+          axios.put(`/step/progress/${step.id}`, {
             in_progress: false,
             image_url: response.data.secure_url
           })
         })
         .then(() => {
-          navigate(`/profile/${userId}`, {state: {journeyProgressId}})
+          console.log('navigating', userId, journeyProgressId)
+          document.exitFullscreen();
         })
     }
   }, [imageSrc])
@@ -90,32 +89,26 @@ const ARScene: React.FC = () => {
   return (
     <div>
       <video
+        hidden
         ref={video}
         autoPlay={true}
-        width="0"
-        height="0"
+        width={videoWidth}
+        height={videoHeight}
         ></video>
-      <canvas ref={canvas} width="400" height="300" />
-      <image id="picture" src={imageSrc}></image>
+      <canvas
+        hidden
+        ref={canvas}
+              />
       <MarkerEntity
-      stepName={stepData.step.name}
-      latitude={stepData.step.latitude}
-      longitude={stepData.step.longitude}
+      stepName={step.step.name}
+      latitude={step.step.latitude}
+      longitude={step.step.longitude}
       letsDraw={letsDraw}
       />
     </div>
 
 
-
-
-    // <>
-
-    // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
-
-    // </div>
-
-
   );
 };
 
-export default ARScene;
+export default AR;
