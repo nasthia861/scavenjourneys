@@ -62,7 +62,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           facingMode: "environment",
         }, audio: false })
         .then((stream) => {
-          video.current.srcObject = stream;
+          console.log(stream)
           const track = stream.getVideoTracks()[0];
           setTracks(track);
           return new (window as any).ImageCapture(track);
@@ -73,6 +73,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           const ctx = canvas.current.getContext('2d');
           ctx.drawImage(imageBitmap, 0, 0, 400, 300);
           const data = canvas.current.toDataURL("image/png");
+          console.log(data)
           setImageSrc(data)
         })
     }}
@@ -101,7 +102,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
         })
         .then(() => {
           tracks.stop();
-          video.current.srcObject = null;
           document.exitFullscreen();
         })
     }
@@ -118,24 +118,37 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   return (
     <div>
+        <canvas
+        hidden
+        ref={canvas}
+              />
     <a-scene
       camera
       isMobile
       embedded
       >
   <a-camera>
-    <a-gui-cursor
-               id='cursor'
-						  raycaster="objects: [gui-interactable]"
+    {/* <a-gui-cursor
+              id='cursor'
+						  // raycaster="objects: [gui-interactable]"
 						  fuse="true"
-              fuse-timeout="3000"
+              fuse-timeout="5000"
 						  color="red"
 						  hover-color="red"
 						  active-color="red"
-						  design="reticle">
-    </a-gui-cursor>
+						  design="reticle"
+              >
+    </a-gui-cursor> */}
+    <a-cursor
+  fuse="true"
+  fuse-timeout="3000"
+  color="red"
+  geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+  material="color: red; shader: flat"
+>
+</a-cursor>
   </a-camera>
-
+{/*
       <a-gui-button
       width="4"
       height="1.5"
@@ -145,7 +158,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       font-size="30px"
       background-color="#000000"
       onClick={letsDraw}
-      ></a-gui-button>
+      ></a-gui-button> */}
      <a-entity
       ref={markerRef}
       gps-entity-place={
@@ -157,6 +170,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
+      onClick={letsDraw}
+
       />
 
       <a-image
