@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import useTheme from "@mui/material/styles/useTheme";
+
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
 import MarkerEntity from './ARSteps';
@@ -24,7 +26,7 @@ type IHeaderProps = {
 };
 
 const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId}) => {
-  const [image, setImage] = useState<string | null | ArrayBuffer>()
+  const [image, setImage] = useState<string | null | ArrayBuffer>(null)
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
@@ -32,6 +34,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
 
   const navigate = useNavigate();
+  const theme = useTheme();
 
   // Increment steps taken in user data
   const giveStepsTakenAchievement = async () => {
@@ -55,7 +58,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         achievement: { id: achievementId },
       });
     };
-    console.log(existingUserData)
     // Check if the user needs an achievement based on steps taken
     if (updatedUserData.stepsTaken >= 5) {
       if (Array.isArray(userAchievements)) {
@@ -142,16 +144,35 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
    }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-        {!step.in_progress && (<CardMedia
-          sx={{ height: 140 }}
-          image={step.image_url}
-        />)}
-        {image && (<CardMedia
-          sx={{ height: 140 }}
-          image={image}
-        />)}
-        <CardContent>
+    <Card sx={{
+      maxWidth: 345,
+      backgroundColor: 'transparent',
+      margin: `${theme.spacing(1)} 0`,
+      padding: theme.spacing(2),
+      }}>
+        {!inProgress ?
+          (<CardMedia
+          sx={{
+            height: 140,
+            border: `1px solid ${theme.palette.primary.main}`,
+            borderRadius: theme.shape.borderRadius,
+            // margin: `${theme.spacing(1)} 0`,
+            // padding: theme.spacing(2),
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+          image={step.image_url || image }
+        />) :
+        (<CardContent
+        sx={{
+          border: `1px solid ${theme.palette.primary.main}`,
+          borderRadius: theme.shape.borderRadius,
+          margin: `${theme.spacing(1)} 0`,
+          padding: theme.spacing(2),
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
           {inProgress && closeEnough && (
@@ -166,6 +187,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
           </IconButton>
         </Typography>
         </CardContent>
+        )}
     </Card>
 
   );
