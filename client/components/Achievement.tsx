@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { myContext } from "./Context";
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -10,7 +8,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
-import { UserType } from '@this/types/User';
+import ReactCardFlip from 'react-card-flip';
+import Card from '@mui/material/Card/Card';
 
 type IHeaderProps = {
   userId: number
@@ -21,6 +20,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [earnedAchievements, setEarnedAchievements] = useState([]);
   const [clickedAchievement, setClickedAchievement] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [flip, setFlip] = useState(false);
 
   const handleAchievementClick = (achievement: any, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setClickedAchievement(achievement);
@@ -61,33 +61,34 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
         {achievements.map((achievement) => (
           <Grid item key={achievement.id} xs={12} sm={6} md={4} lg={3} >
             <Tooltip title={achievement.conditionText}>
-              <Paper
-                elevation={3}
-                sx={{padding: '10px', background:'#f8e5c8'}}
-                className={`achievement-box ${
-                  earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                    ? 'earned'
-                    : 'unearned'
-                }
-                `}
-              >
-                <Avatar
-                  alt={achievement.name}
-                  src={
-                    earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                      ? achievement.icon_url
-                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
-                  }
-                  sx={{ width: 100, height: 100 }}
+                <Card
+                  elevation={3}
                   onClick={(event) => handleAchievementClick(achievement, event)}
-                />
-                <Typography variant="h6">{achievement.name}</Typography>
-                <Typography variant="subtitle1">
-                  {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                    ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
-                    : 'Not yet achieved'}
-                </Typography>
-              </Paper>
+                  sx={{padding: '10px', background:'#f8e5c8'}}
+                  className={`achievement-box ${
+                    earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
+                      ? 'earned'
+                      : 'unearned'
+                  }
+                  `}
+                >
+                  <Avatar
+                    alt={achievement.name}
+                    src={
+                      earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
+                        ? achievement.icon_url
+                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
+                    }
+                    sx={{ width: 100, height: 100 }}
+                    onClick={(event) => handleAchievementClick(achievement, event)}
+                  />
+                  <Typography variant="h6">{achievement.name}</Typography>
+                  <Typography variant="subtitle1">
+                    {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
+                      ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
+                      : 'Not yet achieved'}
+                  </Typography>
+                </Card>
             </Tooltip>
           </Grid>
         ))}

@@ -23,15 +23,22 @@ const Logout = () => {
     window.open('/auth/google', '_self');
   }
 
+  const logUserOut = () => {
+    axios.post('/auth/logout')
+    .then(() => {console.log('logging out')})
+    .catch((err) => {console.error('failed to logout', err)})
+  }
+
   useEffect(() => {
     getPictures();
+    logUserOut();
   }, [])
 
   return (
     <div>
       <Box
-        container
-        direction="column"
+        // container
+        // direction="column"
         // alignItems="center"
       >
         <p>
