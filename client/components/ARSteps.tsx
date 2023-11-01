@@ -66,12 +66,17 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           return new (window as any).ImageCapture(track);
         })
         .then((imageCapture) => imageCapture.takePhoto())
-        .then((blob) => createImageBitmap(blob))
-        .then((imageBitmap) => {
+        .then((blob) => URL.createObjectURL(blob))
+        .then((image) => {
+          console.log(image)
           const ctx = canvas.current.getContext('2d');
-          ctx.drawImage(imageBitmap, 0, 0, 400, 300);
+          // canvas.current.width = getComputedStyle(canvas.current).width.split("px")[0];
+          // canvas.current.height = getComputedStyle(canvas.current).height.split("px")[0];
+          // let ratio = Math.min(canvas.current.width / imageBitmap.width, canvas.current.height / imageBitmap.height);
+          // let x = (canvas.current.width - imageBitmap.width * ratio) / 2;
+          // let y = (canvas.current.height - imageBitmap.height * ratio) / 2;
+          ctx.drawImage(image, 0, 0);
           const data = canvas.current.toDataURL("image/png");
-          console.log(data)
           setImageSrc(data)
         })
     }}
@@ -95,6 +100,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
             in_progress: false,
             image_url: response.data.secure_url
           })
+          console.log(response.data.secure_url)
           setImage(response.data.secure_url)
           setInProgress(false);
         })
@@ -116,36 +122,38 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   return (
     <div>
-        <canvas
-        hidden
-        ref={canvas}
-              />
+      <div>I'm here</div>
+    <canvas
+      hidden
+      // width="400"
+      // height="300"
+      ref={canvas}
+    />
     <a-scene
       camera
       isMobile
       embedded
       >
-  <a-camera>
-    {/* <a-gui-cursor
-              id='cursor'
-						  // raycaster="objects: [gui-interactable]"
-						  fuse="true"
-              fuse-timeout="5000"
-						  color="red"
-						  hover-color="red"
-						  active-color="red"
-						  design="reticle"
-              >
-    </a-gui-cursor> */}
-    <a-cursor
-      fuse="true"
-      fuse-timeout="3000"
-      color="red"
-      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-      material="color: red; shader: flat"
-    >
-</a-cursor>
-  </a-camera>
+      <a-camera>
+        {/* <a-gui-cursor
+                  id='cursor'
+                  // raycaster="objects: [gui-interactable]"
+                  fuse="true"
+                  fuse-timeout="5000"
+                  color="red"
+                  hover-color="red"
+                  active-color="red"
+                  design="reticle"
+                  >
+        </a-gui-cursor> */}
+        <a-cursor
+          fuse="true"
+          fuse-timeout="3000"
+          color="red"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: red; shader: flat"
+        />
+      </a-camera>
 {/*
       <a-gui-button
       width="4"
@@ -157,36 +165,34 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       background-color="#000000"
       onClick={letsDraw}
       ></a-gui-button> */}
-     <a-entity
-      ref={markerRef}
-      gps-entity-place={
-        `latitude: ${latitude};
-         longitude: ${longitude};`}
-      id="marker"
-      position={`0 2 -5`}
-      animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
-      geometry="primitive: plane; width: 2; height: 0.7"
-      material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
-      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-      onClick={letsDraw}
+      <a-entity
+        ref={markerRef}
+        gps-entity-place={
+          `latitude: ${latitude};
+          longitude: ${longitude};`}
+        id="marker"
+        position={`0 2 -5`}
+        animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
+        geometry="primitive: plane; width: 2; height: 0.7"
+        material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
+        text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
+        onClick={letsDraw}
 
       />
 
       <a-image
-      src={logo}
-      width="0.3"
-      height="0.3"
-      position="0 1.6 -4"
-      >
-
-      </a-image>
+        src={logo}
+        width="0.3"
+        height="0.3"
+        position="0 1.6 -4"
+      />
 
       <a-plane
-    width="4.5"
-    height="1.9"
-    color="#835500"
-    position="0 2.1 -6" >
-    </a-plane>
+        width="4.5"
+        height="1.9"
+        color="#835500"
+        position="0 2.1 -6" >
+      </a-plane>
 
    </a-scene>
    </div>

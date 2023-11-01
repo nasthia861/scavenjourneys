@@ -12,6 +12,8 @@ import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import useTheme from "@mui/material/styles/useTheme";
+import Box from '@mui/material/Box';
+
 
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
@@ -23,9 +25,10 @@ type IHeaderProps = {
   step: StepProgressType
   userLat: number;
   userLong: number;
+  accuracy: number;
 };
 
-const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId}) => {
+const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, accuracy}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>(null)
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
@@ -106,15 +109,19 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
 
   const getLocation = () => {
+    let feetAcc = accuracy * 3.28084 * 1.05
     const feetPerDegree = 364000;
 
     const latDiff = Math.abs(Number(step.step.latitude) - userLat);
     const lonDiff = Math.abs(Number(step.step.longitude) - userLong);
 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
-    if(distanceInFeet < 20) {
+
+    if(distanceInFeet < 20 + feetAcc) {
+      console.log('true', distanceInFeet, feetAcc)
       setCloseEnough(true);
     } else {
+      console.log('false', distanceInFeet, feetAcc)
       setCloseEnough(false);
     }
 
@@ -122,6 +129,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
   useEffect(() => {
     getLocation()
+
   }, [userLat, userLong])
 
 
@@ -145,7 +153,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
 
   return (
     <Card sx={{
-      maxWidth: 345,
+      maxWidth: 400,
       backgroundColor: 'transparent',
       margin: `${theme.spacing(1)} 0`,
       padding: theme.spacing(2),
@@ -153,7 +161,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         {!inProgress ?
           (<CardMedia
           sx={{
-            height: 140,
+            height: 300,
             border: `1px solid ${theme.palette.primary.main}`,
             borderRadius: theme.shape.borderRadius,
             // margin: `${theme.spacing(1)} 0`,
@@ -175,11 +183,13 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         }}>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
-          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Typography>
-          {(
+        <Box>
+          {closeEnough && (
               <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
           )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
+        </Box>
         <Typography variant="body2" color="text.secondary" >
           {text}
           <IconButton onClick={() => {speakText()}} >
