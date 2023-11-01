@@ -136,8 +136,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   <a-camera>
     <a-gui-cursor
-              id='cursor'
-						  // raycaster="objects: [gui-interactable]"
+              // id='cursor'
+						  raycaster="objects: [gui-interactable]"
 						  fuse="true"
               fuse-timeout="5000"
 						  color="red"
@@ -146,6 +146,17 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 						  design="reticle">
     </a-gui-cursor>
   </a-camera>
+
+      <a-gui-button
+      width="2"
+      height="0.7"
+      position="0 2 -7"
+      margin="0.1"
+      font-color="#000000"
+      font-size="30px"
+      background-color="transparent"
+      onClick={letsDraw}
+      ></a-gui-button>
      <a-entity
       ref={markerRef}
       gps-entity-place={
@@ -157,22 +168,22 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       geometry="primitive: plane; width: 2; height: 0.7"
       material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
       text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-      onClick={letsDraw}/>
+      />
 
       <a-image
       src={logo}
       width="0.3"
       height="0.3"
-      position="0 1.7 -5"
+      position="0 1.6 -4"
       >
 
       </a-image>
 
       <a-plane
-    width="4.0"
-    height="1.6"
+    width="4.5"
+    height="1.9"
     color="#835500"
-    position="0 2 -5" ></a-plane>
+    position="0 2.1 -6" ></a-plane>
 
    </a-scene>
     <video id="video"></video>
