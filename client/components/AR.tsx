@@ -1,7 +1,6 @@
-import React, { Suspense, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import MarkerEntity from './ARSteps';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { StepProgressType } from '@this/types/StepProgress';
 
 type IHeaderProps = {
@@ -11,19 +10,11 @@ type IHeaderProps = {
 
 const AR: React.FC<IHeaderProps> = ({userId, step}) => {
 
-  // const [isMounted, setIsMounted] = useState(true);
-
-  // const location: {state: {step: StepProgressType, userId: number }} = useLocation();
-  // const stepData = location.state.step;
-  //const userId = location.state.userId;
-
   const canvas = useRef(null);
   const video = useRef(null);
-  // const image = document.getElementById("picture")
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
-
 
   const letsDraw = () => {
 
@@ -43,6 +34,7 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
       navigator.mediaDevices.getUserMedia({ video: {
         facingMode: "environment",
       }, audio: false })
+
       .then((stream) => {
         video.current.srcObject = stream;
       })
@@ -73,30 +65,6 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
     }
   }, [imageSrc])
 
-
-    // useEffect(() => {
-
-    //   const aframeScript = document.createElement('script');
-    //   aframeScript.src = 'https://aframe.io/releases/1.4.2/aframe.min.js';
-    //   document.head.appendChild(aframeScript);
-    //   //aframeScript.async = true
-
-
-    //   const AR_Script = document.createElement('script');
-    //   AR_Script.src = "https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js";
-    //   document.head.appendChild(AR_Script);
-
-    //   aframeScript.onload = () => {
-    //     AR_Script.onload = () => {
-    //       // Initialize your AR components here
-    //     };
-    //   };
-
-    //   return () => {
-    //     aframeScript && aframeScript.remove();
-    //     AR_Script && AR_Script.remove();
-    //   };
-    // }, []);
   return (
     <div>
       <video
