@@ -136,7 +136,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   <a-camera>
     <a-gui-cursor
-              // id='cursor'
+               id='cursor'
 						  raycaster="objects: [gui-interactable]"
 						  fuse="true"
               fuse-timeout="5000"
@@ -148,13 +148,13 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
   </a-camera>
 
       <a-gui-button
-      width="2"
-      height="0.7"
+      width="4"
+      height="1.5"
       position="0 2 -7"
       margin="0.1"
       font-color="#000000"
       font-size="30px"
-      background-color="transparent"
+      background-color="#000000"
       onClick={letsDraw}
       ></a-gui-button>
      <a-entity
