@@ -1,6 +1,7 @@
 import React, { useEffect, useState, SyntheticEvent } from "react";
 import StepProgress from "./StepProgress";
 import Achievements from "./Achievement";
+import StepTab from "./StepTab";
 
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
@@ -59,6 +60,10 @@ type IHeaderProps = {
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [tabValue, setTabValue] = useState("Started");
+  const [isStepTabOpen, setIsStepTabOpen] = useState(false);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
+  const [currJourney, setCurrJourney] = useState<object | null>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -128,7 +133,7 @@ type IHeaderProps = {
 
 
   /** Journey and Step Functionality */
-  const handleJourneyClick = async (journeyId: number ) => {
+  const handleJourneyClick = async (journeyId: number) => {
     try {
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
@@ -181,6 +186,14 @@ type IHeaderProps = {
         console.error("Error deleting journey:", error);
       }
     }
+  };
+
+  const handleOpenStepTab = () => {
+    setIsStepTabOpen(true);
+  };
+
+  const handleCloseStepTab = () => {
+    setIsStepTabOpen(false);
   };
 
   const navigate = useNavigate();
@@ -283,7 +296,7 @@ type IHeaderProps = {
 
       <TabPanel value="Created">
       {/* List of user's created journeys */}
-      <Typography variant="h5">Journeys Createde</Typography>
+      <Typography variant="h5">Journeys Created</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
@@ -306,7 +319,9 @@ type IHeaderProps = {
               <IconButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/StepForm/${userId}/${journey.id}`, {state:{userLat, userLong}});
+                  handleOpenStepTab();
+                  setCurrentJourneyId(journey.id)
+                  setCurrJourney(journey);
                 }}
                 color="primary"
               >
@@ -318,15 +333,28 @@ type IHeaderProps = {
                   handleDeleteJourney(journey.id);
                 }}
                 color="error"
-              >
+                >
                 <DeleteIcon />
               </IconButton>
             </ListItemButton>
+            {/* StepTab component as a tab within the profile page */}
+            {isStepTabOpen && (journey.id === currentJourneyId) && (
+            <StepTab
+              userId={userId}
+              journeyId={currentJourneyId}
+              userLat={userLat}
+              userLong={userLong}
+              journey={currJourney}
+              onClose={handleCloseStepTab}
+            />
+            )}
           </React.Fragment>
         ))}
       </List>
       </TabPanel>
     </TabContext>
+
+
       {/* Confirmation dialog */}
       <Dialog
         open={confirmDialogOpen}
