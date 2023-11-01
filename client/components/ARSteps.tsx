@@ -173,7 +173,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
     height="1.9"
     color="#835500"
     position="0 2.1 -6" >
-      
     </a-plane>
 
    </a-scene>
