@@ -145,7 +145,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
         </a-cursor>
       </a-camera>
 
-      <a-gui-button
+      {/* <a-gui-button
       width="4"
       height="1.5"
       position="0 2 -7"
@@ -154,7 +154,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       font-size="30px"
       background-color="#000000"
       onClick={letsDraw}
-      ></a-gui-button>
+      ></a-gui-button> */}
       <a-entity
         ref={markerRef}
         gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
