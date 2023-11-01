@@ -166,7 +166,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
         text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
         onClick={letsDraw}/>
 
-      <a-image
+      {/* <a-image
       src={logo}
       width="0.3"
       height="0.3"
@@ -180,7 +180,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
     height="1.9"
     color="#835500"
     position="0 2.1 -6" >
-    </a-plane>
+    </a-plane> */}
 
    </a-scene>
    </div>

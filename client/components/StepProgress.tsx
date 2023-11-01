@@ -175,7 +175,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         }}>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
-          {inProgress && closeEnough && (
+          { (
               <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
            )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
