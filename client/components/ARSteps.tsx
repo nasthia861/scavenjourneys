@@ -66,19 +66,19 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           return new (window as any).ImageCapture(track);
         })
         .then((imageCapture) => imageCapture.takePhoto())
-        .then((blob) => URL.createObjectURL(blob))
-        .then((image) => {
-          console.log(image)
-          const ctx = canvas.current.getContext('2d');
-          // canvas.current.width = getComputedStyle(canvas.current).width.split("px")[0];
-          // canvas.current.height = getComputedStyle(canvas.current).height.split("px")[0];
-          // let ratio = Math.min(canvas.current.width / imageBitmap.width, canvas.current.height / imageBitmap.height);
-          // let x = (canvas.current.width - imageBitmap.width * ratio) / 2;
-          // let y = (canvas.current.height - imageBitmap.height * ratio) / 2;
-          ctx.drawImage(image, 0, 0);
-          const data = canvas.current.toDataURL("image/png");
-          setImageSrc(data)
-        })
+        .then((blob) => console.log(blob))
+        // .then((imageBitmap) => {
+        //   console.log(imageBitmap)
+        //   // const ctx = canvas.current.getContext('2d');
+        //   // canvas.current.width = getComputedStyle(canvas.current).width.split("px")[0];
+        //   // canvas.current.height = getComputedStyle(canvas.current).height.split("px")[0];
+        //   // let ratio = Math.min(canvas.current.width / imageBitmap.width, canvas.current.height / imageBitmap.height);
+        //   // let x = (canvas.current.width - imageBitmap.width * ratio) / 2;
+        //   // let y = (canvas.current.height - imageBitmap.height * ratio) / 2;
+        //   // ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, x, y, imageBitmap.width * ratio, imageBitmap.height * ratio );
+        //   // const data = canvas.current.toDataURL("image/png");
+        //   setImageSrc(imageBitmap)
+        // })
     }}
     catch(error) {console.error('could not stream', error)}
   }
@@ -125,8 +125,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       <div>I'm here</div>
     <canvas
       hidden
-      // width="400"
-      // height="300"
+      width="400"
+      height="300"
       ref={canvas}
     />
     <a-scene
