@@ -138,80 +138,116 @@ type IHeaderProps = {
 
 
   return (
-    <Paper>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      paddingTop="32px" // Adjust as needed to move it to the top of the page
+    >
       <h2>Create a New Journey</h2>
-      <TextField
-        label="Name"
-        type="text"
-        name="name"
-        value={journeyData.name}
-        onChange={handleInputChange}
-        error={!journeyData.name}
-      />
-      <TextField
-        label="Description"
-        type="text"
-        name="description"
-        value={journeyData.description}
-        onChange={handleInputChange}
-        error={!journeyData.description}
-      />
-      <Button component="label" variant="outlined" startIcon={<CameraAltRoundedIcon />}>
-        Journey Photo
-        <VisuallyHiddenInput
-          type="file"
-          accept="image/*"
-          capture
-          onChange={(e) => saveImage(e)}
+      <Paper elevation={3} sx={{ maxWidth: 400, padding: 2, backgroundColor: '#fef0d7' }}>
+        <TextField
+          label="Name"
+          type="text"
+          name="name"
+          value={journeyData.name}
+          onChange={handleInputChange}
+          error={!journeyData.name}
+          fullWidth
+          variant="outlined"
         />
-      </Button>
-
-      <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label">Tags</InputLabel>
-        <Select
-          multiple
-          value={selectedTags}
-          onChange={handleTagChange}
-          input={<OutlinedInput label="Tags" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
+        <TextField
+          label="Description"
+          type="text"
+          name="description"
+          value={journeyData.description}
+          onChange={handleInputChange}
+          error={!journeyData.description}
+          fullWidth
+          variant="outlined"
+        />
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          marginTop={2}
         >
-          {tags.map((tag) => (
-            <MenuItem
-              key={tag.id}
-              value={tag.name}
-              style={getStyles(tag.name, selectedTags, theme)}
-            >
-              {tag.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
-
-      {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
-
-      {image && (<img
-        src={image}
-        width="250"
-        height="auto"
-        />
-      )}
-
-      {ready && (
-        <Button onClick={createJourney} variant="outlined">
-          Add Steps
-        </Button>
-      )}
-    </Paper>
+          {image && (
+            <img src={image} width="250" height="auto" alt="Journey Preview" />
+          )}
+          <Button
+            component="label"
+            variant="contained"
+            color="primary"
+            startIcon={<CameraAltRoundedIcon />}
+          >
+            Upload Journey Photo
+            <VisuallyHiddenInput
+              type="file"
+              accept="image/*"
+              capture
+              onChange={(e) => saveImage(e)}
+            />
+          </Button>
+        </Box>
+        <FormControl
+          fullWidth
+          variant="outlined"
+          margin="normal"
+        >
+          <InputLabel id="demo-multiple-name-label">Tags</InputLabel>
+          <Select
+            multiple
+            value={selectedTags}
+            onChange={handleTagChange}
+            input={
+              <OutlinedInput
+                label="Tags"
+                fullWidth
+              />
+            }
+            renderValue={(selected) => (
+              <Box
+                display="flex"
+                flexWrap="wrap"
+                gap={0.5}
+              >
+                {selected.map((value) => (
+                  <Chip key={value} label={value} color="primary" />
+                ))}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {tags.map((tag) => (
+              <MenuItem
+                key={tag.id}
+                value={tag.name}
+                style={getStyles(tag.name, selectedTags, theme)}
+              >
+                {tag.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {sizeWarning && (
+          <Alert severity="warning" sx={{ marginTop: 2 }}>
+            Your image is too big
+          </Alert>
+        )}
+        {ready && (
+          <Button
+            onClick={createJourney}
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            Add Steps
+          </Button>
+        )}
+      </Paper>
+    </Box>
   );
-};
-
+}
 export default CreateJourney;
