@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 
+import logo from '../favicon.svg';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -15,9 +16,15 @@ declare global {
       'a-asset-item': any
       'a-mixin': any
       'a-circle': any
-      'a-sky': any
-      'a-nft': any
+      'a-plane': any
+      'a-image': any
       'a-cursor': any
+      'a-gui-flex-container': any
+      'a-gui-cursor': any
+      'a-gui-icon-label-button': any
+      'a-gui-radio': any
+      'a-gui-button': any
+
     }
   }
 }
@@ -111,43 +118,50 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   return (
     <div>
-    <video
-        hidden
-        ref={video}
-        autoPlay={true}
-        ></video>
-      <canvas
-        hidden
-        ref={canvas}
-              />
     <a-scene
       camera
       isMobile
       embedded
-      //vr-mode-ui="enabled: false"
       >
+  <a-camera>
+    <a-gui-cursor
+	id='cursor'
+	fuse="true"
+        fuse-timeout="5000"
+	color="red"
+	  hover-color="red"
+	  active-color="red"
+	  design="reticle">
+    </a-gui-cursor>
+  </a-camera>
+     <a-entity
+      ref={markerRef}
+      gps-entity-place={
+        `latitude: ${latitude};
+         longitude: ${longitude};`}
+      id="marker"
+      position={`0 2 -5`}
+      animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
+      geometry="primitive: plane; width: 2; height: 0.7"
+      material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
+      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
+      onClick={letsDraw}/>
 
-      <a-camera>
-        <a-cursor
-          cursor="fuse: true; fuseTimeout: 5000"
-          position="0 0 -1"
-          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-          material="color: red; shader: flat">
-        </a-cursor>
-      </a-camera>
+      <a-image
+      src={logo}
+      width="0.3"
+      height="0.3"
+      position="0 1.7 -5" >
+      </a-image>
 
-      <a-entity
-        ref={markerRef}
-        gps-entity-place={`latitude: ${latitude}; longitude: ${longitude};`}
-        id="marker"
-        position={`0 4 -5`}
-        animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
-        geometry="primitive: plane; width: 2; height: 0.7"
-        material="color: yellow; transparent: true; opacity: 0.9"
-        text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
-        onClick={letsDraw}/>
-    </a-scene>
-    </div>
+      <a-plane
+    	width="4.0"
+   	height="1.6"
+    	color="#835500"
+    	position="0 2 -5" >
+      </a-plane>
+   </a-scene>
+   </div>
   );
 };
 
