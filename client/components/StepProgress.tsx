@@ -175,11 +175,11 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId})
         }}>
         <Typography gutterBottom variant="h5" component="div">
           {step.step.name}
-          { (
-              <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
-           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Typography>
+          {(
+              <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
+          )}
         <Typography variant="body2" color="text.secondary" >
           {text}
           <IconButton onClick={() => {speakText()}} >

@@ -61,10 +61,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           facingMode: "environment",
         }, audio: false })
         .then((stream) => {
-<<<<<<< HEAD
-=======
-          console.log(stream)
->>>>>>> df8d577506789c84a344a41c9c20dcd85995e7d1
           const track = stream.getVideoTracks()[0];
           setTracks(track);
           return new (window as any).ImageCapture(track);
@@ -176,7 +172,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
       />
 
-      {/* <a-image
+      <a-image
       src={logo}
       width="0.3"
       height="0.3"
@@ -190,7 +186,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
     height="1.9"
     color="#835500"
     position="0 2.1 -6" >
-    </a-plane> */}
+    </a-plane>
 
    </a-scene>
    </div>
