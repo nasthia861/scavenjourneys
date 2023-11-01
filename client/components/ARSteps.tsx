@@ -37,7 +37,6 @@ interface MarkerEntityProps {
 const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, setInProgress }) => {
 
   const canvas = useRef(null);
-  const video = useRef(null);
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [journeyProgressId, setJourneyProgressId] = useState<number | null>(null);
@@ -55,7 +54,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
           facingMode: "environment",
         }, audio: false })
         .then((stream) => {
-          video.current.srcObject = stream;
           const track = stream.getVideoTracks()[0];
           setTracks(track);
           return new (window as any).ImageCapture(track);
@@ -94,7 +92,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
         })
         .then(() => {
           tracks.stop();
-          video.current.srcObject = null;
           document.exitFullscreen();
         })
     }
@@ -111,11 +108,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 
   return (
     <div>
-    <video
-        hidden
-        ref={video}
-        autoPlay={true}
-        ></video>
       <canvas
         hidden
         ref={canvas}
