@@ -3,31 +3,11 @@ import axios from 'axios';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styled from '@mui/system/styled'
-import Avatar from "@mui/material/Avatar";
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Grid from '@mui/material/Grid';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from "@mui/material/ListItemText";
 import useTheme from "@mui/material/styles/useTheme";
-import ListItemButton from "@mui/material/ListItemButton";
-import deepOrange from "@mui/material/colors/deepOrange";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import AddIcon from "@mui/icons-material/Add";
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import { Typography, List, Divider } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List'
 
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { myContext } from "./Context";
