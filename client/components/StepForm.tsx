@@ -8,6 +8,7 @@ import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
 import { JourneyType } from '@this/types/Journey';
 import { ShakeButton } from '../styling/stepFormStyling';
+import Box from '@mui/material/Box';
 
 const StepForm: React.FC = () => {
   const params = useParams();
@@ -236,39 +237,47 @@ const StepForm: React.FC = () => {
         console.error('Error submitting journey with steps:', error);
       }
     };
-  return (
-    <div>
-      <h3>Add Steps</h3>
-      <TextField
-        label="Step Name"
-        type="text"
-        name="name"
-        value={stepData.name}
-        onChange={handleInputChange}
-        error={stepNameError}
-        helperText={stepNameError ? 'Please enter a name' : ''}
-      />
-      <TextField
-        label="Step Hint"
-        type="text"
-        name="hint"
-        value={stepData.hint}
-        onChange={handleInputChange}
-        error={stepHintError}
-        helperText={stepHintError ? 'Please enter a hint' : ''}
-      />
-      {/* <Button onClick={addStep}>Add Step</Button> */}
-      {!isShaking ? (
-        <Button onClick={submitJourney} variant="contained">
-          Submit Journey
-        </Button>
-      ) : (
-        <ShakeButton onClick={submitJourney} variant="contained">
-          Submit Journey
-        </ShakeButton>
-      )}
-    </div>
-  );
-};
+    
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        paddingTop="32px" // Adjust as needed to move it to the top of the page
+      >
+        <h3>Add Steps</h3>
+        <TextField
+          label="Step Name"
+          type="text"
+          name="name"
+          value={stepData.name}
+          onChange={handleInputChange}
+          error={stepNameError}
+          helperText={stepNameError ? 'Please enter a name' : ''}
+          style={{ marginBottom: '16px' }}
+        />
+        <TextField
+          label="Step Hint"
+          type="text"
+          name="hint"
+          value={stepData.hint}
+          onChange={handleInputChange}
+          error={stepHintError}
+          helperText={stepHintError ? 'Please enter a hint' : ''}
+          style={{ marginBottom: '16px' }}
+        />
+        {!isShaking ? (
+          <Button onClick={submitJourney} variant="contained">
+            Submit Journey
+          </Button>
+        ) : (
+          <ShakeButton onClick={submitJourney} variant="contained">
+            Submit Journey
+          </ShakeButton>
+        )}
+      </Box>
+    );
+  };
+  
 
 export default StepForm;
