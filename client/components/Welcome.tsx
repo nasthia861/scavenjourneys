@@ -3,6 +3,7 @@ import GoogleButton from 'react-google-button'
 import Grid from '@mui/material/Grid';
 import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
+import map from '../styling/scvMap.png'
 
 
 
@@ -13,19 +14,36 @@ const Welcome: React.FC = () => {
     window.open('/auth/google', '_self');
   }
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url(${map})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        height: '100vh',
+        width: 'auto'
+      }}
+    >
       <Grid
         container
         spacing={0}
         direction="column"
         alignItems="center"
         justifyContent="center"
-        padding='30px'
+        padding='20px'
+        paddingTop='60px'
       >
 
           <Image src={logo} width='200px' />
-          <p>
-            We're thrilled to have you embark on this exciting journey filled with clues, riddles, and local hidden gems. Get ready to put your problem-solving skills to the test as you follow the clues and search for locales all around. Whether you're exploring your neighborhood, a park, or a city, this scavenger hunt is designed to be a fun and challenging experience for participants of all ages.
+          <p
+            style={{
+              fontFamily: 'Secular One',
+              fontSize: '20px',
+              color: '#9e5528',
+              textAlign: 'center'
+            }}
+          >
+             <b>Get ready to put your problem-solving skills to the test as you follow the clues to explore your neighborhood, your city, or locations abroad.</b>
           </p>
         <GoogleButton
           className='google-button'
