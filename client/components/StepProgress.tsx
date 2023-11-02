@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
-import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import useTheme from "@mui/material/styles/useTheme";
 import Box from '@mui/material/Box';
@@ -33,10 +28,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
-  // const [selectedStep, setSelectedStep] = useState(null);
 
-
-  const navigate = useNavigate();
   const theme = useTheme();
 
   // Increment steps taken in user data
@@ -118,10 +110,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
 
     if(distanceInFeet < 20 + feetAcc) {
-      console.log('true', distanceInFeet, feetAcc)
+      //console.log('true', distanceInFeet, feetAcc)
       setCloseEnough(true);
     } else {
-      console.log('false', distanceInFeet, feetAcc)
+      //console.log('false', distanceInFeet, feetAcc)
       setCloseEnough(false);
     }
 
@@ -186,7 +178,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </Typography>
         <Box>
           {closeEnough && (
-              <MarkerEntity step={step} userId={userId} setImage={setImage} setInProgress={setInProgress} ></MarkerEntity>
+              <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement}></MarkerEntity>
           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
