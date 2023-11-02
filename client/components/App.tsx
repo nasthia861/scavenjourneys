@@ -2,7 +2,8 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { themeOptions } from './Theme'; //theme import
 import axios, { AxiosResponse }from 'axios';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ThemeProvider from '@mui/material/styles/ThemeProvider'; //theme container
 import CssBaseline from '@mui/material/CssBaseline';
 import Welcome from './Welcome';
@@ -64,6 +65,7 @@ const App = () => {
     //https://mui.com/system/styles/basics/
     return (
       <ThemeProvider theme={themeOptions}>
+        <ToastContainer/>
         <CssBaseline />
         <BrowserRouter>
           <Suspense fallback={<div>Loading...</div>}>

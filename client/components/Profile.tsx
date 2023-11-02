@@ -38,6 +38,8 @@ import SpeechToText from "./SpeechToText";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 import { JourneyType } from "@this/types/Journey";
+import { toast } from 'react-toastify';
+import logo from '../styling/scvnjrny_logo_stacked.svg';
 
 type IHeaderProps = {
   userLat: number;
@@ -140,6 +142,32 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
+      const steps = stepAndJourney.data;
+      const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
+      if (allStepsCompleted) {
+        // Trigger a toast when all steps are completed
+        toast.success(`Congratulations! All steps are completed for this Journey.`, {
+          position: "top-right",
+          hideProgressBar: false,
+          theme: "light",
+          style: {
+            background: '#FDF3E0',
+            border: '2px solid #9a4119',
+            borderRadius: '7px',
+            padding: '5px',
+          },
+          icon: (
+            <img
+              src={logo}
+              style={{
+                width: '32px',
+                height: '32px',
+                marginRight: '5px',
+              }}
+            />
+          ),
+        });
+      }
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
