@@ -44,9 +44,10 @@ import logo from '../styling/scvnjrny_logo_stacked.svg';
 type IHeaderProps = {
   userLat: number;
   userLong: number;
+  accuracy: number;
 };
 
-  const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+  const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
   const location: {state: {journeyProgressId: number | null}} = useLocation();
 
@@ -299,19 +300,27 @@ type IHeaderProps = {
         <TabPanel value="Started">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
-      <List sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+      <List sx={{ padding: theme.spacing(2) }}>
           {journeys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
-                sx={{ border: `1px solid ${theme.palette.secondary.main}`, borderRadius: theme.shape.borderRadius, margin: `${theme.spacing(1)} 0` }}
+                sx={{
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  borderRadius: theme.shape.borderRadius,
+                  margin: `${theme.spacing(1)} 0`,
+                  padding: theme.spacing(2),
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
                 {(selectedIndex === journey.id) && (steps.map((step) => (
-                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy}/>
                 )))}
               </Grid>
             </React.Fragment>

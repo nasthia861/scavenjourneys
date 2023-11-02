@@ -22,6 +22,7 @@ const App = () => {
   // // grabs user data from google oauth
   const [userLat, setUserLat] = useState<number | null>()
   const [userLong, setUserLong] = useState<number | null>()
+  const [accuracy, setAccuracy] = useState<number | null>()
   const [userId, setUserId] = useState<number>(0)
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
@@ -38,6 +39,7 @@ const App = () => {
     navigator.geolocation.watchPosition((position) => {
       setUserLat(position.coords.latitude)
       setUserLong(position.coords.longitude)
+      setAccuracy(position.coords.accuracy)
     }, () => console.error('Could not get location'))
   }
 
@@ -72,7 +74,7 @@ const App = () => {
               <Route path="/" element={<Welcome/>} />
               <Route path="/ar" Component={AR} />
               <Route path="/home" element={<Home userId={userId} userLat={userLat} userLong={userLong}/>} />
-              <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong}/>} />
+              <Route path="/profile/:userId/" element={<Profile userLat={userLat} userLong={userLong} accuracy={accuracy}/>} />
               <Route path="/journey" element={<Journey/>} />
               <Route path="/leaderboard" element={<LeaderBoard/>} />
               <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
