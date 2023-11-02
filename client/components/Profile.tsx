@@ -42,9 +42,10 @@ import { JourneyType } from "@this/types/Journey";
 type IHeaderProps = {
   userLat: number;
   userLong: number;
+  accuracy: number;
 };
 
-  const Profile: React.FC<IHeaderProps> = ({userLat, userLong}) => {
+  const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
   const location: {state: {journeyProgressId: number | null}} = useLocation();
 
@@ -291,7 +292,7 @@ type IHeaderProps = {
               </ListItemButton>
               <Grid>
                 {(selectedIndex === journey.id) && (steps.map((step) => (
-                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId}/>
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy}/>
                 )))}
               </Grid>
             </React.Fragment>
