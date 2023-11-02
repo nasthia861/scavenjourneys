@@ -151,6 +151,9 @@ type IHeaderProps = {
           theme: "light",
           style: {
             background: '#FDF3E0',
+            border: '2px solid #9a4119',
+            borderRadius: '7px',
+            padding: '5px',
           },
           icon: (
             <img

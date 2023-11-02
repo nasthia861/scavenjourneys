@@ -128,8 +128,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       embedded
       >
   <a-camera>
-    <a-gui-cursor
-              id='cursor'
+    {/* <a-gui-cursor
+              // id='cursor'
 						  // raycaster="objects: [gui-interactable]"
 						  fuse="true"
               fuse-timeout="5000"
@@ -138,26 +138,24 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 						  active-color="red"
 						  design="reticle"
               >
-    </a-gui-cursor>
-    {/* <a-cursor
+    </a-gui-cursor> */}
+    <a-cursor
   fuse="true"
   fuse-timeout="3000"
   color="red"
   geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-  material="color: red; shader: flat"
->
-</a-cursor> */}
+  material="color: red; shader: flat">
+  </a-cursor>
   </a-camera>
-{/*
+  {/*
       <a-gui-button
       width="4"
       height="1.5"
-      position="0 2 -7"
+      position="0 2 -2"
       margin="0.1"
       font-color="#000000"
       font-size="30px"
       background-color="#000000"
-      onClick={letsDraw}
       ></a-gui-button> */}
      <a-entity
       ref={markerRef}
@@ -166,25 +164,23 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
          longitude: ${longitude};`}
       id="marker"
       position={`0 2 -5`}
-      animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: false"
-      geometry="primitive: plane; width: 2; height: 0.7"
+      animation="property: scale; to: 1.8 2 1.9; dir: alternate; loop: true"
+      geometry="primitive: plane; width: 1.5; height: 0.7"
       material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
-      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
+      text={`value: ${stepName}; width: 3; align: center; zOffset: 0.9; color: #000000`}
       onClick={letsDraw}
-
       />
 
       <a-image
       src={logo}
       width="0.3"
       height="0.3"
-      position="0 1.6 -4"
+      position="0 1.7 -4"
       >
-
       </a-image>
 
       <a-plane
-    width="4.5"
+    width="3.5"
     height="1.9"
     color="#835500"
     position="0 2.1 -6" >
