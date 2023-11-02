@@ -128,7 +128,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
       embedded
       >
   <a-camera>
-    {/* <a-gui-cursor
+    <a-gui-cursor
               id='cursor'
 						  // raycaster="objects: [gui-interactable]"
 						  fuse="true"
@@ -138,15 +138,15 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ userId, step, setImage, set
 						  active-color="red"
 						  design="reticle"
               >
-    </a-gui-cursor> */}
-    <a-cursor
+    </a-gui-cursor>
+    {/* <a-cursor
   fuse="true"
   fuse-timeout="3000"
   color="red"
   geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
   material="color: red; shader: flat"
 >
-</a-cursor>
+</a-cursor> */}
   </a-camera>
 {/*
       <a-gui-button
