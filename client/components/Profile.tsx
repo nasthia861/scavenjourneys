@@ -167,7 +167,6 @@ type IHeaderProps = {
           ),
         });
       }
-
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
