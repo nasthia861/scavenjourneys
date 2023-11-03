@@ -146,12 +146,12 @@ type IHeaderProps = {
       let journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId)
 
 
-      //console.log(steps)
       const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
       const currentToastCount = toastCounts[journeyId] || 0;
 
 
       if (allStepsCompleted && currentToastCount === 0) {
+         // Increment the toast count for the specific journey
         setToastCounts(prevCounts => ({
           ...prevCounts,
           [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
