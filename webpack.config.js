@@ -30,7 +30,7 @@ const config = {
             favicon: 'client/favicon.svg'
         }),
 
-        //new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin(),
 
         new Dotenv({
             template: path.join(__dirname, ".env"),
@@ -88,7 +88,7 @@ module.exports = () => {
 
     } else {
         config.mode = 'development';
-        //config.plugins.push(new Dotenv())
+        // config.plugins.push(new Dotenv())
     }
     return config;
 };

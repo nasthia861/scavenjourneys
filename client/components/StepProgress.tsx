@@ -98,8 +98,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     }
   };
 
-
-
   const getLocation = () => {
     let feetAcc = accuracy * 3.28084 * 1.05
     const feetPerDegree = 364000;
@@ -171,17 +169,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
           justifyContent: "space-between",
           alignItems: "center",
         }}>
-        {/* <Typography gutterBottom variant="h5" component="div">
-          {step.step.hint}
-        </Typography> */}
-        <Box>
-          {closeEnough && (
-              <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement}></MarkerEntity>
-          )}
-          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
-        </Box>
-        {/* <Typography variant="body2" color="text.secondary" >
-          {text} */}
         <Typography gutterBottom variant="h5" component="div">
           {step.step.hint}
           <IconButton onClick={() => {speakText()}} >
@@ -190,6 +177,12 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </Typography>
         </CardContent>
         )}
+        <Box>
+          { inProgress && (
+              <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement}></MarkerEntity>
+          )}
+          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
+        </Box>
     </Card>
 
   );

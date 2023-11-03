@@ -333,6 +333,26 @@ journeyRouter.get('/progress/user/:userId', async (req, res) => {
   }
 });
 
+journeyRouter.put('/progress/:journeyId', async (req, res) => {
+  const { journeyId } = req.params;
+  const { in_progress } = req.body;
 
+  try {
+    const journeyProgress = await AppDataSource.manager.findOneBy(JourneyProgress, {id: +journeyId});
+
+    if (!journeyProgress) {
+      return res.status(404).send({ message: 'Journey progress not found.' });
+    }
+
+    journeyProgress.in_progress = in_progress;
+
+    await AppDataSource.manager.save(JourneyProgress, journeyProgress);
+
+    res.status(200).send(journeyProgress);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send(err);
+  }
+});
 
 export default journeyRouter;

@@ -38,6 +38,8 @@ import SpeechToText from "./SpeechToText";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserType } from "@this/types/User";
 import { JourneyType } from "@this/types/Journey";
+import { toast } from 'react-toastify';
+import logo from '../styling/scvnjrny_logo_stacked.svg';
 
 type IHeaderProps = {
   userLat: number;
@@ -65,6 +67,7 @@ type IHeaderProps = {
   const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -132,7 +135,6 @@ type IHeaderProps = {
     }
   }, []);
 
-
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
@@ -140,6 +142,44 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
+      const steps = stepAndJourney.data;
+      let journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId)
+
+
+      const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
+      const currentToastCount = toastCounts[journeyId] || 0;
+
+
+      if (allStepsCompleted && currentToastCount === 0) {
+         // Increment the toast count for the specific journey
+        setToastCounts(prevCounts => ({
+          ...prevCounts,
+          [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
+        }));
+
+        // Trigger a toast when all steps are completed
+        toast.success(`Congrats ${username}! All steps are completed for the ${journey[0].journey.name} Journey.`, {
+          position: "top-right",
+          hideProgressBar: false,
+          theme: "light",
+          style: {
+            background: '#FDF3E0',
+            border: '2px solid #9a4119',
+            borderRadius: '7px',
+            padding: '5px',
+          },
+          icon: (
+            <img
+              src={logo}
+              style={{
+                width: '32px',
+                height: '32px',
+                marginRight: '5px',
+              }}
+            />
+          ),
+        });
+      }
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }

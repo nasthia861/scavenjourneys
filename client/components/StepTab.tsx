@@ -60,17 +60,17 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
   };
 
   const grabAIHint = () => {
-    axios.post('/chat/', {
-      latitude: latitude,
-      longitude: longitude,
-      answer: stepData.name
-    })
-    .then((clue) => {
-      console.log(clue);
-    })
-    .catch((error) => {
-      console.error('could not grab clue from server')
-    })
+    if(stepData.name.length > 0){
+      axios.post('/chat/', {
+        answer: stepData.name
+      })
+      .then((clue) => {
+        setStepData({...stepData, hint: clue.data})
+      })
+      .catch((error) => {
+        console.error('could not grab clue from server', error)
+      })
+    }
   }
 
   const submitJourney = async () => {
@@ -270,6 +270,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
             error={stepHintError}
             helperText={stepHintError ? 'Please enter a clue' : ''}
             style={{ marginBottom: '16px' }}
+            multiline
           />
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

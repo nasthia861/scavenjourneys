@@ -91,6 +91,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
             in_progress: false,
             image_url: response.data.secure_url
           })
+          console.log(response.data.secure_url)
           setImage(response.data.secure_url)
           setInProgress(false);
           giveStepsTakenAchievement();
@@ -161,15 +162,15 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         width="0.3"
         height="0.3"
         position="0 1.6 -4"
-        onClick={letsDraw}
+        //onClick={letsDraw}
         />
 
       <a-plane
-        width="4.5"
-        height="1.9"
-        color="#835500"
-        position="0 2.1 -6" >
-      </a-plane>
+    width="3.5"
+    height="1.9"
+    color="#835500"
+    position="0 2.1 -6" >
+    </a-plane>
 
    </a-scene>
    </div>

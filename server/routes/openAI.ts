@@ -7,7 +7,7 @@ const openai = new OpenAI({
 });
 
 chatRouter.post('/', async(req, res) => {
-  const {latitude, longitude, answer} = req.body;
+  const {answer} = req.body;
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -19,7 +19,7 @@ chatRouter.post('/', async(req, res) => {
       messages: [
         {
           "role": "system",
-          "content": `create clue for scavenger hunt in the location ${latitude} ${longitude}. the answer is '${answer}'. Do not share answer, keep it under 2 sentences.`
+          "content": `create a clue for a scavenger hunt where the answer is '${answer}'. Do not share answer, keep it under 2 sentences.`
         },
       ]
     })

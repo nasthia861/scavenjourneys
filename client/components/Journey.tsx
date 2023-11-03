@@ -208,8 +208,6 @@ import { myContext } from "./Context";
 
                   <CardContent>
                     <Typography variant="h6" component="div">
-                      <b>{step.name}</b>
-                      <br />
                       <p>{step.hint}</p>
                     </Typography>
                   </CardContent>
