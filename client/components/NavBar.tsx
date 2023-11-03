@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
@@ -29,11 +29,13 @@ interface NavBarProps {
 
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
 const NavBar = ({ menuItems }: NavBarProps) => {
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2]);
+
   const location = useLocation();
   if (location.pathname === "/") {
     return null;
   }
-  if (location.pathname === "/logout") {
+  if (location.pathname === `/logout/${userId}`) {
     return null;
   }
 

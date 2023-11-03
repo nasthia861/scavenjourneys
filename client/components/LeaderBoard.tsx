@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Grid from '@mui/material/Grid/Grid';
-// import trophy from '../styling/num1trophy.png';
 import Stack from '@mui/material/Stack/Stack';
 
 const Leaderboard = () => {
@@ -93,8 +92,13 @@ const Leaderboard = () => {
                 </Typography>
                 <b/>
                 <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '30px' }}>
-                  {/* < img src={trophy} height='50px' width='auto'/> */}
-                    {index + 1}
+                  {(() => {
+                    if ((index + 1) === 1) {
+                      return <img src='https://cdn.peterbarnum.com/img/bananas/mushroom-strut-banana.gif' height='50px' width='auto' style={{padding: '-30px'}}/>
+                    } else {
+                      return index + 1;
+                    }
+                  })()}
                 </Typography>
               </Stack>
             </Box>
