@@ -123,7 +123,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       embedded
       >
       <a-camera>
-        {/* <a-gui-cursor
+        <a-gui-cursor
                   id='cursor'
                   // raycaster="objects: [gui-interactable]"
                   fuse="true"
@@ -133,26 +133,15 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
                   active-color="red"
                   design="reticle"
                   >
-        </a-gui-cursor> */}
-        <a-cursor
+        </a-gui-cursor>
+        {/* <a-cursor
           fuse="true"
           fuse-timeout="1000"
           color="red"
           geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
           material="color: red; shader: flat"
-        />
+        /> */}
       </a-camera>
-{/*
-      <a-gui-button
-      width="4"
-      height="1.5"
-      position="0 2 -7"
-      margin="0.1"
-      font-color="#000000"
-      font-size="30px"
-      background-color="#000000"
-      onClick={letsDraw}
-      ></a-gui-button> */}
       <a-entity
         ref={markerRef}
         gps-entity-place={
@@ -165,15 +154,15 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         material="color: '#2F0A00'; shader: flat; transparent: true; opacity: 0.7"
         text={`value: ${stepName}; width: 3; align: center; zOffset: 0.1; color: #000000`}
         onClick={letsDraw}
-
-      />
+        />
 
       <a-image
         src={logo}
         width="0.3"
         height="0.3"
         position="0 1.6 -4"
-      />
+        onClick={letsDraw}
+        />
 
       <a-plane
         width="4.5"
