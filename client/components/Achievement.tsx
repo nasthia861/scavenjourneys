@@ -64,7 +64,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                 <Card
                   elevation={3}
                   onClick={(event) => handleAchievementClick(achievement, event)}
-                  sx={{padding: '10px', background:`${world2}`}}
+                  sx={{padding: '10px', background: '#f8e5c8'}}
                   className={`achievement-box ${
                     earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                       ? 'earned'

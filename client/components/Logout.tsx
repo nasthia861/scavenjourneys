@@ -1,22 +1,21 @@
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid/Grid';
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import Carousel from 'react-material-ui-carousel'
-import Item from './Item';
 import GoogleButton from 'react-google-button';
 import Box from '@mui/material/Box/Box';
+import Typography from '@mui/material/Typography';
+import map from '../styling/pinkMap.png'
 
 const Logout = () => {
-  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
-  const [pictures, setPictures] = useState([])
-
+  const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2]);
+  const [pictures, setPictures] = useState([]);
 
   //change axios request to grab user photos instead
   const getPictures = () => {
     axios.get(`/step/progress/user/${userId}`)
       .then((response) => setPictures(response.data))
-      .catch((error) => console.error('could not get pictures'))
+      .catch((error) => console.error('could not get pictures', error))
   }
 
   const googleLogin = () => {
@@ -25,7 +24,7 @@ const Logout = () => {
 
   const logUserOut = () => {
     axios.post('/auth/logout')
-    .then(() => {console.log('logging out')})
+    .then(() => {})
     .catch((err) => {console.error('failed to logout', err)})
   }
 
@@ -35,20 +34,42 @@ const Logout = () => {
   }, [])
 
   return (
-    <div>
+    <div
+    style={{
+      backgroundImage: `url(${map})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      height: '100vh',
+      width: 'auto'
+    }}
+    >
       <Box
-        // container
-        // direction="column"
-        // alignItems="center"
+        sx={{
+          padding: '10px',
+          alignContent: 'center',
+          paddingTop:'100px'
+        }}
       >
-        <p>
-          Thanks for playing. Hope you had a great time and created awesome memories!
+        <p
+          style={{
+            fontFamily: 'Secular One',
+            fontSize: '20px',
+            color: '#9e5528',
+            textAlign: 'center'
+          }}
+        >
+          <b>Thanks for playing. Hope you had a great time and created awesome memories!</b>
         </p>
         <Carousel
+          sx={{
+            padding: '10px',
+            textAlign: 'center'
+          }}
         >
             {
               pictures.map((photoData) => {
-                return <img src={photoData.image_url} key={photoData.id}/>
+                return <img src={photoData.image_url} height='200px' width='auto' key={photoData.id}/>
               })
             }
         </Carousel>
@@ -58,13 +79,13 @@ const Logout = () => {
         spacing={0}
         direction="column"
         alignItems="center"
-        justifyContent="center"
+        alignContent="center"
         padding='30px'
         width='100%'
       >
-        <p>
-          Still have some exploring to do?
-        </p>
+        <Typography>
+          Still exploring?
+        </Typography>
         <GoogleButton
           className='google-button'
           onClick={googleLogin}
