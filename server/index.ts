@@ -14,9 +14,11 @@ import userDataRouter from './routes/userDataRouter';
 import journeyTagRouter from './routes/journeyTag';
 // import homeRouter from './routes/home';
 import cloudRouter from './routes/cloudinary';
+import chatRouter from './routes/openAI';
 import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
-import { v2 as cloudinary } from 'cloudinary'
+
+
 
 
 dotenv.config();
@@ -62,6 +64,7 @@ app.use('/userachievements', userAchievementsRouter);
 app.use('/userdata', userDataRouter);
 app.use('/cloud', cloudRouter);
 app.use('/journeytag', journeyTagRouter);
+app.use('/chat', chatRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'index.html'), (err) => {

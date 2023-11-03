@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { v2 as cloudinary } from 'cloudinary'
-import axios from 'axios'
 
 
 const cloudRouter = Router();
@@ -25,6 +24,7 @@ cloudRouter.post('/:folder/:filename', async(req, res) => {
 
   } catch (error) {
     console.error('could not post to cloudinary', error);
+    res.sendStatus(500);
   }
 
 })

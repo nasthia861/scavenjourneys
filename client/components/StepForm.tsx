@@ -73,6 +73,10 @@ const StepForm: React.FC = () => {
     setStepData({ ...stepData, [name]: value });
   };
 
+  const grabAIHint = () => {
+
+  }
+
   const submitJourney = async () => {
      // Validate step data before submission
      if (!stepData.name || !stepData.hint) {
@@ -237,7 +241,7 @@ const StepForm: React.FC = () => {
         console.error('Error submitting journey with steps:', error);
       }
     };
-    
+
     return (
       <Box
         display="flex"
@@ -278,6 +282,6 @@ const StepForm: React.FC = () => {
       </Box>
     );
   };
-  
+
 
 export default StepForm;
