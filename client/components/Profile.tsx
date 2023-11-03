@@ -67,6 +67,7 @@ type IHeaderProps = {
   const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
 
   // State to hold user's journeys
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -134,7 +135,6 @@ type IHeaderProps = {
     }
   }, []);
 
-
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
@@ -143,10 +143,17 @@ type IHeaderProps = {
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
       const steps = stepAndJourney.data;
+      let journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId)
+
+
+      //console.log(steps)
       const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
-      if (allStepsCompleted) {
+
+      if (allStepsCompleted ) {
+
+
         // Trigger a toast when all steps are completed
-        toast.success(`Congratulations! All steps are completed for this Journey.`, {
+        toast.success(`Congrats ${username}! All steps are completed for the ${journey[0].journey.name} Journey.`, {
           position: "top-right",
           hideProgressBar: false,
           theme: "light",
