@@ -152,7 +152,10 @@ type IHeaderProps = {
 
 
       if (allStepsCompleted && currentToastCount === 0) {
-
+        setToastCounts(prevCounts => ({
+          ...prevCounts,
+          [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
+        }));
 
         // Trigger a toast when all steps are completed
         toast.success(`Congrats ${username}! All steps are completed for the ${journey[0].journey.name} Journey.`, {
