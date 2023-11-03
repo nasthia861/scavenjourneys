@@ -98,8 +98,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     }
   };
 
-
-
   const getLocation = () => {
     let feetAcc = accuracy * 3.28084 * 1.05
     const feetPerDegree = 364000;
