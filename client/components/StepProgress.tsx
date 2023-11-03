@@ -156,8 +156,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
             height: 300,
             border: `1px solid ${theme.palette.primary.main}`,
             borderRadius: theme.shape.borderRadius,
-            // margin: `${theme.spacing(1)} 0`,
-            // padding: theme.spacing(2),
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -173,17 +171,19 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
           justifyContent: "space-between",
           alignItems: "center",
         }}>
-        <Typography gutterBottom variant="h5" component="div">
-          {step.step.name}
-        </Typography>
+        {/* <Typography gutterBottom variant="h5" component="div">
+          {step.step.hint}
+        </Typography> */}
         <Box>
           {closeEnough && (
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement}></MarkerEntity>
           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
-        <Typography variant="body2" color="text.secondary" >
-          {text}
+        {/* <Typography variant="body2" color="text.secondary" >
+          {text} */}
+        <Typography gutterBottom variant="h5" component="div">
+          {step.step.hint}
           <IconButton onClick={() => {speakText()}} >
             <VolumeUpOutlinedIcon fontSize='small' />
           </IconButton>

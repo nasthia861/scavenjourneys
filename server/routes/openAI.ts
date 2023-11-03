@@ -23,8 +23,8 @@ chatRouter.post('/', async(req, res) => {
         },
       ]
     })
-    //res.status(201).json(response.choices[0].message.content)
-    res.status(201).json(response)
+    res.status(201).json(response.choices[0].message.content)
+    //res.status(201).json(response)
   }
   catch (error) {
     console.error('could not get chatgpt response', error)

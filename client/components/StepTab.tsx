@@ -59,6 +59,20 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
     setStepData({ ...stepData, [name]: value });
   };
 
+  const grabAIHint = () => {
+    axios.post('/chat/', {
+      latitude: latitude,
+      longitude: longitude,
+      answer: stepData.name
+    })
+    .then((clue) => {
+      console.log(clue);
+    })
+    .catch((error) => {
+      console.error('could not grab clue from server')
+    })
+  }
+
   const submitJourney = async () => {
      // Validate step data before submission
      if (!stepData.name || !stepData.hint) {
@@ -101,7 +115,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
       // Post the step to the database
       const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
       await axios.post('/step', stepWithJourneyId);
-      
+
       const submittedStepNameHint: any = {
         name: stepData.name,
         hint: stepData.hint
@@ -180,6 +194,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
         }
       }
         // Clear step data and navigate to the home page
+        //right here, clearing everything except name hint and user
         setStepData({ name: '', hint: '', user: { id: userId } });
         // navigate('/home');
       } catch (error) {
@@ -190,9 +205,9 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
     return (
       <div>
         {submittedSteps.length > 0 && (
-          <List 
+          <List
           sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), marginBottom: theme.spacing(2) }}>
-            <Typography 
+            <Typography
               variant="h6">
               New Steps:
             </Typography>
@@ -228,7 +243,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
           Your current location will be used as the destination for this step
           </Typography>
           <TextField
-            label="Step Name"
+            label="Answer"
             type="text"
             name="name"
             value={stepData.name}
@@ -237,16 +252,26 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
             helperText={stepNameError ? 'Please enter a name' : ''}
             style={{ marginBottom: '16px' }}
           />
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Add a clue for the player to solve the step or use our suggested clue button</Typography>
+          <Button
+          onClick={grabAIHint}
+          variant="contained"
+          color="primary"
+          >
+              Suggested Clue
+          </Button>
           <TextField
-            label="Step Hint"
+            label="Step Clue"
             type="text"
             name="hint"
             value={stepData.hint}
             onChange={handleInputChange}
             error={stepHintError}
-            helperText={stepHintError ? 'Please enter a hint' : ''}
+            helperText={stepHintError ? 'Please enter a clue' : ''}
             style={{ marginBottom: '16px' }}
           />
+          <br />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               {!isShaking ? (
