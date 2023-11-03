@@ -148,8 +148,10 @@ type IHeaderProps = {
 
       //console.log(steps)
       const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
+      const currentToastCount = toastCounts[journeyId] || 0;
 
-      if (allStepsCompleted ) {
+
+      if (allStepsCompleted && currentToastCount === 0) {
 
 
         // Trigger a toast when all steps are completed
