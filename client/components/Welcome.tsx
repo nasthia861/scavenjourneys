@@ -3,7 +3,7 @@ import GoogleButton from 'react-google-button'
 import Grid from '@mui/material/Grid';
 import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
-import map from '../styling/scvMap.png'
+import map from '../styling/pinkMap.png'
 
 
 
@@ -31,7 +31,7 @@ const Welcome: React.FC = () => {
         alignItems="center"
         justifyContent="center"
         padding='20px'
-        paddingTop='60px'
+        paddingTop='100px'
       >
 
           <Image src={logo} width='200px' />
