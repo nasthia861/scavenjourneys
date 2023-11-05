@@ -30,6 +30,10 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
   const latitude = userLat
   const longitude = userLong
   const journeyData = journey
+  // const location: {state: {userLat: number, userLong: number, journeyData: JourneyType}} = useLocation();
+  // const latitude = location.state.userLat
+  // const longitude = location.state.userLong
+  // const journeyData = location.state.journeyData
 
   const [stepData, setStepData] = useState<StepType>({
     name: '',

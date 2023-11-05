@@ -40,6 +40,7 @@ type IHeaderProps = {
     //import from home
   });
 
+  const navigate = useNavigate();
   const [image, setImage] = useState<string | null >()
   const [ready, setReady] = useState<boolean>(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
@@ -97,17 +98,84 @@ type IHeaderProps = {
   };
 
   const createJourney = async () => {
-      try {
-          axios.post('/journey', journeyData)
-          .then((response) => {
-            let resData = response.data
-              addTags(selectedTags, resData.id);
-              navigate(`/StepForm/${userId}/${resData.id}`, {state:{userLat, userLong, resData}});
-            })
-
-        } catch (error) {
-          console.error('Error creating journey:', error);
+    try {
+      axios.post('/journey', journeyData)
+      .then((response) => {
+        let resData = response.data
+          addTags(selectedTags, resData.id);
+          console.log('this is the journeyId ----->', resData.id)
+          navigate(`/profile/${userId}`, { state: { currentJourneyIdState: resData.id, isStepTabOpenState: true, tabValueState: 'Created', userLat, userLong } });
+        })
+      // get the userData for logged in user
+      const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
+  
+      // update said userData
+      const existingUserData = userDataResponse.data;
+      const updatedUserData = {
+        ...existingUserData,
+        journeysCreated: existingUserData.journeysCreated + 1,
+      };
+      await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
+  
+    // remember the new userData
+    const newJourneysCreated = existingUserData.journeysCreated + 1
+  
+    // Check for achievements if the user has any
+    const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
+    const userAchievements = userAchievementsResponse.data;
+  
+    // Function to create a new user achievement if it doesn't exist
+    const createNewUserAchievement = async (achievementId: number) => {
+      await axios.post('/userachievements', {
+        user: { id: userId },
+        achievement: { id: achievementId },
+      });
+    };
+    // Check if the user needs an amateur journey maker achievement
+    if (newJourneysCreated >= 5) {
+      if (Array.isArray(userAchievements)) {
+  
+        // Check if the user has achievement ID 1
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === 1
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(1);
         }
+      }
+    }
+    // Check if the user needs an expert journey maker achievement
+    if (newJourneysCreated >= 20) {
+      if (Array.isArray(userAchievements)) {
+  
+        // Check if the user has achievement ID 2
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === 2
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(2);
+        }
+      }
+    }
+    // Check if the user needs an master journey maker achievement
+    if (newJourneysCreated >= 50) {
+      if (Array.isArray(userAchievements)) {
+  
+        // Check if the user has achievement ID 3
+        const hasAchievement = userAchievements.some(
+          (achievement) => achievement.achievement.id === 3
+        );
+        // If they don't have it, create a new user achievement
+        if (!hasAchievement) {
+          createNewUserAchievement(3);
+        }
+      }
+    }
+    } catch (error) {
+      console.error('Error creating journey:', error);
+    }
   };
 
 
@@ -119,7 +187,7 @@ type IHeaderProps = {
     }
   }, [journeyData, sizeWarning, selectedTags])
 
-  const navigate = useNavigate();
+
 
   const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.files[0].size < 5000000) {

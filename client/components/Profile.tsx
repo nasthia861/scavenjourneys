@@ -49,8 +49,8 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
-  const location: {state: {journeyProgressId: number | null}} = useLocation();
-
+  const location: {state: {journeyProgressId: number | undefined}} = useLocation();
+  const { currentJourneyIdState, isStepTabOpenState, tabValueState} = useLocation().state || {};
   const theme = useTheme();
   const [user, setUser] = useState<UserType>()
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
@@ -62,9 +62,9 @@ type IHeaderProps = {
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [tabValue, setTabValue] = useState("Started");
-  const [isStepTabOpen, setIsStepTabOpen] = useState(false);
-  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
+  const [tabValue, setTabValue] = useState(tabValueState || "Started");
+  const [isStepTabOpen, setIsStepTabOpen] = useState(isStepTabOpenState || false);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(currentJourneyIdState || null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
@@ -130,8 +130,9 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-    if(location.state !== null) {
-      handleJourneyClick(location.state.journeyProgressId)
+    if (location.state !== null  && location.state.journeyProgressId) {
+      console.log("hit", location.state.journeyProgressId)
+      handleJourneyClick(location.state.journeyProgressId);
     }
   }, []);
 
