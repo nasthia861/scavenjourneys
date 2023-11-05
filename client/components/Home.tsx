@@ -102,32 +102,41 @@ return (
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card sx={{
-            border: `1px solid ${theme.palette.primary.main}`,
-            maxHeight: 345,
-            backgroundColor: 'transparent',
-            margin: `${theme.spacing(1)} 0`,
-            padding: theme.spacing(2),
-          }}
+          <Card 
+            sx={{
+              padding: '10px',
+              background: '#f8e5c8',
+              borderRadius: '16px',
+              boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
+              // border: '1px solid #9a4119',
+              margin: '10px',
+            }}
             onClick={() => {
             navigate('/journey',{state:{journey, userId}})
           }}>
             <CardMedia
+              sx={{
+                boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
+                borderRadius: theme.shape.borderRadius,
+                alignItems: "center",
+              }}
               component="img"
               alt={journey.name}
               height="140"
               image={journey.img_url}
             />
             <CardContent
-            sx={{
-              backgroundColor: "#fff",
-              border: `1px solid ${theme.palette.primary.main}`,
-              borderRadius: theme.shape.borderRadius,
-              margin: `${theme.spacing(1)} 0`,
-              padding: theme.spacing(2),
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}>
+            // sx={{
+            //   // backgroundColor: "#e9d8b8",
+            //   // border: '1px solid #9a4119',
+            //   // boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
+            //   borderRadius: theme.shape.borderRadius,
+            //   margin: `${theme.spacing(1)} 0`,
+            //   padding: theme.spacing(2),
+            //   justifyContent: "space-between",
+            //   alignItems: "center",
+            // }}
+            >
               <Typography variant="h5" component="div" align="center">
                 {journey.name}
               </Typography>

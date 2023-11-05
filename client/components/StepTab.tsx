@@ -241,7 +241,14 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
           </List>
         )}
         <List
-        sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2) }}>
+          sx={{
+            padding: '10px',
+            background: '#f8e5c8',
+            borderRadius: '16px',
+            boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+            border: '1px solid #9a4119',
+            margin: '10px',
+          }}>
           <h3>Add Steps</h3>
           <Typography variant="body2" color="textSecondary" gutterBottom>
           Your current location will be used as the destination for this step
@@ -261,7 +268,15 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
           <Button
           onClick={grabAIHint}
           variant="contained"
-          color="primary"
+          sx={{
+            background: "primary",
+            borderRadius: '16px',
+            boxShadow: '5px 5px 15px 0px #e3dede, -5px -5px 15px 0px #ffffff',
+            transition: 'box-shadow 0.3s ease-in-out',
+            '&:hover': {
+              boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
+            },
+          }}
           >
               Suggested Clue
           </Button>
@@ -283,7 +298,15 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
                 <Button
                 onClick={submitJourney}
                 variant="contained"
-                color="primary"
+                sx={{
+                  background: "primary",
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #e3dede, -5px -5px 15px 0px #ffffff',
+                  transition: 'box-shadow 0.3s ease-in-out',
+                  '&:hover': {
+                    boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
+                  },
+                }}
                 >
                   Add Step
                 </Button>

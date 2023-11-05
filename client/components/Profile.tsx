@@ -320,15 +320,13 @@ type IHeaderProps = {
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
-                  margin: `${theme.spacing(1)} 0`,
-                  padding: theme.spacing(2),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                  padding: '10px',
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
+                }}>
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
@@ -353,13 +351,12 @@ type IHeaderProps = {
             <ListItemButton
               onClick={() => navigate('/journey', { state: { journey, userId } })}
               sx={{
-                border: `1px solid ${theme.palette.primary.main}`,
-                borderRadius: theme.shape.borderRadius,
-                margin: `${theme.spacing(1)} 0`,
-                padding: theme.spacing(2),
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                padding: '10px',
+                background: '#f8e5c8',
+                borderRadius: '16px',
+                boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                border: '1px solid #9a4119',
+                margin: '10px',
               }}
             >
               <ListItemText
