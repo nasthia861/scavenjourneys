@@ -272,7 +272,7 @@ type IHeaderProps = {
             InputProps={{ endAdornment: <SpeechToText onceSpoken={ setUpdatedUsername } />, sx: {borderRadius: '20px'}}}
           />
             <Button
-               variant="outlined"
+              variant="outlined"
               type='submit'
               sx={{borderRadius: '20px'}}
               onClick={() => {
