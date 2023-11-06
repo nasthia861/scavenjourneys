@@ -33,7 +33,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
 
   const assignJourney = async() => {
     // POST to assign journey to user
-    if(buttonName === 'Solved'){
+    if(buttonName === 'Already Started'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
@@ -135,7 +135,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
       return progress.journey.id === journey.id
     })
     if(idArray.length > 0) {
-      setButtonName('Solved')
+      setButtonName('Already Styarted')
     }
     setAlreadyStarted(idArray);
   }
