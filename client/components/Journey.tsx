@@ -135,7 +135,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
       return progress.journey.id === journey.id
     })
     if(idArray.length > 0) {
-      setButtonName('Already Styarted')
+      setButtonName('Already Started')
     }
     setAlreadyStarted(idArray);
   }
