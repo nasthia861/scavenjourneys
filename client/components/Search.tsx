@@ -83,7 +83,7 @@ const Search: React.FC<IHeaderProps> = ({setJourneys, userLat, userLong, alignme
         </SearchStyle>
         <br/>
 
-        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: 'background.paper', borderRadius: '10px' }}>
+        <Box sx={{  maxWidth: { xs: 342, sm: 480 } , bgcolor: '#f8e5c8', borderRadius: '10px' }}>
           <Tabs
             value={tabValue}
             onChange={handleScrollChange}

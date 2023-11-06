@@ -103,24 +103,26 @@ return (
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
           <Card sx={{
-            border: `1px solid ${theme.palette.primary.main}`,
             maxHeight: 345,
-            backgroundColor: 'transparent',
+            background: '#f8e5c8',
             margin: `${theme.spacing(1)} 0`,
-            padding: theme.spacing(2),
+            padding: '10px',
           }}
+          elevation={3}
             onClick={() => {
             navigate('/journey',{state:{journey, userId}})
           }}>
             <CardMedia
               component="img"
               alt={journey.name}
-              height="140"
+              height="120"
+              width='auto'
               image={journey.img_url}
+              sx={{objectFit: 'contain'}}
             />
             <CardContent
             sx={{
-              backgroundColor: "#fff",
+              backgroundColor: "#FDF3E0",
               border: `1px solid ${theme.palette.primary.main}`,
               borderRadius: theme.shape.borderRadius,
               margin: `${theme.spacing(1)} 0`,
