@@ -143,22 +143,20 @@ type IHeaderProps = {
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
       const steps = stepAndJourney.data;
-      let journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId)
-
-
+      const journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId);
+      const completedJourney = journey[0].journey.name;
       const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
       const currentToastCount = toastCounts[journeyId] || 0;
 
-
       if (allStepsCompleted && currentToastCount === 0) {
          // Increment the toast count for the specific journey
-        setToastCounts(prevCounts => ({
-          ...prevCounts,
-          [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
+        setToastCounts(prevCounts => ({...prevCounts,
+        [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
         }));
 
+
         // Trigger a toast when all steps are completed
-        toast.success(`Congrats ${username}! All steps are completed for the ${journey[0].journey.name} Journey.`, {
+        toast.success(`Congrats ${username}! All steps are completed for the ${completedJourney} Journey.`, {
           position: "top-right",
           hideProgressBar: false,
           theme: "light",
