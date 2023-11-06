@@ -154,8 +154,7 @@ type IHeaderProps = {
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
 
-      const allStepsCompleted: boolean = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
-      
+      const allStepsCompleted: boolean = stepAndJourney.data.every((step: StepProgressType) => !step.in_progress);
 
       if (allStepsCompleted && tabValue === "Started") {
         axios.put(`/journey/progress/${journeyId}`, {in_progress: false})
@@ -165,7 +164,9 @@ type IHeaderProps = {
               return journey.id === result.data.id
             })
             journeysStarted.splice(index, 1)
+            console.log(journeysStarted)
             setJourneysStarted(journeysStarted);
+            setTabValue("Completed");
 
             // Trigger a toast when all steps are completed
             toast.success(`Congrats ${username}! All steps are completed for the ${result.data.journey.name} Journey.`, {
@@ -344,7 +345,7 @@ type IHeaderProps = {
               </ListItemButton>
               <Grid>
                 {(selectedIndex === journey.id) && (steps.map((step) => (
-                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy}/>
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy} handleJourneyClick={handleJourneyClick}/>
                 )))}
               </Grid>
             </React.Fragment>
