@@ -155,6 +155,7 @@ type IHeaderProps = {
       setSteps(stepAndJourney.data);
 
       const allStepsCompleted: boolean = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
+      
 
       if (allStepsCompleted && tabValue === "Started") {
         axios.put(`/journey/progress/${journeyId}`, {in_progress: false})
