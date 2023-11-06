@@ -37,12 +37,13 @@ interface MarkerEntityProps {
   setInProgress: (inProgress: boolean) => void;
   setSizeWarning: (sizeWarning: boolean) => void;
   giveStepsTakenAchievement: () => void;
+  handleJourneyClick: (journeyId: number) => Promise<void>;
   // position?: [number, number, number];
   // text?: string;
   // rotation?: [number, number, number];
 }
   // Geolocate Marker type scene taking in stepData name and coordinates
-const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgress, setSizeWarning,giveStepsTakenAchievement}) => {
+const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgress, setSizeWarning, giveStepsTakenAchievement, handleJourneyClick}) => {
 
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -91,7 +92,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
             in_progress: false,
             image_url: response.data.secure_url
           })
-          console.log(response.data.secure_url)
           setImage(response.data.secure_url)
           setInProgress(false);
           giveStepsTakenAchievement();
@@ -99,6 +99,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         .then(() => {
           tracks.stop();
           document.exitFullscreen();
+          handleJourneyClick(step.journey_progress.id);
         })
         .catch((error) => {
           console.error('could not post to stepProgress', error)
@@ -128,20 +129,13 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
                   id='cursor'
                   // raycaster="objects: [gui-interactable]"
                   fuse="true"
-                  fuse-timeout="5000"
+                  fuse-timeout="1000"
                   color="red"
                   hover-color="red"
                   active-color="red"
                   design="reticle"
                   >
         </a-gui-cursor>
-        {/* <a-cursor
-          fuse="true"
-          fuse-timeout="1000"
-          color="red"
-          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-          material="color: red; shader: flat"
-        /> */}
       </a-camera>
       <a-entity
         ref={markerRef}
@@ -162,7 +156,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         width="0.3"
         height="0.3"
         position="0 1.6 -4"
-        //onClick={letsDraw}
+        onClick={letsDraw}
         />
 
       <a-plane
