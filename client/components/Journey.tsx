@@ -13,14 +13,8 @@ import { useLocation, Link } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { JourneyProgressType } from '@this/types/JourneyProgress';
-import { myContext } from "./Context";
-// import { myContextType } from "./Context";
 
 
-
-// type IHeaderProps = {
-//   userId: number;
-// };
 
   const Journey: React.FC = () => {
 
@@ -39,7 +33,7 @@ import { myContext } from "./Context";
 
   const assignJourney = async() => {
     // POST to assign journey to user
-    if(buttonName === 'Already Started'){
+    if(buttonName === 'Solved'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
@@ -141,7 +135,7 @@ import { myContext } from "./Context";
       return progress.journey.id === journey.id
     })
     if(idArray.length > 0) {
-      setButtonName('Already Started')
+      setButtonName('Solved')
     }
     setAlreadyStarted(idArray);
   }
@@ -172,48 +166,69 @@ import { myContext } from "./Context";
 
 
   return (
-    <Container>
+    <Container sx={{background: '#FDF3E0'}} >
 
       <Stack spacing={2}>
         <h1> Journey Begins Here!</h1>
-        <Item>
-
-          <Card>
+          <Card
+            sx={{background: '#f8e5c8',
+            justifyContent: "center",
+            alignItems: "center",
+            padding: '15px',
+          }}
+            elevation={3}
+          >
             <CardMedia
               component="img"
               alt={journey.name}
               height="140"
               image={journey.img_url}
+              sx={{objectFit: 'contain'}}
             />
-            <CardContent>
-              <Typography variant="h6" component="div">
+              <Typography
+                variant="h6"
+                component="div"
+                alignContent='center'
+                alignItems='center'
+                textAlign='center'
+              >
                 <b>{journey.name}</b>
                 <br/>
                 <br/>
                 {journey.description}
               </Typography>
 
-            </CardContent>
           </Card>
-            <Button onClick={assignJourney} variant='outlined' color="primary">
+            <Button onClick={assignJourney}
+              variant="contained"
+              type='button'
+              sx={{borderRadius: '20px'}}
+              size='small'
+              fullWidth={false}
+              color="primary">
             {buttonName}
             </Button>
-        </Item>
         <h3>Steps:</h3>
         {
         steps.map((step) => {
           return (
-            <Item key={step.id}>
-              <Card>
+              <Card
+                key={step.id}
+                sx={{background: '#f8e5c8',
+                justifyContent: "center",
+                alignItems: "center",
+                padding: '15px',
+                }}
+                elevation={3}
+              >
 
                   <CardContent>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" textAlign='center' >
                       <p>{step.hint}</p>
                     </Typography>
                   </CardContent>
 
               </Card>
-            </Item>
           );
           })
         }
