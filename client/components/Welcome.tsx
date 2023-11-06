@@ -4,6 +4,8 @@ import Grid from '@mui/material/Grid';
 import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
 import map from '../styling/pinkMap.png'
+import Typography from '@mui/material/Typography';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 
 
 
@@ -49,6 +51,9 @@ const Welcome: React.FC = () => {
           className='google-button'
           onClick={googleLogin}
         />
+        <Typography >
+           This app works best on mobile!
+        </Typography>
       </Grid>
     </div>
   )
