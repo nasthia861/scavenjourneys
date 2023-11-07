@@ -252,7 +252,7 @@ type IHeaderProps = {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Grid>
       <Stack spacing={1}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
@@ -274,7 +274,7 @@ type IHeaderProps = {
       </Stack>
 
       {/* Change Username button */}
-     <Stack direction="row" spacing={1}  >
+     <Stack direction="row" spacing={1}  paddingRight='5px'>
         {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
@@ -325,7 +325,7 @@ type IHeaderProps = {
         <TabPanel value="Started">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {journeysStarted.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
@@ -358,7 +358,7 @@ type IHeaderProps = {
       <TabPanel value="Completed">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys Completed</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {completedJourneys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
@@ -392,7 +392,7 @@ type IHeaderProps = {
       <TabPanel value="Created">
       {/* List of user's created journeys */}
       <Typography variant="h5">Journeys Created</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
             <ListItemButton
@@ -471,7 +471,7 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </Grid>
   )
 }
 export default Profile;

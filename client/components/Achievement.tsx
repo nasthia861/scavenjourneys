@@ -49,7 +49,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
 
   return (
     <Grid>
-      <Typography variant="h6" gutterBottom fontWeight='bold' >
+      <Typography variant="h5">
         Badges
       </Typography>
       <Grid container spacing={3}>
