@@ -90,11 +90,6 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
                   <Typography variant="body2" fontWeight='bold' >{achievement.name}</Typography>
-                  {/* <Typography variant="subtitle1">
-                    {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                      ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
-                      : 'Not yet achieved'}
-                  </Typography> */}
                   </Grid>
                 </Card>
             </Tooltip>

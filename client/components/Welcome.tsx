@@ -7,9 +7,6 @@ import map from '../styling/pinkMap.png'
 import Typography from '@mui/material/Typography';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-
-
-
 const Welcome: React.FC = () => {
 
   const googleLogin = () => {

@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import { myContext } from "./Context";
-
-import { Link, useNavigate } from 'react-router-dom';
-import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -16,11 +13,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
-import { UserType } from '@this/types/User';
 import useTheme from "@mui/material/styles/useTheme";
-
-
-
 
 type IHeaderProps = {
   userLat: number;

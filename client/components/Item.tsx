@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 
 const Item = (props: { item: any }) => {
   useEffect(() => {
-    console.log(props.item)
   }, [])
   return (
         <Paper>

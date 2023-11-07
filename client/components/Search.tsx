@@ -1,20 +1,14 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
-import { StyledInputBase } from '../styling/searchStyle'
 import { SearchStyle } from "../styling/searchStyle";
-import { SearchIconWrapper } from "../styling/searchStyle";
-import { Item } from '../styling/journeyStyle'
-import SearchIcon from '@mui/icons-material/Search';
+
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
-import Stack from '@mui/material/Stack';
-
 
 import { JourneyType } from '@this/types/Journey';
 import { TagType } from '@this/types/Tag'
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
 
 type IHeaderProps = {
   setJourneys: (journeys: JourneyType[]) => void;
