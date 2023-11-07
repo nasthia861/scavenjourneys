@@ -207,14 +207,14 @@ type IHeaderProps = {
 
   return (
     <Box
-      sx={{
-        padding: '10px',
-        background: '#f8e5c8',
-        borderRadius: '16px',
-        boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
-        border: '1px solid #9a4119',
-        margin: '10px',
-      }}
+      // sx={{
+      //   padding: '10px',
+      //   background: '#f8e5c8',
+      //   borderRadius: '16px',
+      //   boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+      //   border: '1px solid #9a4119',
+      //   margin: '10px',
+      // }}
       display="flex"
       flexDirection="column"
       alignItems="center"

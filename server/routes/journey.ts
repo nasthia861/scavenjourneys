@@ -341,7 +341,12 @@ journeyRouter.put('/progress/:journeyId', async (req, res) => {
   const { in_progress } = req.body;
 
   try {
-    const journeyProgress = await AppDataSource.manager.findOneBy(JourneyProgress, {id: +journeyId});
+    const journeyProgress = await AppDataSource.manager.findOne(JourneyProgress, {
+      relations: ['journey'],
+      where: {
+          id: +journeyId
+      }
+    });
 
     if (!journeyProgress) {
       return res.status(404).send({ message: 'Journey progress not found.' });

@@ -8,7 +8,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
-import ReactCardFlip from 'react-card-flip';
 import Card from '@mui/material/Card/Card';
 
 type IHeaderProps = {
@@ -79,6 +78,12 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                   }
                   `}
                 >
+                  <Grid
+                    container
+                    direction='row'
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
                   <Avatar
                     alt={achievement.name}
                     src={
@@ -86,15 +91,16 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                         ? achievement.icon_url
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
                     }
-                    sx={{ width: 100, height: 100 }}
+                    sx={{ width: 90, height: 90 }}
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
-                  <Typography variant="h6">{achievement.name}</Typography>
+                  <Typography variant="body2"><b>{achievement.name}</b></Typography>
                   <Typography variant="subtitle1">
                     {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                       ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
                       : 'Not yet achieved'}
                   </Typography>
+                  </Grid>
                 </Card>
             </Tooltip>
           </Grid>

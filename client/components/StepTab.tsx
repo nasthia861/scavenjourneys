@@ -9,11 +9,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List'
 
+
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { myContext } from "./Context";
 import { StepType } from '@this/types/Step';
-import { JourneyType } from '@this/types/Journey';
-import { ShakeButton } from '../styling/stepFormStyling';
 
 interface StepTabProps {
   userId: number;
@@ -199,10 +197,9 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
       }
         // Clear step data and navigate to the home page
         //right here, clearing everything except name hint and user
-        setStepData({ name: '', hint: '', ...stepData });
-        // navigate('/home');
+        setStepData({ ...stepData, name: '', hint: '' });
       } catch (error) {
-        console.error('Error submitting journey with steps:', error);
+        console.error('Error submitting steps:', error);
       }
     };
 
@@ -210,32 +207,31 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
       <div>
         {submittedSteps.length > 0 && (
           <List
-          sx={{ border: `1px solid ${theme.palette.primary.main}`, borderRadius: theme.shape.borderRadius, padding: theme.spacing(2), marginBottom: theme.spacing(2) }}>
-            <Typography
-              variant="h6">
-              New Steps:
-            </Typography>
+            sx={{
+              borderRadius: theme.shape.borderRadius,
+              padding: theme.spacing(2),
+              marginBottom: theme.spacing(2),
+            }}
+          >
+            <Typography variant="h6">New Steps:</Typography>
             {submittedSteps.map((step, index) => (
               <ListItem
                 key={index}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
                   padding: theme.spacing(2),
-                  marginBottom: theme.spacing(2),
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
                 }}
               >
                 <Box sx={{ padding: theme.spacing(2) }}>
-                  <Typography
-                  variant="body1">
-                  Name: {step.name}
+                  <Typography variant="body1">Name: {step.name}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Hint: {step.hint}
                   </Typography>
-                  <Typography
-                  variant="body2"
-                  color="textSecondary">
-                  Hint: {step.hint}
-                  </Typography>
-              </Box>
+                </Box>
               </ListItem>
             ))}
           </List>
@@ -248,10 +244,11 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
             boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
             border: '1px solid #9a4119',
             margin: '10px',
-          }}>
+          }}
+        >
           <h3>Add Steps</h3>
           <Typography variant="body2" color="textSecondary" gutterBottom>
-          Your current location will be used as the destination for this step
+            Your current location will be used as the destination for this step
           </Typography>
           <TextField
             label="Answer"
@@ -264,58 +261,55 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
             style={{ marginBottom: '16px' }}
           />
           <Typography variant="body2" color="textSecondary" gutterBottom>
-            Add a clue for the player to solve the step or use our suggested clue button</Typography>
+            Add a clue for the player to solve the step or use our suggested clue button
+          </Typography>
           <Button
-          onClick={grabAIHint}
-          variant="contained"
-          sx={{
-            background: "primary",
-            borderRadius: '16px',
-            boxShadow: '5px 5px 15px 0px #e3dede, -5px -5px 15px 0px #ffffff',
-            transition: 'box-shadow 0.3s ease-in-out',
-            '&:hover': {
-              boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
-            },
-          }}
+            onClick={grabAIHint}
+            variant="contained"
+            sx={{
+              background: 'primary',
+              borderRadius: '16px',
+              transition: 'box-shadow 0.3s ease-in-out',
+              '&:hover': {
+                boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
+              },
+            }}
           >
-              Suggested Clue
+            Suggested Clue
           </Button>
+          <br />
+          <br />
           <TextField
             label="Step Clue"
-            type="text"
+            multiline // Allow multiple lines
+            rows={3} // Initial number of rows
+            maxRows={6} // Maximum number of rows (it will become scrollable after reaching this limit)
             name="hint"
             value={stepData.hint}
             onChange={handleInputChange}
             error={stepHintError}
             helperText={stepHintError ? 'Please enter a clue' : ''}
-            style={{ marginBottom: '16px' }}
-            multiline
+            style={{ marginBottom: '16px', width: '100%' }}
           />
-          <br />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               {!isShaking ? (
                 <Button
-                onClick={submitJourney}
-                variant="contained"
-                sx={{
-                  background: "primary",
-                  borderRadius: '16px',
-                  boxShadow: '5px 5px 15px 0px #e3dede, -5px -5px 15px 0px #ffffff',
-                  transition: 'box-shadow 0.3s ease-in-out',
-                  '&:hover': {
-                    boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
-                  },
-                }}
+                  onClick={submitJourney}
+                  variant="contained"
+                  sx={{
+                    background: 'primary',
+                    borderRadius: '16px',
+                    transition: 'box-shadow 0.3s ease-in-out',
+                    '&:hover': {
+                      boxShadow: '5px 5px 20px 0px #b9b4b4, -5px -5px 20px 0px #ffffff',
+                    },
+                  }}
                 >
                   Add Step
                 </Button>
               ) : (
-                <Button
-                onClick={submitJourney}
-                variant="contained"
-                color="secondary"
-                >
+                <Button onClick={submitJourney} variant="contained" color="secondary">
                   Add Step
                 </Button>
               )}

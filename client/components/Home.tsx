@@ -102,15 +102,13 @@ return (
       {/* Display list of journeys */}
       {journeys.map((journey) => (
         <Grid item key={journey.id} xs={12} sm={6} md={4}>
-          <Card 
-            sx={{
-              padding: '10px',
-              background: '#f8e5c8',
-              borderRadius: '16px',
-              boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
-              // border: '1px solid #9a4119',
-              margin: '10px',
-            }}
+          <Card sx={{
+            maxHeight: 345,
+            background: '#f8e5c8',
+            margin: `${theme.spacing(1)} 0`,
+            padding: '10px',
+          }}
+          elevation={3}
             onClick={() => {
             navigate('/journey',{state:{journey, userId}})
           }}>
@@ -122,21 +120,21 @@ return (
               }}
               component="img"
               alt={journey.name}
-              height="140"
+              height="120"
+              width='auto'
               image={journey.img_url}
+              sx={{objectFit: 'contain'}}
             />
             <CardContent
-            // sx={{
-            //   // backgroundColor: "#e9d8b8",
-            //   // border: '1px solid #9a4119',
-            //   // boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
-            //   borderRadius: theme.shape.borderRadius,
-            //   margin: `${theme.spacing(1)} 0`,
-            //   padding: theme.spacing(2),
-            //   justifyContent: "space-between",
-            //   alignItems: "center",
-            // }}
-            >
+            sx={{
+              backgroundColor: "#FDF3E0",
+              border: `1px solid ${theme.palette.primary.main}`,
+              borderRadius: theme.shape.borderRadius,
+              margin: `${theme.spacing(1)} 0`,
+              padding: theme.spacing(2),
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}>
               <Typography variant="h5" component="div" align="center">
                 {journey.name}
               </Typography>
