@@ -21,9 +21,10 @@ type IHeaderProps = {
   userLat: number;
   userLong: number;
   accuracy: number;
+  handleJourneyClick: (journeyId: number) => Promise<void>
 };
 
-const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, accuracy}) => {
+const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, accuracy, handleJourneyClick}) => {
   const [image, setImage] = useState<string | null | ArrayBuffer>(null)
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
@@ -178,8 +179,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </CardContent>
         )}
         <Box>
-          { inProgress && (
-              <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement}></MarkerEntity>
+          { inProgress && closeEnough && (
+              <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
