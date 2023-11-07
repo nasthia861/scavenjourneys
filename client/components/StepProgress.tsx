@@ -15,6 +15,7 @@ import Alert from '@mui/material/Alert';
 import MarkerEntity from './ARSteps';
 
 
+
 type IHeaderProps = {
   userId: number
   step: StepProgressType
@@ -30,6 +31,27 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
 
   const theme = useTheme();
+
+  function getDeviceInfo() {
+    const userAgent = navigator.userAgent;
+
+    if (/Android/.test(userAgent)) {
+      return 'Android Device';
+    } else if (/iPad|iPhone|iPod/.test(userAgent)) {
+      return 'iOS Device';
+    } else if (/Windows/.test(userAgent)) {
+      return 'Windows PC';
+    } else if (/Macintosh|Mac OS X/.test(userAgent)) {
+      return 'Macintosh';
+    }
+  }
+
+
+  useEffect(() => {
+    const deviceType = getDeviceInfo();
+    console.log('Device Type:', deviceType); 
+  }, []);
+
 
   // Increment steps taken in user data
   const giveStepsTakenAchievement = async () => {
