@@ -222,7 +222,7 @@ type IHeaderProps = {
 
    const handleDeleteJourney = (journeyId: React.SetStateAction<number>) => {
     setJourneyIdToDelete(journeyId);
-    handleConfirmDialogOpen(); // Open the confirmation dialog  
+    handleConfirmDialogOpen(); // Open the confirmation dialog
   };
 
   const deleteJourney = async () => {
