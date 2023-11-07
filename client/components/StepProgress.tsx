@@ -8,6 +8,9 @@ import Typography from '@mui/material/Typography';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import useTheme from "@mui/material/styles/useTheme";
 import Box from '@mui/material/Box';
+import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import Button from '@mui/material/Button';
 
 
 import IconButton from '@mui/material/IconButton';
@@ -33,7 +36,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
 
   const theme = useTheme();
 
-  function getDeviceInfo() {
+  const  getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
      if (/iPad|iPhone/.test(userAgent)) {
       return 'iOS Device';
@@ -41,12 +44,28 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
       return 'Macintosh';
     }
   }
+
   let deviceType;
 
   useEffect(() => {
      deviceType = getDeviceInfo() || '';
     console.log('Device Type:', deviceType);
   }, []);
+
+  const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = await new FileReader()
+    reader.addEventListener('load', (event) => {
+      axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
+        .then((response) => {
+          axios.put(`/step/progress/${step.id}`, {
+            in_progress: false,
+            image_url: response.data.secure_url
+          })
+          setImage(response.data.secure_url)
+        })
+    });
+    reader.readAsDataURL(e.target.files[0]);
+}
 
 
   // Increment steps taken in user data
@@ -199,7 +218,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
           { inProgress && closeEnough && (
               deviceType === 'iPad' || deviceType === 'iPhone' || deviceType === 'Macintosh' || deviceType === 'Mac OS X' ? (
                 <div>
-               
+                   <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                  Solve Step
+                  <VisuallyHiddenInput
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={(e) => solveStep(e)}/>
+                   </Button>
               </div>
               ) : (
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
