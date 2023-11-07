@@ -54,7 +54,8 @@ type IHeaderProps = {
   const theme = useTheme();
   const [user, setUser] = useState<UserType>()
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
-  const [journeys, setJourneys] = useState<JourneyProgressType[]>([]);
+  const [journeysStarted, setJourneysStarted] = useState<JourneyProgressType[]>([]);
+  const [completedJourneys, setCompletedJourneys] = useState<JourneyProgressType[]>([]);
   const [steps, setSteps] = useState<StepProgressType[]>([]);
   const [username, setUsername] = useState<string>('');
   const [updatedUsername, setUpdatedUsername] = useState<string>('');
@@ -69,7 +70,7 @@ type IHeaderProps = {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
 
-  // State to hold user's journeys
+  // State to hold user's journeys created
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number>();
 
@@ -120,7 +121,14 @@ type IHeaderProps = {
   const getUserData = async () => {
     try {
       const userJourneys = await axios.get(`/journey/progress/${userId}`);
-      setJourneys(userJourneys.data);
+      const unfinished = userJourneys.data.filter((journey: JourneyProgressType) => {
+        return journey.in_progress === true;
+      })
+      const finished = userJourneys.data.filter((journey: JourneyProgressType) => {
+        return journey.in_progress === false;
+      })
+      setJourneysStarted(unfinished);
+      setCompletedJourneys(finished);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -131,8 +139,11 @@ type IHeaderProps = {
     getUserData();
     getUserJourneys();
     if(location.state !== null) {
-      handleJourneyClick(location.state.journeyProgressId)
+      if(location.state.journeyProgressId) {
+        handleJourneyClick(location.state.journeyProgressId)
+      }
     }
+
   }, []);
 
   /** Journey and Step Functionality */
@@ -142,48 +153,51 @@ type IHeaderProps = {
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
       setSteps(stepAndJourney.data);
-      const steps = stepAndJourney.data;
-      const journey = journeys.filter(journey => journey.journey.id === steps[0].step.journeyId);
-      const completedJourney = journey[0].journey.name;
-      const allStepsCompleted = steps.every((step: { in_progress: boolean; }) => !step.in_progress);
-      const currentToastCount = toastCounts[journeyId] || 0;
 
-      if (allStepsCompleted && currentToastCount === 0) {
-         // Increment the toast count for the specific journey
-        setToastCounts(prevCounts => ({...prevCounts,
-        [journeyId]: prevCounts[journeyId] ? prevCounts[journeyId] + 1 : 1
-        }));
+      const allStepsCompleted: boolean = stepAndJourney.data.every((step: StepProgressType) => !step.in_progress);
 
+      if (allStepsCompleted && tabValue === "Started") {
+        axios.put(`/journey/progress/${journeyId}`, {in_progress: false})
+          .then((result) => {
+            setCompletedJourneys([...completedJourneys, result.data])
+            const index = journeysStarted.findIndex((journey) => {
+              return journey.id === result.data.id
+            })
+            journeysStarted.splice(index, 1)
+            console.log(journeysStarted)
+            setJourneysStarted(journeysStarted);
+            setTabValue("Completed");
 
-        // Trigger a toast when all steps are completed
-        toast.success(`Congrats ${username}! All steps are completed for the ${completedJourney} Journey.`, {
-          position: "top-right",
-          hideProgressBar: false,
-          theme: "light",
-          style: {
-            background: '#FDF3E0',
-            border: '2px solid #9a4119',
-            borderRadius: '7px',
-            padding: '5px',
-          },
-          icon: (
-            <img
-              src={logo}
-              style={{
-                width: '32px',
-                height: '32px',
-                marginRight: '5px',
-              }}
-            />
-          ),
-        });
+            // Trigger a toast when all steps are completed
+            toast.success(`Congrats ${username}! All steps are completed for the ${result.data.journey.name} Journey.`, {
+              position: "top-right",
+              hideProgressBar: false,
+              theme: "light",
+              style: {
+                background: '#FDF3E0',
+                border: '2px solid #9a4119',
+                borderRadius: '7px',
+                padding: '5px',
+              },
+              icon: (
+                <img
+                  src={logo}
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    marginRight: '5px',
+                  }}
+                />
+              ),
+            });
+          })
       }
     } catch (error) {
       console.error('Error fetching journey details:', error);
     }
   };
 
-   // Function to fetch and display user's journeys
+   // Function to fetch and display user's journeys created
    const getUserJourneys = async () => {
      try {
        const userJourneysResponse = await axios.get(`/journey/user/${userId}`);
@@ -299,6 +313,7 @@ type IHeaderProps = {
         <TabList onChange={handleTabChange} aria-label="lab API tabs example">
           <Tab label="Badges" value="Badges" />
           <Tab label="Started" value="Started" />
+          <Tab label="Completed" value="Completed" />
           <Tab label="Created" value="Created" />
         </TabList>
       </Box>
@@ -311,7 +326,40 @@ type IHeaderProps = {
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
       <List sx={{ padding: theme.spacing(2) }}>
-          {journeys.map((journey) => (
+          {journeysStarted.map((journey) => (
+            <React.Fragment key={journey.id}>
+              <ListItemButton
+                selected={selectedIndex === journey.id}
+                onClick={() => handleJourneyClick(journey.id)}
+                sx={{
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  borderRadius: theme.shape.borderRadius,
+                  margin: `${theme.spacing(1)} 0`,
+                  padding: theme.spacing(2),
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
+              </ListItemButton>
+              <Grid>
+                {(selectedIndex === journey.id) && (steps.map((step) => (
+                    <StepProgress key={step.id} step={step} userLat={userLat} userLong={userLong} userId={userId} accuracy={accuracy} handleJourneyClick={handleJourneyClick}/>
+                )))}
+              </Grid>
+            </React.Fragment>
+          ))}
+
+        </List>
+      </TabPanel>
+
+
+      <TabPanel value="Completed">
+       {/* List of Journey Progress*/}
+      <Typography variant="h5">Journeys Completed</Typography>
+      <List sx={{ padding: theme.spacing(2) }}>
+          {completedJourneys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
                 selected={selectedIndex === journey.id}
@@ -335,10 +383,10 @@ type IHeaderProps = {
               </Grid>
             </React.Fragment>
           ))}
-          {/* <Typography variant="h5">Steps & Step Progress</Typography> */}
 
         </List>
       </TabPanel>
+
 
 
       <TabPanel value="Created">
