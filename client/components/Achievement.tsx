@@ -49,7 +49,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
 
   return (
     <Grid>
-      <Typography variant="h6" gutterBottom fontWeight='bold' >
+      <Typography variant="h5">
         Badges
       </Typography>
       <Grid container spacing={3}>
@@ -64,7 +64,6 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     background: '#f8e5c8',
                     borderRadius: '16px',
                     boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
-                    // border: '1px solid #9a4119',
                     margin: '10px',
                   }}
                   className={`achievement-box ${
