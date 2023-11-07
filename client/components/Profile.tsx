@@ -67,7 +67,6 @@ type IHeaderProps = {
   const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(currentJourneyIdState || null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
 
   // State to hold user's journeys created
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
