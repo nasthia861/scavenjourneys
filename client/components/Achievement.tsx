@@ -84,17 +84,12 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     src={
                       earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                         ? achievement.icon_url
-                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXtj2yTlGQsSFEbsm6qejwdNw0766Z_qfTPA&usqp=CAU'
+                        : 'https://cdn.peterbarnum.com/img/thumbnails/400x400_james_banana.webp'
                     }
-                    sx={{ width: 90, height: 90 }}
+                    sx={{ width: 90, height: 90, objectFit: 'contain' }}
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
                   <Typography variant="body2" fontWeight='bold' >{achievement.name}</Typography>
-                  {/* <Typography variant="subtitle1">
-                    {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                      ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
-                      : 'Not yet achieved'}
-                  </Typography> */}
                   </Grid>
                 </Card>
             </Tooltip>

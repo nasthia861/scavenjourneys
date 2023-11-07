@@ -118,13 +118,13 @@ return (
                 boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
                 borderRadius: theme.shape.borderRadius,
                 alignItems: "center",
+                objectFit: 'contain'
               }}
               component="img"
               alt={journey.name}
               height="120"
               width='auto'
               image={journey.img_url}
-              sx={{objectFit: 'contain'}}
             />
             <CardContent
             sx={{
@@ -135,8 +135,15 @@ return (
               padding: theme.spacing(2),
               justifyContent: "space-between",
               alignItems: "center",
+              textAlign: 'center',
+              alignContent: 'center'
             }}>
-              <Typography variant="h5" component="div" align="center">
+              <Typography
+                variant="h5"
+                alignItems="center"
+                textAlign='center'
+                alignContent='center'
+              >
                 {journey.name}
               </Typography>
             </CardContent>
