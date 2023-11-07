@@ -35,13 +35,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
 
   function getDeviceInfo() {
     const userAgent = navigator.userAgent;
-
-    if (/Android/.test(userAgent)) {
-      return 'Android Device';
-    } else if (/iPad|iPhone|iPod/.test(userAgent)) {
+     if (/iPad|iPhone|iPod/.test(userAgent)) {
       return 'iOS Device';
-    } else if (/Windows/.test(userAgent)) {
-      return 'Windows PC';
     } else if (/Macintosh|Mac OS X/.test(userAgent)) {
       return 'Macintosh';
     }
@@ -50,7 +45,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
 
   useEffect(() => {
     const deviceType = getDeviceInfo();
-    console.log('Device Type:', deviceType); 
+    console.log('Device Type:', deviceType);
   }, []);
 
 
