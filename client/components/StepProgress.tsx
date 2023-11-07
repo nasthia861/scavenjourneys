@@ -143,27 +143,30 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
    }
 
   return (
-    <Card sx={{
-      maxWidth: 400,
-      backgroundColor: 'transparent',
-      margin: `${theme.spacing(1)} 0`,
-      padding: theme.spacing(2),
+    <Card 
+      sx={{
+        padding: '10px',
+        background: '#f8e5c8',
+        borderRadius: '16px',
+        boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+        border: '1px solid #9a4119',
+        margin: '10px',
       }}>
-        {!inProgress ?
-          (<CardMedia
-          sx={{
-            height: 300,
-            border: `1px solid ${theme.palette.primary.main}`,
-            borderRadius: theme.shape.borderRadius,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-          image={step.image_url || image }
+      {!inProgress ?
+        (<CardMedia
+        sx={{
+          height: 300,
+          border: `1px solid ${theme.palette.primary.main}`,
+          borderRadius: theme.shape.borderRadius,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+        image={step.image_url || image }
         />) :
         (<CardContent
         sx={{
-          border: `1px solid ${theme.palette.primary.main}`,
+          // border: `1px solid ${theme.palette.primary.main}`,
           borderRadius: theme.shape.borderRadius,
           margin: `${theme.spacing(1)} 0`,
           padding: theme.spacing(2),
