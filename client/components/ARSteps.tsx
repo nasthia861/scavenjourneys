@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import Button from '@mui/material/Button';
 
 import logo from '../favicon.svg';
 declare global {
@@ -127,8 +129,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       <a-camera>
         <a-gui-cursor
                   id='cursor'
-                  // raycaster="objects: [gui-interactable]"
-                  fuse="true"
                   fuse-timeout="1000"
                   color="red"
                   hover-color="red"

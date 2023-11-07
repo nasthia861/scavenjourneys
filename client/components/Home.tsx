@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import { myContext } from "./Context";
-
-import { Link, useNavigate } from 'react-router-dom';
-import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -16,11 +13,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { StyledCreateJourneyButton } from '../styling/homeStyle';
 import Search from './Search'
 import { JourneyType } from '@this/types/Journey';
-import { UserType } from '@this/types/User';
 import useTheme from "@mui/material/styles/useTheme";
-
-
-
 
 type IHeaderProps = {
   userLat: number;
@@ -67,11 +60,12 @@ const handleToggleChange = (
 return (
   <Grid
     container
-    spacing={0}
+    spacing={2.5}
     direction="column"
     alignItems="center"
     justifyContent="center"
     padding='30px'
+    paddingRight='10px'
   >
     <br/>
     <Search setJourneys={setJourneys} getJourneys={getJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
@@ -113,6 +107,11 @@ return (
             navigate('/journey',{state:{journey, userId}})
           }}>
             <CardMedia
+              sx={{
+                boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
+                borderRadius: theme.shape.borderRadius,
+                alignItems: "center",
+              }}
               component="img"
               alt={journey.name}
               height="120"

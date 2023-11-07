@@ -34,8 +34,8 @@ const Leaderboard = () => {
   }
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+    <Grid justifyContent='center' p='10px'>
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
         Leaderboard
       </Typography>
       <Grid
@@ -113,7 +113,7 @@ const Leaderboard = () => {
           </Box>
         </Box>
       ))}
-    </Box>
+    </Grid>
   );
 };
 

@@ -4,7 +4,6 @@ import Achievements from "./Achievement";
 import StepTab from "./StepTab";
 
 import Avatar from "@mui/material/Avatar";
-import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
@@ -49,8 +48,8 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
-  const location: {state: {journeyProgressId: number | null}} = useLocation();
-
+  const location: {state: {journeyProgressId: number | undefined}} = useLocation();
+  const { currentJourneyIdState, isStepTabOpenState, tabValueState} = useLocation().state || {};
   const theme = useTheme();
   const [user, setUser] = useState<UserType>()
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
@@ -63,9 +62,9 @@ type IHeaderProps = {
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [tabValue, setTabValue] = useState("Started");
-  const [isStepTabOpen, setIsStepTabOpen] = useState(false);
-  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
+  const [tabValue, setTabValue] = useState(tabValueState || "Started");
+  const [isStepTabOpen, setIsStepTabOpen] = useState(isStepTabOpenState || false);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(currentJourneyIdState || null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
@@ -137,9 +136,11 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-    if(location.state !== null) {
-      if(location.state.journeyProgressId) {
-        handleJourneyClick(location.state.journeyProgressId)
+    if (location.state !== null) {
+      if (isStepTabOpen) {
+        return;
+      } else {
+        handleJourneyClick(location.state.journeyProgressId);
       }
     }
 
@@ -163,7 +164,6 @@ type IHeaderProps = {
               return journey.id === result.data.id
             })
             journeysStarted.splice(index, 1)
-            console.log(journeysStarted)
             setJourneysStarted(journeysStarted);
             setTabValue("Completed");
 
@@ -222,7 +222,6 @@ type IHeaderProps = {
    const handleDeleteJourney = (journeyId: React.SetStateAction<number>) => {
     setJourneyIdToDelete(journeyId);
     handleConfirmDialogOpen(); // Open the confirmation dialog
-    console.log('handleDeleteJourney: ', journeyiDToDelete)
   };
 
   const deleteJourney = async () => {
@@ -251,13 +250,16 @@ type IHeaderProps = {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Grid>
       <Stack spacing={1}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
-            sx={{ bgcolor: deepOrange[900],
-              width: 56, height: 56 }}
+            sx={{
+              bgcolor: deepOrange[900],
+              width: 56,
+              height: 56,
+            }}
             src={userImg}
             />
           </ListItemAvatar>
@@ -273,7 +275,7 @@ type IHeaderProps = {
       </Stack>
 
       {/* Change Username button */}
-     <Stack direction="row" spacing={1}  >
+     <Stack direction="row" spacing={1}  paddingLeft='10px'>
         {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
@@ -309,7 +311,7 @@ type IHeaderProps = {
 
       <TabContext value={tabValue}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+        <TabList onChange={handleTabChange} aria-label="lab API tabs example" variant='fullWidth' >
           <Tab label="Badges" value="Badges" />
           <Tab label="Started" value="Started" />
           <Tab label="Completed" value="Completed" />
@@ -324,22 +326,20 @@ type IHeaderProps = {
         <TabPanel value="Started">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {journeysStarted.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
-                  margin: `${theme.spacing(1)} 0`,
-                  padding: theme.spacing(2),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                  padding: '10px',
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
+                }}>
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
@@ -357,22 +357,20 @@ type IHeaderProps = {
       <TabPanel value="Completed">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys Completed</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {completedJourneys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
-                  margin: `${theme.spacing(1)} 0`,
-                  padding: theme.spacing(2),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                  padding: '10px',
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
+                }}>
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
@@ -391,19 +389,18 @@ type IHeaderProps = {
       <TabPanel value="Created">
       {/* List of user's created journeys */}
       <Typography variant="h5">Journeys Created</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
             <ListItemButton
               onClick={() => navigate('/journey', { state: { journey, userId } })}
               sx={{
-                border: `1px solid ${theme.palette.primary.main}`,
-                borderRadius: theme.shape.borderRadius,
-                margin: `${theme.spacing(1)} 0`,
-                padding: theme.spacing(2),
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                padding: '10px',
+                background: '#f8e5c8',
+                borderRadius: '16px',
+                boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                border: '1px solid #9a4119',
+                margin: '10px',
               }}
             >
               <ListItemText
@@ -470,7 +467,7 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </Grid>
   )
 }
 export default Profile;

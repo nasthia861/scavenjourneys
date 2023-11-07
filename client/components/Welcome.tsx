@@ -5,10 +5,7 @@ import Image from 'mui-image';
 import logo from '../styling/scvnjrny_logo_stacked.svg';
 import map from '../styling/pinkMap.png'
 import Typography from '@mui/material/Typography';
-import InfoOutlined from '@mui/icons-material/InfoOutlined';
-
-
-
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const Welcome: React.FC = () => {
 
@@ -33,26 +30,29 @@ const Welcome: React.FC = () => {
         alignItems="center"
         justifyContent="center"
         padding='20px'
-        paddingTop='100px'
+        paddingTop='80px'
       >
 
           <Image src={logo} width='200px' />
-          <p
+          <Typography
             style={{
               fontFamily: 'Secular One',
               fontSize: '20px',
               color: '#9e5528',
               textAlign: 'center'
             }}
+            padding='5px'
+            paragraph={true}
+            fontWeight='bold'
           >
-             <b>Get ready to put your problem-solving skills to the test as you follow the clues to explore your neighborhood, your city, or locations abroad.</b>
-          </p>
+             Get ready to put your problem-solving skills to the test as you follow the clues to explore your neighborhood, your city, or locations abroad.
+          </Typography>
         <GoogleButton
           className='google-button'
           onClick={googleLogin}
         />
-        <Typography >
-           This app works best on mobile!
+        <Typography fontWeight='bold' >
+           <InfoOutlinedIcon sx={{paddingTop: '2px'}} />This app works best on mobile
         </Typography>
       </Grid>
     </div>

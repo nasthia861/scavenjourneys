@@ -8,17 +8,10 @@ import { StepProgress } from '../db/entities/StepProgress';
 import { JourneyTag } from '../db/entities/JourneyTag';
 import { Step } from '../db/entities/Step';
 
-
 const journeyRouter = express.Router();
 const journeyRepository = AppDataSource.getRepository(Journey);
 const journeyProgressRepo = AppDataSource.getRepository(JourneyProgress);
 const userRepo = AppDataSource.getRepository(User)
-const stepProgressRepo = AppDataSource.getRepository(StepProgress);
-const journeyTagRepo = AppDataSource.getRepository(JourneyTag);
-const stepRepository = AppDataSource.getRepository(Step);
-
-
-
 
 //get all journeys
 journeyRouter.get('/', async(req, res) => {
@@ -65,6 +58,9 @@ journeyRouter.get('/user/:userId', async (req, res) => {
       where: {
         user: { id: parseInt(userId, 10) }
       },
+      order: {
+        created_at: 'DESC'
+      },
     });
 
     res.status(200).json(userJourneys);
@@ -73,7 +69,6 @@ journeyRouter.get('/user/:userId', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 //get journey by name
 journeyRouter.get('/name/:name', async(req, res) => {
@@ -98,7 +93,6 @@ journeyRouter.get('/name/:name', async(req, res) => {
   })
 })
 
-
 // Create a new journey
 journeyRouter.post('/', async (req: Request, res: Response) => {
   try {
@@ -121,31 +115,6 @@ journeyRouter.post('/', async (req: Request, res: Response) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-// // GET journeys by userId
-// journeyRouter.get('/user/:userId', async (req, res) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const journeys = await AppDataSource.manager.find(Journey, {
-//       relations: ['user'],
-//       where: {
-//         user :  {
-//           id: +userId,
-//         }
-//       }
-//     });
-//     if (journeys) {
-//       res.status(200).json(journeys);
-//     } else {
-//       res.status(404).send('No Journeys found');
-//     }
-//   } catch (error) {
-
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 // update a journey by id
 journeyRouter.put('/:id', async (req, res) => {
@@ -188,7 +157,6 @@ journeyRouter.delete('/:id', async (req, res) => {
           id: journeyId,
         },
       });
-      console.log("journey progress hit")
     } catch (journeyProgressError) {
       console.error('Error deleting associated journey progress records:', journeyProgressError);
     }
@@ -225,7 +193,6 @@ journeyRouter.delete('/:id', async (req, res) => {
       res.status(404).json({ message: 'Journey not found' });
     }
   } catch (error) {
-    console.log('this is the journey id ---->', journeyId);
     console.error('Could not delete journey and associated data', error);
     res.status(500).send('Internal Server Error');
   }
