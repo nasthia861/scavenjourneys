@@ -176,7 +176,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
    }
 
   return (
-    <Card 
+    <Card
       sx={{
         padding: '10px',
         background: '#f8e5c8',
@@ -230,7 +230,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
               ) : (
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
           )
-        )}
+          )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
     </Card>

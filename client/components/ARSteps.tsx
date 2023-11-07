@@ -160,7 +160,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         />
 
       <a-plane
-    width="3.5"
+    width="4.0"
     height="1.9"
     color="#835500"
     position="0 2.1 -6" >
