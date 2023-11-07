@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
@@ -87,7 +87,6 @@ type IHeaderProps = {
     })
     tagIds.forEach((obj: {}) => {
       axios.post('/journeytag', obj)
-        .then(() => console.log('journeyTag submitted'))
         .catch((error) => console.error('could not create journeyTag'))
     })
   }
@@ -103,7 +102,6 @@ type IHeaderProps = {
       .then((response) => {
         let resData = response.data
           addTags(selectedTags, resData.id);
-          console.log('this is the journeyId ----->', resData.id)
           navigate(`/profile/${userId}`, { state: { currentJourneyIdState: resData.id, isStepTabOpenState: true, tabValueState: 'Created', userLat, userLong } });
         })
       // get the userData for logged in user
@@ -182,7 +180,6 @@ type IHeaderProps = {
   useEffect(() => {
     axios.get('/tag').then((tags) => setTags(tags.data))
     if(journeyData.name && journeyData.description && journeyData.img_url) {
-      console.log('ready');
       setReady(true);
     }
   }, [journeyData, sizeWarning, selectedTags])
@@ -223,6 +220,7 @@ type IHeaderProps = {
       <h2>Create a New Journey</h2>
       <Paper elevation={3} sx={{ maxWidth: 400, padding: 2, backgroundColor: '#fef0d7' }}>
         <TextField
+          sx={{ padding: '10px' }}
           label="Name"
           type="text"
           name="name"
@@ -233,6 +231,7 @@ type IHeaderProps = {
           variant="outlined"
         />
         <TextField
+          sx={{ padding: '10px' }}
           label="Description"
           type="text"
           name="description"

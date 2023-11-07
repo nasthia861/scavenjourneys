@@ -57,7 +57,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     // Check if the user needs an achievement based on steps taken
     if (updatedUserData.stepsTaken >= 5) {
       if (Array.isArray(userAchievements)) {
-        console.log('these are your achievements---->',userAchievements)
         // Check if the user has achievement ID for steps taken
         const achievementId = 10;
         const hasAchievement = userAchievements.some(
@@ -109,10 +108,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
 
     if(distanceInFeet < 20 + feetAcc) {
-      //console.log('true', distanceInFeet, feetAcc)
       setCloseEnough(true);
     } else {
-      //console.log('false', distanceInFeet, feetAcc)
       setCloseEnough(false);
     }
 

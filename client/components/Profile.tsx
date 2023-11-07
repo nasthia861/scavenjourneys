@@ -151,7 +151,6 @@ type IHeaderProps = {
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
-      console.log(journeyId);
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
@@ -167,7 +166,6 @@ type IHeaderProps = {
               return journey.id === result.data.id
             })
             journeysStarted.splice(index, 1)
-            console.log(journeysStarted)
             setJourneysStarted(journeysStarted);
             setTabValue("Completed");
 
@@ -225,8 +223,7 @@ type IHeaderProps = {
 
    const handleDeleteJourney = (journeyId: React.SetStateAction<number>) => {
     setJourneyIdToDelete(journeyId);
-    handleConfirmDialogOpen(); // Open the confirmation dialog
-    console.log('handleDeleteJourney: ', journeyiDToDelete)
+    handleConfirmDialogOpen(); // Open the confirmation dialog  
   };
 
   const deleteJourney = async () => {

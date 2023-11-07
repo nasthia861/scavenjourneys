@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -17,7 +16,7 @@ import Grid from "@mui/material/Grid";
 const Journey: React.FC = () => {
   const location: { state: { journey: JourneyType; userId: number } } =
     useLocation();
-  const journey = location.state.journey;
+  let journey = location.state.journey;
   const userId = location.state.userId;
   const [alreadyStarted, setAlreadyStarted] = useState([]);
   const [steps, setSteps] = useState<StepType[]>([]);
@@ -28,6 +27,12 @@ const Journey: React.FC = () => {
   );
 
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     journey = await axios.get()
+  //   }
+  // }, []);
 
   const assignJourney = async () => {
     // POST to assign journey to user
@@ -172,82 +177,93 @@ const Journey: React.FC = () => {
     }
   }, [journeyProgressId]);
 
-  return (
-    <Grid
-      sx={{
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-      }}
-    >
-      <Stack spacing={2}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-          Journey: {journey.name}
-        </Typography>
-        <Card
-          sx={{
-            background: "#f8e5c8",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "15px",
-          }}
-          elevation={3}
-        >
-          <CardMedia
-            component="img"
-            alt={journey.name}
-            height="140"
-            image={journey.img_url}
-            sx={{ objectFit: "contain" }}
-          />
-          <Typography
-            variant="h6"
-            component="div"
-            alignContent="center"
-            alignItems="center"
-            textAlign="center"
-            padding="10px"
-          >
-            {journey.description}
+  // Check if the journey data is available, otherwise display a loading message.
+  if (!journey) {
+    return (
+      <div>
+        Loading journey data...
+      </div>
+    );
+  } else {
+    // Render the journey details and steps if the journey data is available.
+    return (
+      <Grid
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
+        <Stack spacing={2}>
+          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            Journey: {journey.name}
           </Typography>
-        </Card>
-        <Button
-          onClick={assignJourney}
-          variant="contained"
-          type="button"
-          sx={{ borderRadius: "20px" }}
-          size="small"
-          fullWidth={false}
-          color="primary"
-        >
-          {buttonName}
-        </Button>
-        <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-          Steps:
-        </Typography>
-        {steps.map((step) => {
-          return (
-            <Card
-              key={step.id}
-              sx={{
-                background: "#f8e5c8",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "15px",
-              }}
-              elevation={3}
+          <Card
+            sx={{
+              background: "#f8e5c8",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "15px",
+            }}
+            elevation={3}
+          >
+            <CardMedia
+              component="img"
+              alt={journey.name}
+              height="140"
+              image={journey.img_url}
+              sx={{ objectFit: "contain" }}
+            />
+            <Typography
+              variant="h6"
+              component="div"
+              alignContent="center"
+              alignItems="center"
+              textAlign="center"
+              padding="10px"
             >
-              <CardContent>
-                <Typography variant="h6" component="div" textAlign="center">
-                  <p>{step.hint}</p>
-                </Typography>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </Stack>
-    </Grid>
-  );
+              {journey.description}
+            </Typography>
+          </Card>
+          <Button
+            onClick={assignJourney}
+            variant="contained"
+            type="button"
+            sx={{ borderRadius: "20px" }}
+            size="small"
+            fullWidth={false}
+            color="primary"
+          >
+            {buttonName}
+          </Button>
+          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+            Steps:
+          </Typography>
+          {steps.map((step) => {
+            return (
+              <Card
+                key={step.id}
+                sx={{
+                  background: "#f8e5c8",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "15px",
+                }}
+                elevation={3}
+              >
+                <CardContent>
+                  <Typography variant="h6" component="div" textAlign="center">
+                    <p>{step.hint}</p>
+                  </Typography>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </Stack>
+      </Grid>
+    );
+  }
 };
+
 
 export default Journey;

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List'
 
 
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { StepType } from '@this/types/Step';
 
 interface StepTabProps {

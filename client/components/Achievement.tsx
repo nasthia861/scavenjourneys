@@ -64,7 +64,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     background: '#f8e5c8',
                     borderRadius: '16px',
                     boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
-                    border: '1px solid #9a4119',
+                    // border: '1px solid #9a4119',
                     margin: '10px',
                   }}
                   className={`achievement-box ${
@@ -91,11 +91,6 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
                   <Typography variant="body2" fontWeight='bold' >{achievement.name}</Typography>
-                  {/* <Typography variant="subtitle1">
-                    {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                      ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
-                      : 'Not yet achieved'}
-                  </Typography> */}
                   </Grid>
                 </Card>
             </Tooltip>
