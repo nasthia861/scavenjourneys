@@ -125,15 +125,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       camera
       isMobile
       embedded
-      vr-mode-ui="
-      enterARButton: #myEnterARButton
-      enterVRButton: #myEnterVRButton
-      "
       >
-          <a id="myEnterVRButton" style={{visibility: 'hidden'}}></a>
-          <Button component="label" id="myEnterARButton" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-            Solve Step
-          </Button>
+
       <a-camera>
         <a-gui-cursor
                   id='cursor'
