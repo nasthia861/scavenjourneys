@@ -7,12 +7,12 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Item } from '../styling/journeyStyle';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
 import { JourneyType } from "@this/types/Journey";
 import { StepType } from "@this/types/Step"
 import { JourneyProgressType } from '@this/types/JourneyProgress';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -33,7 +33,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
 
   const assignJourney = async() => {
     // POST to assign journey to user
-    if(buttonName === 'Solved'){
+    if(buttonName === 'Go to Journey'){
       setJourneyProgressId(alreadyStarted[0].id);
     } else {
       const steps: {data: []} = await axios.get(`/step/journey/${journey.id}`)
@@ -135,7 +135,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
       return progress.journey.id === journey.id
     })
     if(idArray.length > 0) {
-      setButtonName('Solved')
+      setButtonName('Go to Journey')
     }
     setAlreadyStarted(idArray);
   }
@@ -148,8 +148,6 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
       axios.get(`/step/journey/${journey.id}`)
         .then((stepAndJourney: {data: []}) => {
           setSteps(stepAndJourney.data);
-          // setSelectedStep(stepAndJourney.data);
-
         })
         .catch((error) => {
           console.error('Error getting steps for journey:', error);
@@ -166,10 +164,16 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
 
 
   return (
-    <Container sx={{background: '#FDF3E0'}} >
+    <Grid sx={{
+      justifyContent: "center",
+      alignItems: "center",
+      padding: '20px',
+    }} >
 
       <Stack spacing={2}>
-        <h1> Journey Begins Here!</h1>
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+        Journey: {journey.name}
+      </Typography>
           <Card
             sx={{background: '#f8e5c8',
             justifyContent: "center",
@@ -191,10 +195,8 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
                 alignContent='center'
                 alignItems='center'
                 textAlign='center'
+                padding='10px'
               >
-                <b>{journey.name}</b>
-                <br/>
-                <br/>
                 {journey.description}
               </Typography>
 
@@ -208,7 +210,9 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
               color="primary">
             {buttonName}
             </Button>
-        <h3>Steps:</h3>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+              Steps:
+            </Typography>
         {
         steps.map((step) => {
           return (
@@ -233,7 +237,7 @@ import { JourneyProgressType } from '@this/types/JourneyProgress';
           })
         }
       </Stack>
-    </Container>
+    </Grid>
   );
 };
 
