@@ -4,7 +4,6 @@ import Achievements from "./Achievement";
 import StepTab from "./StepTab";
 
 import Avatar from "@mui/material/Avatar";
-import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
@@ -49,8 +48,8 @@ type IHeaderProps = {
 
   const Profile: React.FC<IHeaderProps> = ({userLat, userLong, accuracy}) => {
 
-  const location: {state: {journeyProgressId: number | null}} = useLocation();
-
+  const location: {state: {journeyProgressId: number | undefined}} = useLocation();
+  const { currentJourneyIdState, isStepTabOpenState, tabValueState} = useLocation().state || {};
   const theme = useTheme();
   const [user, setUser] = useState<UserType>()
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2])
@@ -63,9 +62,9 @@ type IHeaderProps = {
   const [userImg, setUserImg] = useState<string>('');
   const [journeyiDToDelete, setJourneyIdToDelete] = useState<number | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [tabValue, setTabValue] = useState("Started");
-  const [isStepTabOpen, setIsStepTabOpen] = useState(false);
-  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(null);
+  const [tabValue, setTabValue] = useState(tabValueState || "Started");
+  const [isStepTabOpen, setIsStepTabOpen] = useState(isStepTabOpenState || false);
+  const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(currentJourneyIdState || null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
@@ -138,9 +137,11 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-    if(location.state !== null) {
-      if(location.state.journeyProgressId) {
-        handleJourneyClick(location.state.journeyProgressId)
+    if (location.state !== null) {
+      if (isStepTabOpen) {
+        return;
+      } else {
+        handleJourneyClick(location.state.journeyProgressId);
       }
     }
 
@@ -149,6 +150,7 @@ type IHeaderProps = {
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
+      console.log(journeyId);
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
@@ -257,8 +259,11 @@ type IHeaderProps = {
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
-            sx={{ bgcolor: deepOrange[900],
-              width: 56, height: 56 }}
+            sx={{
+              bgcolor: deepOrange[900],
+              width: 56,
+              height: 56,
+            }}
             src={userImg}
             />
           </ListItemAvatar>
@@ -274,7 +279,7 @@ type IHeaderProps = {
       </Stack>
 
       {/* Change Username button */}
-     <Stack direction="row" spacing={1}  paddingRight='5px'>
+     <Stack direction="row" spacing={1}  paddingLeft='10px'>
         {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
@@ -332,15 +337,13 @@ type IHeaderProps = {
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
-                  margin: `${theme.spacing(1)} 0`,
-                  padding: theme.spacing(2),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                  padding: '10px',
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
+                }}>
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
@@ -365,15 +368,13 @@ type IHeaderProps = {
                 selected={selectedIndex === journey.id}
                 onClick={() => handleJourneyClick(journey.id)}
                 sx={{
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  borderRadius: theme.shape.borderRadius,
-                  margin: `${theme.spacing(1)} 0`,
-                  padding: theme.spacing(2),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                  padding: '10px',
+                  background: '#f8e5c8',
+                  borderRadius: '16px',
+                  boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                  border: '1px solid #9a4119',
+                  margin: '10px',
+                }}>
                 <ListItemText primary={journey.journey.name} secondary={journey.journey.description} />
               </ListItemButton>
               <Grid>
@@ -398,13 +399,12 @@ type IHeaderProps = {
             <ListItemButton
               onClick={() => navigate('/journey', { state: { journey, userId } })}
               sx={{
-                border: `1px solid ${theme.palette.primary.main}`,
-                borderRadius: theme.shape.borderRadius,
-                margin: `${theme.spacing(1)} 0`,
-                padding: theme.spacing(2),
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                padding: '10px',
+                background: '#f8e5c8',
+                borderRadius: '16px',
+                boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                border: '1px solid #9a4119',
+                margin: '10px',
               }}
             >
               <ListItemText
