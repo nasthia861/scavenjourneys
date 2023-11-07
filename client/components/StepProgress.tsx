@@ -33,9 +33,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
-
   const theme = useTheme();
+  let deviceType;
 
+  // Function to assess for IOS devices
   const  getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
      if (/iPad|iPhone/.test(userAgent)) {
@@ -44,12 +45,11 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
       return 'Macintosh';
     }
   }
-
-  let deviceType;
-
+  // Assignment of device type
   useEffect(() => {
      deviceType = getDeviceInfo() || '';
-    console.log('Device Type:', deviceType);
+     //remove to see device type in console
+    //console.log('Device Type:', deviceType);
   }, []);
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
