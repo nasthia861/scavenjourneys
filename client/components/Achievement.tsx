@@ -1,11 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 import Card from '@mui/material/Card/Card';
@@ -19,7 +16,6 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [earnedAchievements, setEarnedAchievements] = useState([]);
   const [clickedAchievement, setClickedAchievement] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [flip, setFlip] = useState(false);
 
   const handleAchievementClick = (achievement: any, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setClickedAchievement(achievement);
@@ -52,8 +48,8 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   }, [userId]);
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
+    <Grid>
+      <Typography variant="h6" gutterBottom fontWeight='bold' >
         Badges
       </Typography>
       <Grid container spacing={3}>
@@ -80,7 +76,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                 >
                   <Grid
                     container
-                    direction='row'
+                    direction='column'
                     justifyContent="space-evenly"
                     alignItems="center"
                   >
@@ -94,12 +90,12 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     sx={{ width: 90, height: 90 }}
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
-                  <Typography variant="body2"><b>{achievement.name}</b></Typography>
-                  <Typography variant="subtitle1">
+                  <Typography variant="body2" fontWeight='bold' >{achievement.name}</Typography>
+                  {/* <Typography variant="subtitle1">
                     {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                       ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
                       : 'Not yet achieved'}
-                  </Typography>
+                  </Typography> */}
                   </Grid>
                 </Card>
             </Tooltip>
@@ -121,7 +117,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
       >
         {clickedAchievement && clickedAchievement.conditionText}
       </Popover>
-    </Container>
+    </Grid>
   );
 };
 

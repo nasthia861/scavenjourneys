@@ -315,7 +315,7 @@ type IHeaderProps = {
 
       <TabContext value={tabValue}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+        <TabList onChange={handleTabChange} aria-label="lab API tabs example" variant='fullWidth' >
           <Tab label="Badges" value="Badges" />
           <Tab label="Started" value="Started" />
           <Tab label="Completed" value="Completed" />

@@ -67,11 +67,12 @@ const handleToggleChange = (
 return (
   <Grid
     container
-    spacing={0}
+    spacing={2.5}
     direction="column"
     alignItems="center"
     justifyContent="center"
     padding='30px'
+    paddingRight='10px'
   >
     <br/>
     <Search setJourneys={setJourneys} getJourneys={getJourneys} userLat={userLat} userLong={userLong} alignment={alignment}/>
