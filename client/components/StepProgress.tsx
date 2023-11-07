@@ -35,16 +35,16 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
 
   function getDeviceInfo() {
     const userAgent = navigator.userAgent;
-     if (/iPad|iPhone|iPod/.test(userAgent)) {
+     if (/iPad|iPhone/.test(userAgent)) {
       return 'iOS Device';
     } else if (/Macintosh|Mac OS X/.test(userAgent)) {
       return 'Macintosh';
     }
   }
-
+  let deviceType;
 
   useEffect(() => {
-    const deviceType = getDeviceInfo();
+     deviceType = getDeviceInfo() || '';
     console.log('Device Type:', deviceType);
   }, []);
 
@@ -197,8 +197,14 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         )}
         <Box>
           { inProgress && closeEnough && (
+              deviceType === 'iPad' || deviceType === 'iPhone' || deviceType === 'Macintosh' || deviceType === 'Mac OS X' ? (
+                <div>
+               
+              </div>
+              ) : (
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
-          )}
+          )
+        )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
     </Card>
