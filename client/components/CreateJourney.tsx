@@ -37,7 +37,6 @@ type IHeaderProps = {
       id: userId
     },
     img_url: null,
-    //import from home
   });
 
   const navigate = useNavigate();

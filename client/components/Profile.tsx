@@ -4,7 +4,6 @@ import Achievements from "./Achievement";
 import StepTab from "./StepTab";
 
 import Avatar from "@mui/material/Avatar";
-import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
@@ -255,15 +254,16 @@ type IHeaderProps = {
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <Stack 
-      spacing={1}>
-        <ListItem 
-          alignItems="flex-start">
+    <Grid>
+      <Stack spacing={1}>
+        <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
-            sx={{ bgcolor: deepOrange[900],
-              width: 56, height: 56 }}
+            sx={{
+              bgcolor: deepOrange[900],
+              width: 56,
+              height: 56,
+            }}
             src={userImg}
             />
           </ListItemAvatar>
@@ -279,7 +279,7 @@ type IHeaderProps = {
       </Stack>
 
       {/* Change Username button */}
-     <Stack direction="row" spacing={1}  >
+     <Stack direction="row" spacing={1}  paddingLeft='10px'>
         {updateButton ? (
         <form onSubmit= { handleSubmit } >
           <TextField
@@ -330,7 +330,7 @@ type IHeaderProps = {
         <TabPanel value="Started">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys In Progress</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {journeysStarted.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
@@ -361,7 +361,7 @@ type IHeaderProps = {
       <TabPanel value="Completed">
        {/* List of Journey Progress*/}
       <Typography variant="h5">Journeys Completed</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
           {completedJourneys.map((journey) => (
             <React.Fragment key={journey.id}>
               <ListItemButton
@@ -393,7 +393,7 @@ type IHeaderProps = {
       <TabPanel value="Created">
       {/* List of user's created journeys */}
       <Typography variant="h5">Journeys Created</Typography>
-      <List sx={{ padding: theme.spacing(2) }}>
+      <List>
         {userJourneys.map((journey) => (
           <React.Fragment key={journey.id}>
             <ListItemButton
@@ -471,7 +471,7 @@ type IHeaderProps = {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </Grid>
   )
 }
 export default Profile;
