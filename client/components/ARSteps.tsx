@@ -130,7 +130,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       enterVRButton: #myEnterVRButton
       "
       >
-          {/* <a id="myEnterVRButton" style={{visibility: 'hidden'}}></a> */}
+          <a id="myEnterVRButton" style={{visibility: 'hidden'}}></a>
           <Button component="label" id="myEnterARButton" variant="contained" startIcon={<CameraAltRoundedIcon />}>
             Solve Step
           </Button>
