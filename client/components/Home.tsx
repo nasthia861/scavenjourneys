@@ -114,6 +114,11 @@ return (
             navigate('/journey',{state:{journey, userId}})
           }}>
             <CardMedia
+              sx={{
+                boxShadow: '2px 2px 5px 0px #a0a0a0, -2px -2px 5px 0px #ffffff',
+                borderRadius: theme.shape.borderRadius,
+                alignItems: "center",
+              }}
               component="img"
               alt={journey.name}
               height="120"

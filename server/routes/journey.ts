@@ -65,6 +65,9 @@ journeyRouter.get('/user/:userId', async (req, res) => {
       where: {
         user: { id: parseInt(userId, 10) }
       },
+      order: {
+        created_at: 'DESC'
+      },
     });
 
     res.status(200).json(userJourneys);
