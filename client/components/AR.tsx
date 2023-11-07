@@ -59,7 +59,6 @@ const AR: React.FC<IHeaderProps> = ({userId, step}) => {
           })
         })
         .then(() => {
-          console.log('navigating', userId, journeyProgressId)
           document.exitFullscreen();
         })
     }

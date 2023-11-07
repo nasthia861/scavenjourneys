@@ -1,11 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 import Card from '@mui/material/Card/Card';
@@ -19,7 +16,6 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   const [earnedAchievements, setEarnedAchievements] = useState([]);
   const [clickedAchievement, setClickedAchievement] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [flip, setFlip] = useState(false);
 
   const handleAchievementClick = (achievement: any, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setClickedAchievement(achievement);
@@ -52,8 +48,8 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
   }, [userId]);
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
+    <Grid>
+      <Typography variant="h5">
         Badges
       </Typography>
       <Grid container spacing={3}>
@@ -63,7 +59,13 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                 <Card
                   elevation={3}
                   onClick={(event) => handleAchievementClick(achievement, event)}
-                  sx={{padding: '10px', background: '#f8e5c8'}}
+                  sx={{
+                    padding: '10px',
+                    background: '#f8e5c8',
+                    borderRadius: '16px',
+                    boxShadow: '5px 5px 15px 0px #a0a0a0, -5px -5px 15px 0px #ffffff',
+                    margin: '10px',
+                  }}
                   className={`achievement-box ${
                     earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
                       ? 'earned'
@@ -73,7 +75,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                 >
                   <Grid
                     container
-                    direction='row'
+                    direction='column'
                     justifyContent="space-evenly"
                     alignItems="center"
                   >
@@ -87,12 +89,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
                     sx={{ width: 90, height: 90 }}
                     onClick={(event) => handleAchievementClick(achievement, event)}
                   />
-                  <Typography variant="body2"><b>{achievement.name}</b></Typography>
-                  <Typography variant="subtitle1">
-                    {earnedAchievements.some((earnedAchievement) => earnedAchievement.achievement.id === achievement.id)
-                      ? `Achieved on: ${new Date(earnedAchievements.find((earnedAchievement) => earnedAchievement.achievement.id === achievement.id).createdAt).toDateString()}`
-                      : 'Not yet achieved'}
-                  </Typography>
+                  <Typography variant="body2" fontWeight='bold' >{achievement.name}</Typography>
                   </Grid>
                 </Card>
             </Tooltip>
@@ -114,7 +111,7 @@ const Achievements: React.FC<IHeaderProps> = ({userId}) => {
       >
         {clickedAchievement && clickedAchievement.conditionText}
       </Popover>
-    </Container>
+    </Grid>
   );
 };
 
