@@ -61,7 +61,6 @@ const NavBar = ({ menuItems }: NavBarProps) => {
 
   const logUserOut = () => {
     axios.post('/auth/logout')
-    .then(() => {console.log('logging out')})
     .catch((err) => {console.error('failed to logout', err)})
   }
 

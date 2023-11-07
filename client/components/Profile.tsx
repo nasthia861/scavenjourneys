@@ -67,7 +67,6 @@ type IHeaderProps = {
   const [currentJourneyId, setCurrentJourneyId] = useState<number | null>(currentJourneyIdState || null);
   const [currJourney, setCurrJourney] = useState<object | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [toastCounts, setToastCounts] = useState<{ [key: number]: number }>({});
 
   // State to hold user's journeys created
   const [userJourneys, setUserJourneys] = useState<JourneyType[]>([]);
@@ -150,7 +149,6 @@ type IHeaderProps = {
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
-      console.log(journeyId);
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
@@ -166,7 +164,6 @@ type IHeaderProps = {
               return journey.id === result.data.id
             })
             journeysStarted.splice(index, 1)
-            console.log(journeysStarted)
             setJourneysStarted(journeysStarted);
             setTabValue("Completed");
 
@@ -225,7 +222,6 @@ type IHeaderProps = {
    const handleDeleteJourney = (journeyId: React.SetStateAction<number>) => {
     setJourneyIdToDelete(journeyId);
     handleConfirmDialogOpen(); // Open the confirmation dialog
-    console.log('handleDeleteJourney: ', journeyiDToDelete)
   };
 
   const deleteJourney = async () => {

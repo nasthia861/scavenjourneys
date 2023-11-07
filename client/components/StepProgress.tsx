@@ -8,11 +8,15 @@ import Typography from '@mui/material/Typography';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import useTheme from "@mui/material/styles/useTheme";
 import Box from '@mui/material/Box';
+import { VisuallyHiddenInput } from '../styling/createJourneyStyle';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import Button from '@mui/material/Button';
 
 
 import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
 import MarkerEntity from './ARSteps';
+
 
 
 type IHeaderProps = {
@@ -29,8 +33,40 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const [closeEnough, setCloseEnough] = useState(false)
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
-
   const theme = useTheme();
+  let deviceType;
+
+  // Function to assess for IOS devices
+  const  getDeviceInfo = () => {
+    const userAgent = navigator.userAgent;
+     if (/iPad|iPhone/.test(userAgent)) {
+      return 'iOS Device';
+    } else if (/Macintosh|Mac OS X/.test(userAgent)) {
+      return 'Macintosh';
+    }
+  }
+  // Assignment of device type
+  useEffect(() => {
+     deviceType = getDeviceInfo() || '';
+     //remove to see device type in console
+    //console.log('Device Type:', deviceType);
+  }, []);
+
+  const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = await new FileReader()
+    reader.addEventListener('load', (event) => {
+      axios.post(`/cloud/stepProgress/${step.id}`, {data: event.target.result})
+        .then((response) => {
+          axios.put(`/step/progress/${step.id}`, {
+            in_progress: false,
+            image_url: response.data.secure_url
+          })
+          setImage(response.data.secure_url)
+        })
+    });
+    reader.readAsDataURL(e.target.files[0]);
+}
+
 
   // Increment steps taken in user data
   const giveStepsTakenAchievement = async () => {
@@ -57,7 +93,6 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     // Check if the user needs an achievement based on steps taken
     if (updatedUserData.stepsTaken >= 5) {
       if (Array.isArray(userAchievements)) {
-        console.log('these are your achievements---->',userAchievements)
         // Check if the user has achievement ID for steps taken
         const achievementId = 10;
         const hasAchievement = userAchievements.some(
@@ -109,10 +144,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
 
     if(distanceInFeet < 20 + feetAcc) {
-      //console.log('true', distanceInFeet, feetAcc)
       setCloseEnough(true);
     } else {
-      //console.log('false', distanceInFeet, feetAcc)
       setCloseEnough(false);
     }
 
@@ -143,7 +176,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
    }
 
   return (
-    <Card 
+    <Card
       sx={{
         padding: '10px',
         background: '#f8e5c8',
@@ -183,7 +216,20 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         )}
         <Box>
           { inProgress && closeEnough && (
+              deviceType === 'iPad' || deviceType === 'iPhone' || deviceType === 'Macintosh' || deviceType === 'Mac OS X' ? (
+                <div>
+                   <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                  Solve Step
+                  <VisuallyHiddenInput
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={(e) => solveStep(e)}/>
+                   </Button>
+              </div>
+              ) : (
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
+          )
           )}
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
