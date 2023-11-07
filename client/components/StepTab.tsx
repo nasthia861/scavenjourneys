@@ -199,7 +199,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
       }
         // Clear step data and navigate to the home page
         //right here, clearing everything except name hint and user
-        setStepData({ name: '', hint: '', user: { id: userId } });
+        setStepData({ name: '', hint: '', ...stepData });
         // navigate('/home');
       } catch (error) {
         console.error('Error submitting journey with steps:', error);

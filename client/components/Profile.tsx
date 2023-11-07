@@ -130,15 +130,20 @@ type IHeaderProps = {
     getUserNameImg();
     getUserData();
     getUserJourneys();
-    if (location.state !== null  && location.state.journeyProgressId) {
-      console.log("hit", location.state.journeyProgressId)
-      handleJourneyClick(location.state.journeyProgressId);
+    if (location.state !== null) {
+      if (isStepTabOpen) {
+        return;
+      } else {
+        console.log("hit", location.state.journeyProgressId);
+        handleJourneyClick(location.state.journeyProgressId);
+      }
     }
   }, []);
 
   /** Journey and Step Functionality */
   const handleJourneyClick = async (journeyId: number) => {
     try {
+      console.log(journeyId);
       setSelectedIndex(journeyId)
       // GET steps for the selected journey
       const stepAndJourney = await axios.get(`/step/progress/${journeyId}`);
