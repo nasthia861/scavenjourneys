@@ -215,18 +215,18 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </CardContent>
         )}
 
-          { inProgress && closeEnough && (
-
-            <div> test </div>
-                  //  <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-                  // Solve Step
-                  // <VisuallyHiddenInput
-                  // type="file"
-                  // accept="image/*"
-                  // capture="environment"
-                  // onChange={(e) => solveStep(e)}/>
-                  //  </Button>
-                  //  {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
+          { inProgress && closeEnough && deviceType === 'ios Device' && (
+                <Box>
+                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                Solve Step
+                <VisuallyHiddenInput
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) => solveStep(e)}/>
+                 </Button>
+                 {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
+              </Box>
 
                )}
 
