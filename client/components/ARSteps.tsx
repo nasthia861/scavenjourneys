@@ -3,6 +3,8 @@ import axios from 'axios';
 import { StepProgressType } from '@this/types/StepProgress';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 import logo from '../favicon.svg';
 declare global {
@@ -52,6 +54,8 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
   const [longitude, setLongitude] = useState<number | null>(null);
   const [stepName, setStepName] = useState<string | null> (null);
   const [tracks, setTracks] = useState<MediaStreamTrack | null> (null);
+  const [loadingPicture, setLoadingPicture] = useState<boolean>(false);
+
 
 
 
@@ -59,6 +63,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
     const reader = await new FileReader()
     try{
       if (navigator.mediaDevices.getUserMedia) {
+        setLoadingPicture(true)
         navigator.mediaDevices.getUserMedia({ video: {
           facingMode: "environment",
         }, audio: false })
@@ -94,13 +99,14 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
             in_progress: false,
             image_url: response.data.secure_url
           })
+          document.exitFullscreen();
           setImage(response.data.secure_url)
+          setLoadingPicture(false)
           setInProgress(false);
           giveStepsTakenAchievement();
         })
         .then(() => {
           tracks.stop();
-          document.exitFullscreen();
           handleJourneyClick(step.journey_progress.id);
         })
         .catch((error) => {
@@ -120,7 +126,9 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
   }, []);
 
   return (
+
     <div>
+    {loadingPicture && (<CircularProgress />)}
     <a-scene
       camera
       isMobile
