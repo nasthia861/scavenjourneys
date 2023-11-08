@@ -137,7 +137,6 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       <a-camera position="0 2 0">
         <a-gui-cursor
                   id='cursor'
-                  position="0 2 0"
                   fuse-timeout="1000"
                   color="red"
                   hover-color="red"
