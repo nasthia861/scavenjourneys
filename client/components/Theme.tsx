@@ -12,5 +12,16 @@ export const themeOptions = createTheme({
       default: '#FDF3E0',
     },
   },
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            border: '10px solid #9a4119',
+          }
+        }
+      }
+    }
+  }
 
 });
