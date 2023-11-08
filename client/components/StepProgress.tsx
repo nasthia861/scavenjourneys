@@ -49,7 +49,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   useEffect(() => {
      deviceType = getDeviceInfo() || '';
      //remove to see device type in console
-    //console.log('Device Type:', deviceType);
+    console.log('Device Type:', deviceType);
   }, []);
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,25 +214,32 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </Typography>
         </CardContent>
         )}
-        <Box>
-          { inProgress && closeEnough && (
-              deviceType === 'iPad' || deviceType === 'iPhone' || deviceType === 'Macintosh' || deviceType === 'Mac OS X' ? (
-                <div>
-                   <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-                  Solve Step
-                  <VisuallyHiddenInput
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  onChange={(e) => solveStep(e)}/>
-                   </Button>
-              </div>
-              ) : (
+
+          { inProgress && closeEnough && deviceType === 'iPhone' && (
+                <Box>
+                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                Solve Step
+                <VisuallyHiddenInput
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) => solveStep(e)}/>
+                 </Button>
+                 {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
+              </Box>
+
+               )}
+
+        { inProgress && closeEnough && deviceType !== 'iPhone' && (
+
+            <Box>
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
-          )
-          )}
+
           {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
         </Box>
+
+
+        )}
     </Card>
 
   );
