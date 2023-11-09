@@ -24,6 +24,7 @@ const App = () => {
   const [userLong, setUserLong] = useState<number | null>()
   const [accuracy, setAccuracy] = useState<number | null>()
   const [userId, setUserId] = useState<number>(0)
+  const [loggedOut, setLoggedOut] = useState<boolean | null>(null)
 
   //menuItems array of links to specified pages (mapped in NavBar.tsx)
   const menuItems = [
@@ -69,7 +70,7 @@ const App = () => {
         <CssBaseline />
         <BrowserRouter>
           <Suspense fallback={<div>Loading...</div>}>
-            <NavBar menuItems={menuItems} />
+            <NavBar menuItems={menuItems} loggedOut={loggedOut}/>
             <Routes>
               <Route path="/" element={<Welcome/>} />
               <Route path="/ar" Component={AR} />
@@ -80,7 +81,7 @@ const App = () => {
               <Route path="/create-journey/:UserId" element={<CreateJourney userLat={userLat} userLong={userLong}/>} />
               <Route path="/StepForm/:UserId/:journeyId" element={<StepForm/>} />
               <Route path="/achievements/:UserId" element={<Achievements userId={userId}/>} />
-              <Route path="/logout/:UserId" element={<Logout/>} />
+              <Route path="/logout/:UserId" element={<Logout setLoggedOut={setLoggedOut}/>} />
             </Routes>
           </Suspense>
         </BrowserRouter>
