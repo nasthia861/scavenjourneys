@@ -7,9 +7,14 @@ import Box from '@mui/material/Box/Box';
 import Typography from '@mui/material/Typography';
 import map from '../styling/pinkMap.png'
 
-const Logout = () => {
+type IHeaderProps = {
+  setLoggedOut: (loggedOut: boolean) => void;
+};
+
+const Logout: React.FC<IHeaderProps> = ({setLoggedOut}) => {
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2]);
   const [pictures, setPictures] = useState([]);
+  //const [loggedOut, setLoggedOut] = useState<boolean | null>(false);
 
   //change axios request to grab user photos instead
   const getPictures = () => {
@@ -23,8 +28,13 @@ const Logout = () => {
   }
 
   const logUserOut = () => {
+
     axios.post('/auth/logout')
-    .then(() => {})
+    .then((data) => {
+      if(data.data === 'loggedOut') {
+        setLoggedOut(true)
+      }
+    })
     .catch((err) => {console.error('failed to logout', err)})
   }
 
