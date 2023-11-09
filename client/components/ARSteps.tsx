@@ -135,10 +135,16 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       embedded
       >
       <a-camera >
-      <a-cursor
-      fuse-timeout="2000"
-      color="tan"
-    ></a-cursor>
+        <a-gui-cursor
+                  id='cursor'
+                  fuse-timeout="1000"
+                  color="red"
+                  hover-color="red"
+                  active-color="red"
+                  position="0 0 -1"
+                  design="reticle"
+                  >
+        </a-gui-cursor>
       </a-camera>
       <a-entity
         ref={markerRef}
