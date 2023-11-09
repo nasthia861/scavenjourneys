@@ -25,10 +25,11 @@ interface NavBarProps {
   //menu items hold the value of MenuItem interface within an array to map over
   //path and label props being passed to MenuItem array elements
   menuItems: MenuItem[];
+  loggedOut: boolean
 }
 
 //NavBar accepts NavBar props with with menu items array, each value assigned a path and label
-const NavBar = ({ menuItems }: NavBarProps) => {
+const NavBar = ({ menuItems, loggedOut }: NavBarProps) => {
   const [userId, setUserId] = useState<number>(+window.location.pathname.split('/')[2]);
 
   const location = useLocation();
@@ -38,6 +39,7 @@ const NavBar = ({ menuItems }: NavBarProps) => {
   if (location.pathname === `/logout/${userId}`) {
     return null;
   }
+
 
   //authenticate user
   const [auth, setAuth] = React.useState<boolean | null>(true);
@@ -61,11 +63,18 @@ const NavBar = ({ menuItems }: NavBarProps) => {
 
   const logUserOut = () => {
     axios.post('/auth/logout')
+    .then((data) => {
+      console.log('navbar')
+      if(data.data === 'loggedOut') {
+        return null
+      }
+    })
     .catch((err) => {console.error('failed to logout', err)})
   }
 
 
   return (
+    loggedOut ? null :
     <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
       <AppBar position="static">
         <Toolbar>

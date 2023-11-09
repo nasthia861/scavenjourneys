@@ -8,6 +8,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List'
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 import { useNavigate } from 'react-router-dom';
@@ -52,6 +53,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
   const [stepHintError, setStepHintError] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [submittedSteps, setSubmittedStep] = useState<any>([]); // Track submitted steps
+  const [loadingSuggestion, setLoadingSuggestion] = useState<boolean>(false);
 
   useEffect(() => {
   }, [journeyCreated, journeyId, stepIds]);
@@ -63,11 +65,13 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
 
   const grabAIHint = () => {
     if(stepData.name.length > 0){
+      setLoadingSuggestion(true)
       axios.post('/chat/', {
         answer: stepData.name
       })
       .then((clue) => {
         setStepData({...stepData, hint: clue.data})
+        setLoadingSuggestion(false)
       })
       .catch((error) => {
         console.error('could not grab clue from server', error)
@@ -277,6 +281,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
           >
             Suggested Clue
           </Button>
+          {loadingSuggestion && (<CircularProgress />)}
           <br />
           <br />
           <TextField
