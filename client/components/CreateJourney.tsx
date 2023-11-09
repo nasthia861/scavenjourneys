@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate, useParams } from 'react-router-dom';
 import { JourneyType } from '@this/types/Journey'
 
@@ -45,6 +46,8 @@ type IHeaderProps = {
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [tags, setTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
+  const [loadingPicture, setLoadingPicture] = useState<boolean>(false);
+
 
   const theme = useTheme();
   const ITEM_HEIGHT = 48;
@@ -105,7 +108,7 @@ type IHeaderProps = {
         })
       // get the userData for logged in user
       const userDataResponse = await axios.get(`/userdata/byUserId/${userId}`);
-  
+
       // update said userData
       const existingUserData = userDataResponse.data;
       const updatedUserData = {
@@ -113,14 +116,14 @@ type IHeaderProps = {
         journeysCreated: existingUserData.journeysCreated + 1,
       };
       await axios.put(`/userdata/${existingUserData.id}`, updatedUserData);
-  
+
     // remember the new userData
     const newJourneysCreated = existingUserData.journeysCreated + 1
-  
+
     // Check for achievements if the user has any
     const userAchievementsResponse = await axios.get(`/userachievements/byUserId/${userId}`);
     const userAchievements = userAchievementsResponse.data;
-  
+
     // Function to create a new user achievement if it doesn't exist
     const createNewUserAchievement = async (achievementId: number) => {
       await axios.post('/userachievements', {
@@ -131,7 +134,7 @@ type IHeaderProps = {
     // Check if the user needs an amateur journey maker achievement
     if (newJourneysCreated >= 5) {
       if (Array.isArray(userAchievements)) {
-  
+
         // Check if the user has achievement ID 1
         const hasAchievement = userAchievements.some(
           (achievement) => achievement.achievement.id === 1
@@ -145,7 +148,7 @@ type IHeaderProps = {
     // Check if the user needs an expert journey maker achievement
     if (newJourneysCreated >= 20) {
       if (Array.isArray(userAchievements)) {
-  
+
         // Check if the user has achievement ID 2
         const hasAchievement = userAchievements.some(
           (achievement) => achievement.achievement.id === 2
@@ -159,7 +162,7 @@ type IHeaderProps = {
     // Check if the user needs an master journey maker achievement
     if (newJourneysCreated >= 50) {
       if (Array.isArray(userAchievements)) {
-  
+
         // Check if the user has achievement ID 3
         const hasAchievement = userAchievements.some(
           (achievement) => achievement.achievement.id === 3
@@ -187,12 +190,14 @@ type IHeaderProps = {
 
   const saveImage = async(e: React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.files[0].size < 5000000) {
+      setLoadingPicture(true)
       setSizeWarning(false);
       const reader = await new FileReader()
       reader.addEventListener('load', async(event) => {
         const response = await axios.post(`/cloud/createJourney/${journeyData.name}`, {data: event.target.result})
         setJourneyData({ ...journeyData, img_url: response.data.secure_url});
         setImage(response.data.secure_url)
+        setLoadingPicture(false)
       })
       reader.readAsDataURL(e.target.files[0]);
     } else {
@@ -263,6 +268,7 @@ type IHeaderProps = {
               onChange={(e) => saveImage(e)}
             />
           </Button>
+          {loadingPicture && (<CircularProgress />)}
         </Box>
         <FormControl
           fullWidth
