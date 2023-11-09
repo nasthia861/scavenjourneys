@@ -215,7 +215,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </CardContent>
         )}
 
-          { inProgress && closeEnough && deviceType === 'iPhone' && (
+          { inProgress && (
                 <Box>
                  <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
                 Solve Step

@@ -134,13 +134,14 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
       isMobile
       embedded
       >
-      <a-camera position="0 2 0">
+      <a-camera >
         <a-gui-cursor
                   id='cursor'
                   fuse-timeout="1000"
                   color="red"
                   hover-color="red"
                   active-color="red"
+                  position="0 0 -1"
                   design="reticle"
                   >
         </a-gui-cursor>
@@ -171,7 +172,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
     width="4.5"
     height="1.9"
     color="#835500"
-    position="0 2 -6" >
+    position="0 2.1 -6" >
     </a-plane>
 
    </a-scene>
