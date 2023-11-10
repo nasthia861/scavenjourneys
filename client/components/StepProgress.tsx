@@ -53,7 +53,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
      //remove to see device type in console
     //console.log('Device Type:', type);
   }, []);
-  console.log(navigator.platform);
+  // console.log(navigator.platform);
 
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +147,8 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
 
-    if(distanceInFeet < 20 + feetAcc) {
+    //add feetAcc to take into account accuracy
+    if(distanceInFeet < 20) {
       setCloseEnough(true);
     } else {
       setCloseEnough(false);
