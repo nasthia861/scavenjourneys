@@ -130,16 +130,28 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
     <div>
     {loadingPicture && (<CircularProgress />)}
     <a-scene
-      camera
+    cameraRig
       isMobile
       embedded
       >
-      <a-camera >
+         <a-entity id="cameraRig" position="0 0 0">
+      <a-camera
+        wasd-controls
+        look-controls
+      >
+        <a-cursor
+          fuse-timeout="2000"
+          color="tan"
+        ></a-cursor>
+      </a-camera>
+    </a-entity>
+
+      {/* <a-camera  >
       <a-cursor
       fuse-timeout="2000"
       color="tan"
     ></a-cursor>
-      </a-camera>
+      </a-camera> */}
       <a-entity
         ref={markerRef}
         gps-entity-place={
@@ -168,7 +180,9 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
     color="#835500"
     position="0 2.1 -6" >
     </a-plane>
-
+    {/* <a-entity camera look-controls >
+      <a-cursor fuse-timeout="2000" color="tan"></a-cursor>
+    </a-entity> */}
    </a-scene>
    </div>
   );

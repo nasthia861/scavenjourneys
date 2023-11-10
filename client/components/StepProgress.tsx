@@ -34,7 +34,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const [sizeWarning, setSizeWarning] = useState<boolean>(false)
   const [inProgress, setInProgress] = useState<boolean>(step.in_progress)
   const theme = useTheme();
-  let deviceType;
+  const [deviceType, setDeviceType] = useState('');
 
   // Function to assess for IOS devices
   const  getDeviceInfo = () => {
@@ -44,12 +44,13 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     } else if (/Macintosh|Mac OS X/.test(userAgent)) {
       return 'Macintosh';
     }
+    return 'other'
   }
   // Assignment of device type
   useEffect(() => {
-     deviceType = getDeviceInfo() || '';
+     const type = getDeviceInfo() || '';
      //remove to see device type in console
-    console.log('Device Type:', deviceType);
+    console.log('Device Type:', type);
   }, []);
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,34 +215,28 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </Typography>
         </CardContent>
         )}
-
-          { inProgress && closeEnough && (
-                <Box>
-                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-                Solve Step
-                <VisuallyHiddenInput
-                type="file"
-                accept="image/*"
-                capture="environment"
-                onChange={(e) => solveStep(e)}/>
-                 </Button>
-                 {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
-              </Box>
-
-               )}
-
-        { inProgress && closeEnough && deviceType !== 'iPhone' && (
-
+          { inProgress && closeEnough && deviceType === '' && (
             <Box>
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
 
-          {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
-        </Box>
+              {sizeWarning && (<Alert severity="warning">Your image is too big</Alert>)}
+            </Box>
+        )}
 
-
+        { inProgress && closeEnough && deviceType === 'iOS Device' && (
+              <Box>
+                <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+              Solve Step
+              <VisuallyHiddenInput
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={(e) => solveStep(e)}/>
+                </Button>
+                {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
+            </Box>
         )}
     </Card>
-
   );
 };
 
