@@ -216,6 +216,24 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </CardContent>
         )}
           { inProgress && closeEnough && deviceType === '' && (
+
+          { inProgress && (
+                <Box>
+                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
+                Solve Step
+                <VisuallyHiddenInput
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) => solveStep(e)}/>
+                 </Button>
+                 {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
+              </Box>
+
+               )}
+
+        { inProgress && closeEnough && deviceType !== 'iPhone' && (
+
             <Box>
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
 
