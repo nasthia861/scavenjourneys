@@ -130,7 +130,7 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
     <div>
     {loadingPicture && (<CircularProgress />)}
     <a-scene
-    cameraRig
+    camera
       isMobile
       embedded
       >

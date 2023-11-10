@@ -36,6 +36,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   const theme = useTheme();
   const [deviceType, setDeviceType] = useState('');
 
+
   // Function to assess for IOS devices
   const  getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
@@ -50,8 +51,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
   useEffect(() => {
      const type = getDeviceInfo() || '';
      //remove to see device type in console
-    console.log('Device Type:', type);
+    //console.log('Device Type:', type);
   }, []);
+  console.log(navigator.platform);
+
 
   const solveStep = async(e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = await new FileReader()
@@ -215,24 +218,10 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
         </Typography>
         </CardContent>
         )}
-          { inProgress && closeEnough && deviceType === '' && (
 
-          { inProgress && (
-                <Box>
-                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
-                Solve Step
-                <VisuallyHiddenInput
-                type="file"
-                accept="image/*"
-                capture="environment"
-                onChange={(e) => solveStep(e)}/>
-                 </Button>
-                 {sizeWarning && <Alert severity="warning">Your image is too big</Alert>}
-              </Box>
 
-               )}
 
-        { inProgress && closeEnough && deviceType !== 'iPhone' && (
+        { inProgress && closeEnough && navigator.platform !== 'iPhone' && (
 
             <Box>
               <MarkerEntity step={step} setImage={setImage} setInProgress={setInProgress} setSizeWarning={setSizeWarning} giveStepsTakenAchievement={giveStepsTakenAchievement} handleJourneyClick={handleJourneyClick}></MarkerEntity>
@@ -241,7 +230,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
             </Box>
         )}
 
-        { inProgress && closeEnough && deviceType === 'iOS Device' && (
+        { inProgress && closeEnough && navigator.platform === 'iPhone' &&(
               <Box>
                 <Button component="label" variant="contained" startIcon={<CameraAltRoundedIcon />}>
               Solve Step
