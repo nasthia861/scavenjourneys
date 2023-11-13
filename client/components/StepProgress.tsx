@@ -148,7 +148,7 @@ const StepProgress: React.FC<IHeaderProps> = ({step, userLat, userLong, userId, 
     const distanceInFeet = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * feetPerDegree;
 
     //add feetAcc to take into account accuracy
-    if(distanceInFeet < 15) {
+    if(distanceInFeet < 15 + feetAcc) {
       setCloseEnough(true);
     } else {
       setCloseEnough(false);
