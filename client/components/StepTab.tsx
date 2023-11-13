@@ -119,7 +119,7 @@ const StepTab: React.FC<StepTabProps> = ({ userId, journeyId, userLat, userLong,
       setJourneyCreated(true);
 
       // Post the step to the database
-      const stepWithJourneyId = { ...stepData, journey: { id: journeyId }};
+      const stepWithJourneyId = { ...stepData, journey: { id: journeyId }, latitude: userLat, longitude: userLong};
       await axios.post('/step', stepWithJourneyId);
 
       const submittedStepNameHint: any = {
