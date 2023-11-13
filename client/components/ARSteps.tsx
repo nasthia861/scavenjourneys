@@ -158,10 +158,10 @@ const MarkerEntity: React.FC<MarkerEntityProps> = ({ step, setImage, setInProgre
         src={logo}
         width="0.3"
         height="0.3"
-        position="0 1.7 -4"
+        position="0 1.6 -4"
         onClick={letsDraw}
         />
-        
+
       <a-plane
     width="4.5"
     height="1.9"

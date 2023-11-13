@@ -169,6 +169,7 @@ type IHeaderProps = {
 
             // Trigger a toast when all steps are completed
             toast.success(`Congrats ${username}! All steps are completed for the ${result.data.journey.name} Journey.`, {
+              autoClose: 5000,
               position: "top-right",
               hideProgressBar: false,
               theme: "light",
